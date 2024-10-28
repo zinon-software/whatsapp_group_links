@@ -53,6 +53,13 @@ class _MediaLinkDetailScreenState extends State<MediaLinkDetailScreen> {
                 ),
               ),
             ),
+            // اضف اعلانك هنا لاكثر من 200 الف مستخدم write code ui
+
+            const SizedBox(height: 10),
+            Text(widget.socialMediaLink.title),
+            const SizedBox(height: 10),
+            Text(widget.socialMediaLink.url),
+
             const SizedBox(height: 40),
             ElevatedButton(
               onPressed: () async {

@@ -3,8 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-import 'app_helper.dart';
-
+import 'ad_helper.dart';
 
 class AdsManager {
   static final AdsManager _instance = AdsManager._internal();
@@ -64,7 +63,9 @@ class AdsManager {
   }
 
   Widget getBannerAdWidget({AdSize? adSize}) {
-    return _BannerAdWidget(adSize: adSize,);
+    return _BannerAdWidget(
+      adSize: adSize,
+    );
   }
 
   void disposeBannerAds() {
@@ -357,13 +358,7 @@ class AdsManager {
   void disposeNativeAd() {
     _nativeAd.dispose();
   }
-
-
-
-
 }
-
-
 
 class NativeAdWidget extends StatefulWidget {
   const NativeAdWidget({super.key});
@@ -373,27 +368,25 @@ class NativeAdWidget extends StatefulWidget {
 }
 
 class _NativeAdWidgetState extends State<NativeAdWidget> {
-
   NativeAd? _nativeAd;
   bool _nativeAdIsLoaded = false;
 
   @override
   Widget build(BuildContext context) {
-    if ( _nativeAd != null && _nativeAdIsLoaded) {
+    if (_nativeAd != null && _nativeAdIsLoaded) {
       return Align(
-          alignment: Alignment.center,
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              minWidth: 320, // minimum recommended width
-              minHeight: 320, // minimum recommended height
-              maxWidth: 400,
-              maxHeight: 400,
-            ),
-            child: AdWidget(ad: _nativeAd!),
-            // child: AdWidget(ad: _nativeAd!),
-          ));
-    }
-    else {
+        alignment: Alignment.center,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            minWidth: 320, // minimum recommended width
+            minHeight: 320, // minimum recommended height
+            maxWidth: 400,
+            maxHeight: 400,
+          ),
+          child: AdWidget(ad: _nativeAd!),
+        ),
+      );
+    } else {
       return const SizedBox();
     }
   }
@@ -403,12 +396,12 @@ class _NativeAdWidgetState extends State<NativeAdWidget> {
     super.didChangeDependencies();
     // Create the ad objects and load ads.
     _nativeAd = NativeAd(
-      adUnitId:  AdHelper().nativeAdUnitId,
+      adUnitId: AdHelper().nativeAdUnitId,
       request: const AdRequest(),
       nativeAdOptions: NativeAdOptions(
 
-        // adChoicesPlacement: AdChoi
-      ),
+          // adChoicesPlacement: AdChoi
+          ),
       listener: NativeAdListener(
         onAdLoaded: (Ad ad) {
           print('_NativeAdWidget $NativeAd loaded.');
@@ -475,9 +468,7 @@ class _NativeAdWidgetState extends State<NativeAdWidget> {
   }
 }
 
-
 class _BannerAdWidget extends StatefulWidget {
-
   final AdSize? adSize;
   const _BannerAdWidget({this.adSize});
   @override
@@ -485,10 +476,7 @@ class _BannerAdWidget extends StatefulWidget {
 }
 
 class _BannerAdWidgetState extends State<_BannerAdWidget> {
-
   late BannerAd _bannerAd;
-
-
 
   @override
   void dispose() {
@@ -496,11 +484,10 @@ class _BannerAdWidgetState extends State<_BannerAdWidget> {
     _bannerAd.dispose();
   }
 
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _bannerAd =BannerAd(
+    _bannerAd = BannerAd(
       adUnitId: AdHelper().bannerAdUnitId,
       size: widget.adSize ?? AdSize.banner,
       request: const AdRequest(),
@@ -515,7 +502,6 @@ class _BannerAdWidgetState extends State<_BannerAdWidget> {
     )..load();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -525,5 +511,3 @@ class _BannerAdWidgetState extends State<_BannerAdWidget> {
     );
   }
 }
-
-

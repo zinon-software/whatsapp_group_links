@@ -8,8 +8,6 @@ import 'package:linkati/firebase_options.dart';
 
 import 'src/screens/home_screen.dart';
 
-// SharedPreferences? prefs;
-// String? urlServer, bannarIsAd, interstIsAd, nativeIsAd;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,11 +16,6 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // prefs = await SharedPreferences.getInstance();
-  // print(prefs?.getString('token'));
-  // print(prefs?.getInt('user_id'));
-
-  // GlobalBindings().dependencies();
 
   MobileAds.instance.initialize();
 
@@ -59,6 +52,14 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: Colors.green,
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(color: Colors.black, fontSize: 14),
+          bodyMedium: TextStyle(color: Colors.black, fontSize: 12),
+          bodySmall: TextStyle(color: Colors.black, fontSize: 10),
+          titleLarge: TextStyle(color: Colors.black, fontSize: 16),
+          titleMedium: TextStyle(color: Colors.black, fontSize: 14),
+          titleSmall: TextStyle(color: Colors.black, fontSize: 12),
+        ),
         colorScheme: const ColorScheme(
           brightness: Brightness.light,
           primary: Colors.green, // لون العنصر الأساسي
@@ -92,34 +93,6 @@ class MyApp extends StatelessWidget {
       locale: const Locale("ar", "AE"),
       home: const HomeScreen(),
     );
-
-    // const GetMaterialApp(
-    //   debugShowCheckedModeBanner: false,
-    // themeMode: ThemeMode.dark,
-    // localizationsDelegates: [
-    //   GlobalCupertinoLocalizations.delegate,
-    //   GlobalMaterialLocalizations.delegate,
-    //   GlobalWidgetsLocalizations.delegate,
-    // ],
-    // supportedLocales: [Locale("ar", "AE")],
-    // locale: Locale("ar", "AE"),
-    // home: SplashView(),
-    // );
   }
 }
 
-// class GlobalBindings extends Bindings {
-//   @override
-//   void dependencies() {
-//     // ignore: unused_local_variable
-//     Get.put(PostController(), permanent: true);
-//     // ignore: unused_local_variable
-//     Get.put(UsersController());
-//     // ignore: unused_local_variable
-//     Get.lazyPut(() => FromPostController(), fenix: true);
-//     // ignore: unused_local_variable
-//     Get.lazyPut(() => NotificationController(), fenix: true);
-//     // ignore: unused_local_variable
-//     Get.lazyPut(() => LikeController(), fenix: true);
-//   }
-// }

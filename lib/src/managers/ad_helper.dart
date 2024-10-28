@@ -3,11 +3,10 @@
 import 'dart:io';
 
 class AdHelper {
-  // final bool _testMode = true;
-  final bool isRelease = !const bool.fromEnvironment('dart.vm.product');
+  final bool isTest = ! const bool.fromEnvironment('dart.vm.product');
 
   String get bannerAdUnitId {
-    if (!isRelease) {
+    if (isTest) {
       return "ca-app-pub-3940256099942544/6300978111";
     } else if (Platform.isAndroid) {
       return "ca-app-pub-9553130506719526/7133339279";
@@ -19,7 +18,7 @@ class AdHelper {
   }
 
   String get interstitialAdUnitId {
-    if (!isRelease) {
+    if (isTest) {
       return "ca-app-pub-3940256099942544/1033173712";
     } else if (Platform.isAndroid) {
       return "ca-app-pub-9553130506719526/2286199091";
@@ -31,7 +30,7 @@ class AdHelper {
   }
 
   String get rewardedAdUnitId {
-    if (!isRelease) {
+    if (isTest) {
       return "ca-app-pub-3940256099942544/5224354917";
     } else if (Platform.isAndroid) {
       return "ca-app-pub-9553130506719526/2587589604";
@@ -44,7 +43,7 @@ class AdHelper {
 
 
   String get rewardedInterstitialAdUnitId {
-    if (!isRelease) {
+    if (isTest) {
       return "ca-app-pub-3940256099942544/5224354917";
     } else if (Platform.isAndroid) {
       return "ca-app-pub-9553130506719526/6351248791";
@@ -57,7 +56,7 @@ class AdHelper {
 
   
   String get nativeAdUnitId {
-    if(!isRelease){
+    if(isTest){
       return '/6499/example/native';
     }
     else {

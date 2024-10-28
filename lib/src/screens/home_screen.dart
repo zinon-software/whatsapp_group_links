@@ -82,8 +82,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         if ((index + 1) % 10 == 0)
                           Padding(
                             padding: const EdgeInsets.all(20.0),
-                            child:
-                                Center(child: _adsManager.getNativeAdWidget()),
+                            child: Center(
+                              child: _adsManager.getNativeAdWidget(),
+                            ),
                           ),
                         InkWell(
                           onTap: () {
@@ -129,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-                            _adsManager.showRewardedAd();
+          _adsManager.showRewardedAd();
 
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => const AddMediaLinkScreen(),
