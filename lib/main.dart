@@ -6,7 +6,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:linkati/firebase_options.dart';
 
 
-import 'new_code/screens/home_screen.dart';
+import 'src/screens/home_screen.dart';
 
 // SharedPreferences? prefs;
 // String? urlServer, bannarIsAd, interstIsAd, nativeIsAd;

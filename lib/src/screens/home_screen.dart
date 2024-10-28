@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:linkati/new_code/extensions/date_format_extension.dart';
-import 'package:linkati/new_code/screens/add_media_link_screen.dart';
+import 'package:linkati/src/extensions/date_format_extension.dart';
+import 'package:linkati/src/screens/add_media_link_screen.dart';
 
 import '../managers/ads_manager.dart';
 import '../managers/cloud_manager.dart';
@@ -17,21 +17,26 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final ScrollController _scrollController = ScrollController();
+
   final CloudManager cloudManager = CloudManager();
-  late AdsManager adsManager;
+  late AdsManager _adsManager;
 
   @override
   void initState() {
     super.initState();
-    adsManager = AdsManager();
-    adsManager.loadBannerAd();
-    adsManager.loadRewardedAd();
+    _adsManager = AdsManager();
+    _adsManager.loadBannerAd();
+    _adsManager.loadRewardedAd();
+    _adsManager.loadNativeAd();
   }
 
   @override
   void dispose() {
-    adsManager.disposeBannerAds();
-    
+    _scrollController.dispose();
+    _adsManager.disposeBannerAds();
+    _adsManager.disposeNativeAd();
+
     super.dispose();
   }
 
@@ -45,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: adsManager.getBannerAdWidget(),
+            child: _adsManager.getBannerAdWidget(),
           ),
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
@@ -72,38 +77,48 @@ class _HomeScreenState extends State<HomeScreen> {
                     var link = SocialMediaLink.fromJson(linkData);
                     link.documentId = snapshot.data!.docs[index].id;
 
-                    return InkWell(
-                      onTap: () {
-                        adsManager.showRewardedInterstitialAd();
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => MediaLinkDetailScreen(
-                            socialMediaLink: link,
+                    return Column(
+                      children: [
+                        if ((index + 1) % 10 == 0)
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child:
+                                Center(child: _adsManager.getNativeAdWidget()),
                           ),
-                        ));
-                      },
-                      child: Card(
-                        child: ListTile(
-                          title: Text(link.title),
-                          subtitle: Row(
-                            children: [
-                              Text(link.createDt.formatTimeAgoString()),
-                              const SizedBox(width: 20),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[300],
-                                  borderRadius: BorderRadius.circular(18),
-                                ),
-                                padding: const EdgeInsets.all(5),
-                                child: Text(
-                                  link.type,
-                                  style: const TextStyle(fontSize: 10),
-                                ),
+                        InkWell(
+                          onTap: () {
+                            _adsManager.showRewardedAd();
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => MediaLinkDetailScreen(
+                                socialMediaLink: link,
                               ),
-                            ],
+                            ));
+                          },
+                          child: Card(
+                            child: ListTile(
+                              title: Text(link.title),
+                              subtitle: Row(
+                                children: [
+                                  Text(link.createDt.formatTimeAgoString()),
+                                  const SizedBox(width: 20),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[300],
+                                      borderRadius: BorderRadius.circular(18),
+                                    ),
+                                    padding: const EdgeInsets.all(5),
+                                    child: Text(
+                                      link.type,
+                                      style: const TextStyle(fontSize: 10),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              trailing: Text('${link.views} مشاهدة'),
+                            ),
                           ),
-                          trailing: Text('${link.views} مشاهدة'),
                         ),
-                      ),
+                      ],
                     );
                   },
                 );
@@ -114,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          adsManager.showRewardedAd();
+                            _adsManager.showRewardedAd();
 
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => const AddMediaLinkScreen(),

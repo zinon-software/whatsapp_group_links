@@ -1,8 +1,9 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+
+import 'app_helper.dart';
 
 
 class AdsManager {
@@ -64,16 +65,6 @@ class AdsManager {
 
   Widget getBannerAdWidget({AdSize? adSize}) {
     return _BannerAdWidget(adSize: adSize,);
-    // log(_bannerAd.size.height.toDouble().toString());
-    // return StatefulBuilder(
-    //   builder: (context, setState) {
-    //     return SizedBox(
-    //       height: _bannerAd.size.height.toDouble(),
-    //       width: _bannerAd.size.width.toDouble(),
-    //       child: AdWidget(ad: _bannerAd),
-    //     );
-    //   },
-    // );
   }
 
   void disposeBannerAds() {
@@ -128,7 +119,7 @@ class AdsManager {
 
   void _createRewardedInterstitialAd() {
     RewardedInterstitialAd.load(
-      adUnitId: AdHelper().rewardedAdUnitId,
+      adUnitId: AdHelper().rewardedInterstitialAdUnitId,
       request: request,
       rewardedInterstitialAdLoadCallback: RewardedInterstitialAdLoadCallback(
         onAdLoaded: (RewardedInterstitialAd ad) {
@@ -536,61 +527,3 @@ class _BannerAdWidgetState extends State<_BannerAdWidget> {
 }
 
 
-
-
-class AdHelper {
-  // final bool _testMode = true;
-  final bool isRelease = const bool.fromEnvironment('dart.vm.product');
-
-  String get bannerAdUnitId {
-    if (!isRelease) {
-      return "ca-app-pub-3940256099942544/6300978111";
-    } else if (Platform.isAndroid) {
-      return "ca-app-pub-9553130506719526/7133339279";
-    } else if (Platform.isIOS) {
-      return "";
-    } else {
-      throw UnsupportedError("Unsupported Platform");
-    }
-  }
-
-  String get interstitialAdUnitId {
-    if (!isRelease) {
-      return "ca-app-pub-3940256099942544/1033173712";
-    } else if (Platform.isAndroid) {
-      return "ca-app-pub-9553130506719526/2286199091";
-    } else if (Platform.isIOS) {
-      return "";
-    } else {
-      throw UnsupportedError("Unsupported Platform");
-    }
-  }
-
-  String get rewardedAdUnitId {
-    if (!isRelease) {
-      return "ca-app-pub-3940256099942544/5224354917";
-    } else if (Platform.isAndroid) {
-      return "ca-app-pub-9553130506719526/2587589604";
-    } else if (Platform.isIOS) {
-      return "";
-    } else {
-      throw UnsupportedError("Unsupported Platform");
-    }
-  }
-
-  
-  String get nativeAdUnitId {
-    if(!isRelease){
-      return '/6499/example/native';
-    }
-    else {
-      if (Platform.isAndroid) {
-        return "ca-app-pub-2434981739474696/5341907076";
-      } else if (Platform.isIOS) {
-        return "ca-app-pub-2434981739474696/4764156723";
-      } else {
-        throw UnsupportedError("Unsupported Platform");
-      }
-    }
-  }
-}

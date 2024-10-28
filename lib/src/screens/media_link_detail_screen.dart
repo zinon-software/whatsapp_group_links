@@ -1,7 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:linkati/new_code/models/social_media_link.dart';
+import 'package:linkati/src/models/social_media_link.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../managers/ads_manager.dart';
