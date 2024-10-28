@@ -1,11 +1,12 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:linkati/src/widgets/alert_widget.dart';
+import 'package:linkati/src/widgets/custom_button_widget.dart';
 
 import '../managers/ads_manager.dart';
 import '../managers/cloud_manager.dart';
 import '../models/social_media_link.dart';
+import '../widgets/custom_text_field.dart';
 
 class AddMediaLinkScreen extends StatefulWidget {
   const AddMediaLinkScreen({super.key});
@@ -17,8 +18,8 @@ class AddMediaLinkScreen extends StatefulWidget {
 class _AddMediaLinkScreenState extends State<AddMediaLinkScreen> {
   final CloudManager cloudManager = CloudManager();
 
-  late final TextEditingController titleController = TextEditingController();
-  late final TextEditingController urlController = TextEditingController();
+  late final TextEditingController _titleController;
+  late final TextEditingController _urlController;
   final GlobalKey<FormState> _formKey =
       GlobalKey<FormState>(); // Added form key
 
@@ -26,6 +27,8 @@ class _AddMediaLinkScreenState extends State<AddMediaLinkScreen> {
 
   @override
   void initState() {
+    _titleController = TextEditingController();
+    _urlController = TextEditingController();
     super.initState();
     _adsManager = AdsManager();
     _adsManager.loadBannerAd(adSize: AdSize.fullBanner);
@@ -33,8 +36,8 @@ class _AddMediaLinkScreenState extends State<AddMediaLinkScreen> {
 
   @override
   void dispose() {
-    titleController.dispose();
-    urlController.dispose();
+    _titleController.dispose();
+    _urlController.dispose();
     _adsManager.disposeBannerAds();
 
     super.dispose();
@@ -67,13 +70,10 @@ class _AddMediaLinkScreenState extends State<AddMediaLinkScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      TextFormField(
+                      CustomTextField(
                         keyboardType: TextInputType.name,
-                        controller: titleController,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: "العنوان",
-                        ),
+                        controller: _titleController,
+                        labelText: "العنوان",
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "يرجى إدخال العنوان";
@@ -82,13 +82,10 @@ class _AddMediaLinkScreenState extends State<AddMediaLinkScreen> {
                         },
                       ),
                       const SizedBox(height: 10),
-                      TextFormField(
+                      CustomTextField(
                         keyboardType: TextInputType.url,
-                        controller: urlController,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: "الرابط",
-                        ),
+                        controller: _urlController,
+                        hintText: "الرابط",
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "يرجى إدخال الرابط";
@@ -99,60 +96,47 @@ class _AddMediaLinkScreenState extends State<AddMediaLinkScreen> {
                         },
                       ),
                       const SizedBox(height: 10),
-                      ElevatedButton(
+                      CustomButtonWidget(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             // Create a new social media link
-                            String type = determineType(urlController.text);
+                            String type = determineType(_urlController.text);
                             SocialMediaLink newLink = SocialMediaLink(
-                              title: titleController.text,
+                              title: _titleController.text,
                               createDt: DateTime.now(),
-                              url: urlController.text,
+                              url: _urlController.text,
                               views: 0,
                               type: type,
                               isActive: false,
                             );
 
-                            showAdaptiveDialog(
-                              context: context,
-                              builder: (context) => const CupertinoAlertDialog(
-                                content: SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child: Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                ),
-                              ),
-                            );
+                            AppAlert.loading(context);
 
                             // Add the link to Firestore
                             await cloudManager.addSocialMediaLink(newLink);
-                            Navigator.pop(context);
+                            // ignore: use_build_context_synchronously
                             // عرض رسالة إعلامية بنجاح الإضافة باستخدام AwesomeDialog
-                            AwesomeDialog(
-                              context: context,
-                              dialogType: DialogType.success,
-                              animType: AnimType.bottomSlide,
-                              title: 'تمت الإضافة بنجاح',
-                              desc:
-                                  'تمت إضافة الرابط بنجاح إلى قاعدة البيانات.',
-                              btnCancelOnPress: () {
+                            AppAlert.confirm(
+                              // ignore: use_build_context_synchronously
+                              context,
+                              title: "تمت إضافة الرابط بنجاح",
+                              body:
+                                  "تمت أضافة الرابط بنجاح ألى قاعدة البيانات.",
+                              okTixt: "إنشاء رابط جديد",
+                              onConfirm: () {
+                                _titleController.clear();
+                                _urlController.clear();
+                              },
+                              dismissOn: false,
+                              cancelTixt: "إغلق",
+                              onCancelBtnTap: () {
+                                AppAlert.dismissDialog(context);
                                 Navigator.pop(context);
                               },
-                              btnOkOnPress: () {
-                                titleController.clear();
-                                urlController.clear();
-                              },
-                              btnOkText: "إضافة رابط جديد",
-                              btnCancelText: "إغلاق",
-                              dismissOnTouchOutside: false,
-                              dismissOnBackKeyPress: false,
-                            ).show();
+                            );
                           }
                         },
-                        child: const Text('إضافة الرابط'),
+                        label: 'إضافة الرابط',
                       ),
                     ],
                   ),

@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:linkati/firebase_options.dart';
 
-
 import 'src/screens/home_screen.dart';
-
+import 'src/utils/color_manager.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,7 +15,6 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
 
   MobileAds.instance.initialize();
 
@@ -50,39 +49,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: Colors.green,
-        textTheme: const TextTheme(
-          bodyLarge: TextStyle(color: Colors.black, fontSize: 14),
-          bodyMedium: TextStyle(color: Colors.black, fontSize: 12),
-          bodySmall: TextStyle(color: Colors.black, fontSize: 10),
-          titleLarge: TextStyle(color: Colors.black, fontSize: 16),
-          titleMedium: TextStyle(color: Colors.black, fontSize: 14),
-          titleSmall: TextStyle(color: Colors.black, fontSize: 12),
-        ),
-        colorScheme: const ColorScheme(
-          brightness: Brightness.light,
-          primary: Colors.green, // لون العنصر الأساسي
-          secondary: Colors.blue, // لون الخلفية
-          surface: Colors.white, // لون السطح (مثل خلفية البطاقات)
-          error: Colors.red, // لون الخطأ
-          onPrimary: Colors.white, // لون النص على العنصر الأساسي
-          onSecondary: Colors.white, // لون النص على الخلفية
-          onSurface: Colors.black, // لون النص على السطح
-          onError: Colors.white, // لون النص على الخطأ
-          
-        ),
-        appBarTheme: const AppBarTheme(
-          shadowColor: Colors.transparent,
-          surfaceTintColor: Colors.transparent,
-        ),
-        floatingActionButtonTheme: FloatingActionButtonThemeData(
-          shape: RoundedRectangleBorder(
-            // إضافة BorderRadius للتغيير في شكل الزوايا
-            borderRadius: BorderRadius.circular(30),
-          ),
-        ),
-      ),
+      theme: themeData(),
       themeMode: ThemeMode.dark,
       localizationsDelegates: const [
         GlobalCupertinoLocalizations.delegate,
@@ -96,3 +63,70 @@ class MyApp extends StatelessWidget {
   }
 }
 
+ThemeData themeData() {
+  return ThemeData(
+    primaryColor: ColorManager.primaryLight,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: Colors.white,
+      primary: ColorManager.primaryLight,
+    ),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: ColorManager.primaryLight,
+      foregroundColor: Colors.white,
+      centerTitle: true,
+      systemOverlayStyle: SystemUiOverlayStyle(
+        systemNavigationBarColor: ColorManager.container,
+        systemNavigationBarIconBrightness: Brightness.dark,
+      ),
+    ),
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
+      backgroundColor: ColorManager.primaryLight,
+      foregroundColor: Colors.white,
+    ),
+    cardTheme: CardTheme(
+      elevation: 5,
+      color: ColorManager.card,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(6),
+      ),
+      clipBehavior: Clip.antiAlias,
+      margin: const EdgeInsets.symmetric(
+        horizontal: 4,
+        vertical: 6,
+      ),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: ButtonStyle(
+        side: WidgetStateProperty.resolveWith<BorderSide>(
+          (states) => const BorderSide(width: 1, color: Colors.green),
+        ),
+      ),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        padding: WidgetStateProperty.all(const EdgeInsets.all(12)),
+        shape: WidgetStateProperty.all(RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+        )),
+        backgroundColor:
+            const WidgetStatePropertyAll(ColorManager.primaryLight),
+        foregroundColor: const WidgetStatePropertyAll(Colors.white),
+      ),
+    ),
+    tabBarTheme: TabBarTheme(
+      // labelPadding: EdgeInsets.symmetric(horizontal: 8),
+      indicatorSize: TabBarIndicatorSize.label,
+      labelColor: ColorManager.secondaryLight,
+      unselectedLabelColor: ColorManager.disabled,
+      // dividerColor: Colors.transparent,
+      labelStyle: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+      ),
+      unselectedLabelStyle: const TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+  );
+}

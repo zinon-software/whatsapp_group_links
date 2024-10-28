@@ -2,6 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:linkati/src/models/social_media_link.dart';
+import 'package:linkati/src/widgets/custom_button_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../managers/ads_manager.dart';
@@ -56,12 +57,16 @@ class _MediaLinkDetailScreenState extends State<MediaLinkDetailScreen> {
             // اضف اعلانك هنا لاكثر من 200 الف مستخدم write code ui
 
             const SizedBox(height: 10),
-            Text(widget.socialMediaLink.title),
-            const SizedBox(height: 10),
-            Text(widget.socialMediaLink.url),
+            Text(
+              widget.socialMediaLink.title,
+              style: const TextStyle(
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold),
+            ),
 
-            const SizedBox(height: 40),
-            ElevatedButton(
+            Spacer(),
+            CustomButtonWidget(
               onPressed: () async {
                 if (widget.socialMediaLink.isActive) {
                   launchUrl(Uri.parse(widget.socialMediaLink.url));
@@ -78,9 +83,9 @@ class _MediaLinkDetailScreenState extends State<MediaLinkDetailScreen> {
                   ).show();
                 }
               },
-              child: Text('الانتقال الى ${widget.socialMediaLink.type}'),
+              label: 'الانتقال الى ${widget.socialMediaLink.type}',
             ),
-            const SizedBox(height: 40),
+            Spacer(),
           ],
         ),
       ),
