@@ -23,7 +23,7 @@ class _MediaLinkDetailScreenState extends State<MediaLinkDetailScreen> {
   void initState() {
     super.initState();
     _adsManager = AdsManager();
-    _adsManager.loadBannerAd(adSize: AdSize.mediumRectangle);
+    _adsManager.loadBannerAd(adSize: AdSize.fullBanner);
   }
 
   @override
@@ -46,11 +46,14 @@ class _MediaLinkDetailScreenState extends State<MediaLinkDetailScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: _adsManager.getBannerAdWidget(),
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Center(
+                child: _adsManager.getBannerAdWidget(
+                  adSize: AdSize.mediumRectangle,
+                ),
+              ),
             ),
             const SizedBox(height: 40),
-            
             ElevatedButton(
               onPressed: () async {
                 if (widget.socialMediaLink.isActive) {

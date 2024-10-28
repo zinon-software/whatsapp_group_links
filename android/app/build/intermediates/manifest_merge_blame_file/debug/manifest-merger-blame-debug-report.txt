@@ -1,0 +1,586 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.zainon.whatsapp_group_links"
+4    android:versionCode="20"
+5    android:versionName="4.2.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="24"
+9        android:targetSdkVersion="34" />
+10    <!--
+11         The INTERNET permission is required for development. Specifically,
+12         the Flutter tool needs it to communicate with the running application
+13         to allow setting breakpoints, to provide hot reload, etc.
+14    -->
+15    <uses-permission android:name="android.permission.INTERNET" />
+15-->C:\Users\Zinon-Software\Desktop\projects\whatsapp_group_links\android\app\src\debug\AndroidManifest.xml:6:5-66
+15-->C:\Users\Zinon-Software\Desktop\projects\whatsapp_group_links\android\app\src\debug\AndroidManifest.xml:6:22-64
+16    <!-- Although the *SdkVersion is captured in gradle build files, this is required for non gradle builds -->
+17    <!-- <uses-sdk android:minSdkVersion="21" /> -->
+18    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+18-->[com.google.firebase:firebase-firestore:25.1.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\f69d6011fae7dc6520d6facb40740540\transformed\jetified-firebase-firestore-25.1.0\AndroidManifest.xml:10:5-79
+18-->[com.google.firebase:firebase-firestore:25.1.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\f69d6011fae7dc6520d6facb40740540\transformed\jetified-firebase-firestore-25.1.0\AndroidManifest.xml:10:22-76
+19    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
+19-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:26:5-79
+19-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:26:22-76
+20    <uses-permission android:name="android.permission.ACCESS_ADSERVICES_AD_ID" />
+20-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:27:5-82
+20-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:27:22-79
+21    <uses-permission android:name="android.permission.ACCESS_ADSERVICES_ATTRIBUTION" />
+21-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:28:5-88
+21-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:28:22-85
+22    <uses-permission android:name="android.permission.ACCESS_ADSERVICES_TOPICS" /> <!-- Android package visibility setting -->
+22-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:29:5-83
+22-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:29:22-80
+23    <queries>
+23-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:35:5-68:15
+24
+25        <!-- For browser content -->
+26        <intent>
+26-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:38:9-44:18
+27            <action android:name="android.intent.action.VIEW" />
+27-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:39:13-65
+27-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:39:21-62
+28
+29            <category android:name="android.intent.category.BROWSABLE" />
+29-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:41:13-74
+29-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:41:23-71
+30
+31            <data android:scheme="https" />
+31-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:43:13-44
+31-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:43:19-41
+32        </intent>
+33        <!-- End of browser content -->
+34        <!-- For CustomTabsService -->
+35        <intent>
+35-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:47:9-49:18
+36            <action android:name="android.support.customtabs.action.CustomTabsService" />
+36-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:48:13-90
+36-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:48:21-87
+37        </intent>
+38        <!-- End of CustomTabsService -->
+39        <!-- For MRAID capabilities -->
+40        <intent>
+40-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:52:9-56:18
+41            <action android:name="android.intent.action.INSERT" />
+41-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:53:13-67
+41-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:53:21-64
+42
+43            <data android:mimeType="vnd.android.cursor.dir/event" />
+43-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:43:13-44
+44        </intent>
+45        <intent>
+45-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:57:9-61:18
+46            <action android:name="android.intent.action.VIEW" />
+46-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:39:13-65
+46-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:39:21-62
+47
+48            <data android:scheme="sms" />
+48-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:43:13-44
+48-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:43:19-41
+49        </intent>
+50        <intent>
+50-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:62:9-66:18
+51            <action android:name="android.intent.action.DIAL" />
+51-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:63:13-65
+51-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:63:21-62
+52
+53            <data android:path="tel:" />
+53-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:43:13-44
+54        </intent>
+55        <!-- End of MRAID capabilities -->
+56    </queries>
+57
+58    <uses-permission android:name="android.permission.WAKE_LOCK" />
+58-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:25:5-68
+58-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:25:22-65
+59    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+59-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:28:5-77
+59-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:28:22-74
+60
+61    <permission
+61-->[androidx.core:core:1.13.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\c61b536c4082c3ac67070627c2d090ef\transformed\core-1.13.1\AndroidManifest.xml:22:5-24:47
+62        android:name="com.zainon.whatsapp_group_links.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+62-->[androidx.core:core:1.13.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\c61b536c4082c3ac67070627c2d090ef\transformed\core-1.13.1\AndroidManifest.xml:23:9-81
+63        android:protectionLevel="signature" />
+63-->[androidx.core:core:1.13.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\c61b536c4082c3ac67070627c2d090ef\transformed\core-1.13.1\AndroidManifest.xml:24:9-44
+64
+65    <uses-permission android:name="com.zainon.whatsapp_group_links.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+65-->[androidx.core:core:1.13.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\c61b536c4082c3ac67070627c2d090ef\transformed\core-1.13.1\AndroidManifest.xml:26:5-97
+65-->[androidx.core:core:1.13.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\c61b536c4082c3ac67070627c2d090ef\transformed\core-1.13.1\AndroidManifest.xml:26:22-94
+66
+67    <application
+68        android:name="android.app.Application"
+69        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+69-->[androidx.core:core:1.13.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\c61b536c4082c3ac67070627c2d090ef\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
+70        android:debuggable="true"
+71        android:extractNativeLibs="false"
+72        android:icon="@mipmap/launcher_icon"
+73        android:label="قروباتي" >
+74
+75        <!-- Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 -->
+76        <meta-data
+77            android:name="com.google.android.gms.ads.APPLICATION_ID"
+78            android:value="ca-app-pub-9553130506719526~4832613298" />
+79
+80        <activity
+81            android:name="com.zainon.whatsapp_group_links.MainActivity"
+82            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+83            android:exported="true"
+84            android:hardwareAccelerated="true"
+85            android:launchMode="singleTop"
+86            android:theme="@style/LaunchTheme"
+87            android:windowSoftInputMode="adjustResize" >
+88
+89            <!--
+90                 Specifies an Android theme to apply to this Activity as soon as
+91                 the Android process has started. This theme is visible to the user
+92                 while the Flutter UI initializes. After that, this theme continues
+93                 to determine the Window background behind the Flutter UI.
+94            -->
+95            <meta-data
+96                android:name="io.flutter.embedding.android.NormalTheme"
+97                android:resource="@style/NormalTheme" />
+98
+99            <intent-filter>
+100                <action android:name="android.intent.action.MAIN" />
+101
+102                <category android:name="android.intent.category.LAUNCHER" />
+103            </intent-filter>
+104        </activity>
+105        <!--
+106             Don't delete the meta-data below.
+107             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+108        -->
+109        <meta-data
+110            android:name="flutterEmbedding"
+111            android:value="2" />
+112
+113        <service
+113-->[:cloud_firestore] C:\Users\Zinon-Software\AppData\Local\Pub\Cache\hosted\pub.dev\cloud_firestore-5.4.4\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:9-14:19
+114            android:name="com.google.firebase.components.ComponentDiscoveryService"
+114-->[:cloud_firestore] C:\Users\Zinon-Software\AppData\Local\Pub\Cache\hosted\pub.dev\cloud_firestore-5.4.4\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:18-89
+115            android:directBootAware="true"
+115-->[com.google.firebase:firebase-common:21.0.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\7b0d2ccb20acab2a44a7785822be53d9\transformed\jetified-firebase-common-21.0.0\AndroidManifest.xml:32:13-43
+116            android:exported="false" >
+116-->[com.google.firebase:firebase-firestore:25.1.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\f69d6011fae7dc6520d6facb40740540\transformed\jetified-firebase-firestore-25.1.0\AndroidManifest.xml:16:13-37
+117            <meta-data
+117-->[:cloud_firestore] C:\Users\Zinon-Software\AppData\Local\Pub\Cache\hosted\pub.dev\cloud_firestore-5.4.4\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:11:13-13:85
+118                android:name="com.google.firebase.components:io.flutter.plugins.firebase.firestore.FlutterFirebaseFirestoreRegistrar"
+118-->[:cloud_firestore] C:\Users\Zinon-Software\AppData\Local\Pub\Cache\hosted\pub.dev\cloud_firestore-5.4.4\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:12:17-134
+119                android:value="com.google.firebase.components.ComponentRegistrar" />
+119-->[:cloud_firestore] C:\Users\Zinon-Software\AppData\Local\Pub\Cache\hosted\pub.dev\cloud_firestore-5.4.4\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:13:17-82
+120            <meta-data
+120-->[:firebase_core] C:\Users\Zinon-Software\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_core-3.6.0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:11:13-13:85
+121                android:name="com.google.firebase.components:io.flutter.plugins.firebase.core.FlutterFirebaseCoreRegistrar"
+121-->[:firebase_core] C:\Users\Zinon-Software\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_core-3.6.0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:12:17-124
+122                android:value="com.google.firebase.components.ComponentRegistrar" />
+122-->[:firebase_core] C:\Users\Zinon-Software\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_core-3.6.0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:13:17-82
+123            <meta-data
+123-->[com.google.firebase:firebase-firestore:25.1.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\f69d6011fae7dc6520d6facb40740540\transformed\jetified-firebase-firestore-25.1.0\AndroidManifest.xml:17:13-19:85
+124                android:name="com.google.firebase.components:com.google.firebase.firestore.FirebaseFirestoreKtxRegistrar"
+124-->[com.google.firebase:firebase-firestore:25.1.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\f69d6011fae7dc6520d6facb40740540\transformed\jetified-firebase-firestore-25.1.0\AndroidManifest.xml:18:17-122
+125                android:value="com.google.firebase.components.ComponentRegistrar" />
+125-->[com.google.firebase:firebase-firestore:25.1.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\f69d6011fae7dc6520d6facb40740540\transformed\jetified-firebase-firestore-25.1.0\AndroidManifest.xml:19:17-82
+126            <meta-data
+126-->[com.google.firebase:firebase-firestore:25.1.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\f69d6011fae7dc6520d6facb40740540\transformed\jetified-firebase-firestore-25.1.0\AndroidManifest.xml:20:13-22:85
+127                android:name="com.google.firebase.components:com.google.firebase.firestore.FirestoreRegistrar"
+127-->[com.google.firebase:firebase-firestore:25.1.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\f69d6011fae7dc6520d6facb40740540\transformed\jetified-firebase-firestore-25.1.0\AndroidManifest.xml:21:17-111
+128                android:value="com.google.firebase.components.ComponentRegistrar" />
+128-->[com.google.firebase:firebase-firestore:25.1.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\f69d6011fae7dc6520d6facb40740540\transformed\jetified-firebase-firestore-25.1.0\AndroidManifest.xml:22:17-82
+129            <meta-data
+129-->[com.google.firebase:firebase-common-ktx:21.0.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\66bd436e32e919e03c20bbfc58668be2\transformed\jetified-firebase-common-ktx-21.0.0\AndroidManifest.xml:12:13-14:85
+130                android:name="com.google.firebase.components:com.google.firebase.ktx.FirebaseCommonLegacyRegistrar"
+130-->[com.google.firebase:firebase-common-ktx:21.0.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\66bd436e32e919e03c20bbfc58668be2\transformed\jetified-firebase-common-ktx-21.0.0\AndroidManifest.xml:13:17-116
+131                android:value="com.google.firebase.components.ComponentRegistrar" />
+131-->[com.google.firebase:firebase-common-ktx:21.0.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\66bd436e32e919e03c20bbfc58668be2\transformed\jetified-firebase-common-ktx-21.0.0\AndroidManifest.xml:14:17-82
+132            <meta-data
+132-->[com.google.firebase:firebase-common:21.0.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\7b0d2ccb20acab2a44a7785822be53d9\transformed\jetified-firebase-common-21.0.0\AndroidManifest.xml:35:13-37:85
+133                android:name="com.google.firebase.components:com.google.firebase.FirebaseCommonKtxRegistrar"
+133-->[com.google.firebase:firebase-common:21.0.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\7b0d2ccb20acab2a44a7785822be53d9\transformed\jetified-firebase-common-21.0.0\AndroidManifest.xml:36:17-109
+134                android:value="com.google.firebase.components.ComponentRegistrar" />
+134-->[com.google.firebase:firebase-common:21.0.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\7b0d2ccb20acab2a44a7785822be53d9\transformed\jetified-firebase-common-21.0.0\AndroidManifest.xml:37:17-82
+135        </service>
+136
+137        <meta-data
+137-->[:google_mobile_ads] C:\Users\Zinon-Software\AppData\Local\Pub\Cache\hosted\pub.dev\google_mobile_ads-5.2.0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:12:9-14:36
+138            android:name="io.flutter.embedded_views_preview"
+138-->[:google_mobile_ads] C:\Users\Zinon-Software\AppData\Local\Pub\Cache\hosted\pub.dev\google_mobile_ads-5.2.0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:13:13-61
+139            android:value="true" />
+139-->[:google_mobile_ads] C:\Users\Zinon-Software\AppData\Local\Pub\Cache\hosted\pub.dev\google_mobile_ads-5.2.0\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:14:13-33
+140
+141        <activity
+141-->[:url_launcher_android] C:\Users\Zinon-Software\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.13\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:9-13:74
+142            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
+142-->[:url_launcher_android] C:\Users\Zinon-Software\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.13\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:11:13-74
+143            android:exported="false"
+143-->[:url_launcher_android] C:\Users\Zinon-Software\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.13\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:12:13-37
+144            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+144-->[:url_launcher_android] C:\Users\Zinon-Software\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.13\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:13:13-71
+145
+146        <uses-library
+146-->[androidx.window:window:1.2.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\fcbe0a3e38d79c926f915d069364d26e\transformed\jetified-window-1.2.0\AndroidManifest.xml:23:9-25:40
+147            android:name="androidx.window.extensions"
+147-->[androidx.window:window:1.2.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\fcbe0a3e38d79c926f915d069364d26e\transformed\jetified-window-1.2.0\AndroidManifest.xml:24:13-54
+148            android:required="false" />
+148-->[androidx.window:window:1.2.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\fcbe0a3e38d79c926f915d069364d26e\transformed\jetified-window-1.2.0\AndroidManifest.xml:25:13-37
+149        <uses-library
+149-->[androidx.window:window:1.2.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\fcbe0a3e38d79c926f915d069364d26e\transformed\jetified-window-1.2.0\AndroidManifest.xml:26:9-28:40
+150            android:name="androidx.window.sidecar"
+150-->[androidx.window:window:1.2.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\fcbe0a3e38d79c926f915d069364d26e\transformed\jetified-window-1.2.0\AndroidManifest.xml:27:13-51
+151            android:required="false" /> <!-- Include the AdActivity and InAppPurchaseActivity configChanges and themes. -->
+151-->[androidx.window:window:1.2.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\fcbe0a3e38d79c926f915d069364d26e\transformed\jetified-window-1.2.0\AndroidManifest.xml:28:13-37
+152        <activity
+152-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:73:9-78:43
+153            android:name="com.google.android.gms.ads.AdActivity"
+153-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:74:13-65
+154            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+154-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:75:13-122
+155            android:exported="false"
+155-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:76:13-37
+156            android:theme="@android:style/Theme.Translucent" />
+156-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:77:13-61
+157
+158        <provider
+158-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:80:9-85:43
+159            android:name="com.google.android.gms.ads.MobileAdsInitProvider"
+159-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:81:13-76
+160            android:authorities="com.zainon.whatsapp_group_links.mobileadsinitprovider"
+160-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:82:13-73
+161            android:exported="false"
+161-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:83:13-37
+162            android:initOrder="100" />
+162-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:84:13-36
+163
+164        <service
+164-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:87:9-91:43
+165            android:name="com.google.android.gms.ads.AdService"
+165-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:88:13-64
+166            android:enabled="true"
+166-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:89:13-35
+167            android:exported="false" />
+167-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:90:13-37
+168
+169        <activity
+169-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:93:9-97:43
+170            android:name="com.google.android.gms.ads.OutOfContextTestingActivity"
+170-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:94:13-82
+171            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+171-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:95:13-122
+172            android:exported="false" />
+172-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:96:13-37
+173        <activity
+173-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:98:9-105:43
+174            android:name="com.google.android.gms.ads.NotificationHandlerActivity"
+174-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:99:13-82
+175            android:excludeFromRecents="true"
+175-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:100:13-46
+176            android:exported="false"
+176-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:101:13-37
+177            android:launchMode="singleTask"
+177-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:102:13-44
+178            android:taskAffinity=""
+178-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:103:13-36
+179            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+179-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:104:13-72
+180
+181        <property
+181-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:107:9-109:62
+182            android:name="android.adservices.AD_SERVICES_CONFIG"
+182-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:108:13-65
+183            android:resource="@xml/gma_ad_services_config" />
+183-->[com.google.android.gms:play-services-ads-lite:23.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\0b4ec1dce73947905cb539d0ec4ae8d3\transformed\jetified-play-services-ads-lite-23.4.0\AndroidManifest.xml:109:13-59
+184
+185        <provider
+185-->[com.google.firebase:firebase-common:21.0.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\7b0d2ccb20acab2a44a7785822be53d9\transformed\jetified-firebase-common-21.0.0\AndroidManifest.xml:23:9-28:39
+186            android:name="com.google.firebase.provider.FirebaseInitProvider"
+186-->[com.google.firebase:firebase-common:21.0.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\7b0d2ccb20acab2a44a7785822be53d9\transformed\jetified-firebase-common-21.0.0\AndroidManifest.xml:24:13-77
+187            android:authorities="com.zainon.whatsapp_group_links.firebaseinitprovider"
+187-->[com.google.firebase:firebase-common:21.0.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\7b0d2ccb20acab2a44a7785822be53d9\transformed\jetified-firebase-common-21.0.0\AndroidManifest.xml:25:13-72
+188            android:directBootAware="true"
+188-->[com.google.firebase:firebase-common:21.0.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\7b0d2ccb20acab2a44a7785822be53d9\transformed\jetified-firebase-common-21.0.0\AndroidManifest.xml:26:13-43
+189            android:exported="false"
+189-->[com.google.firebase:firebase-common:21.0.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\7b0d2ccb20acab2a44a7785822be53d9\transformed\jetified-firebase-common-21.0.0\AndroidManifest.xml:27:13-37
+190            android:initOrder="100" />
+190-->[com.google.firebase:firebase-common:21.0.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\7b0d2ccb20acab2a44a7785822be53d9\transformed\jetified-firebase-common-21.0.0\AndroidManifest.xml:28:13-36
+191
+192        <activity
+192-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\108d64dc943a948c2305d16b00dc6f45\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:20:9-22:45
+193            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+193-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\108d64dc943a948c2305d16b00dc6f45\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:20:19-85
+194            android:exported="false"
+194-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\108d64dc943a948c2305d16b00dc6f45\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:22:19-43
+195            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+195-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\108d64dc943a948c2305d16b00dc6f45\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:21:19-78
+196
+197        <uses-library
+197-->[androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05] C:\Users\Zinon-Software\.gradle\caches\transforms-3\1e548ea6a9624913f3573d631ab49e36\transformed\jetified-ads-adservices-1.0.0-beta05\AndroidManifest.xml:23:9-25:40
+198            android:name="android.ext.adservices"
+198-->[androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05] C:\Users\Zinon-Software\.gradle\caches\transforms-3\1e548ea6a9624913f3573d631ab49e36\transformed\jetified-ads-adservices-1.0.0-beta05\AndroidManifest.xml:24:13-50
+199            android:required="false" />
+199-->[androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05] C:\Users\Zinon-Software\.gradle\caches\transforms-3\1e548ea6a9624913f3573d631ab49e36\transformed\jetified-ads-adservices-1.0.0-beta05\AndroidManifest.xml:25:13-37
+200
+201        <provider
+201-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:31:9-39:20
+202            android:name="androidx.startup.InitializationProvider"
+202-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:32:13-67
+203            android:authorities="com.zainon.whatsapp_group_links.androidx-startup"
+203-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:33:13-68
+204            android:exported="false" >
+204-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:34:13-37
+205            <meta-data
+205-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:36:13-38:52
+206                android:name="androidx.work.WorkManagerInitializer"
+206-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:37:17-68
+207                android:value="androidx.startup" />
+207-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:38:17-49
+208            <meta-data
+208-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\d8f7e96ca3967cc0b8846df2f8a85785\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:29:13-31:52
+209                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+209-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\d8f7e96ca3967cc0b8846df2f8a85785\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:30:17-78
+210                android:value="androidx.startup" />
+210-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\d8f7e96ca3967cc0b8846df2f8a85785\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:31:17-49
+211            <meta-data
+211-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\89cb9aab1cb75e338890f7bff1722bfe\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:29:13-31:52
+212                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+212-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\89cb9aab1cb75e338890f7bff1722bfe\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:30:17-85
+213                android:value="androidx.startup" />
+213-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\89cb9aab1cb75e338890f7bff1722bfe\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:31:17-49
+214        </provider>
+215
+216        <service
+216-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:41:9-46:35
+217            android:name="androidx.work.impl.background.systemalarm.SystemAlarmService"
+217-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:42:13-88
+218            android:directBootAware="false"
+218-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:43:13-44
+219            android:enabled="@bool/enable_system_alarm_service_default"
+219-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:44:13-72
+220            android:exported="false" />
+220-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:45:13-37
+221        <service
+221-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:47:9-53:35
+222            android:name="androidx.work.impl.background.systemjob.SystemJobService"
+222-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:48:13-84
+223            android:directBootAware="false"
+223-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:49:13-44
+224            android:enabled="@bool/enable_system_job_service_default"
+224-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:50:13-70
+225            android:exported="true"
+225-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:51:13-36
+226            android:permission="android.permission.BIND_JOB_SERVICE" />
+226-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:52:13-69
+227        <service
+227-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:54:9-59:35
+228            android:name="androidx.work.impl.foreground.SystemForegroundService"
+228-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:55:13-81
+229            android:directBootAware="false"
+229-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:56:13-44
+230            android:enabled="@bool/enable_system_foreground_service_default"
+230-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:57:13-77
+231            android:exported="false" />
+231-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:58:13-37
+232
+233        <receiver
+233-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:61:9-66:35
+234            android:name="androidx.work.impl.utils.ForceStopRunnable$BroadcastReceiver"
+234-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:62:13-88
+235            android:directBootAware="false"
+235-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:63:13-44
+236            android:enabled="true"
+236-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:64:13-35
+237            android:exported="false" />
+237-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:65:13-37
+238        <receiver
+238-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:67:9-77:20
+239            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryChargingProxy"
+239-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:68:13-106
+240            android:directBootAware="false"
+240-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:69:13-44
+241            android:enabled="false"
+241-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:70:13-36
+242            android:exported="false" >
+242-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:71:13-37
+243            <intent-filter>
+243-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:73:13-76:29
+244                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+244-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:74:17-87
+244-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:74:25-84
+245                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+245-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:75:17-90
+245-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:75:25-87
+246            </intent-filter>
+247        </receiver>
+248        <receiver
+248-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:78:9-88:20
+249            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryNotLowProxy"
+249-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:79:13-104
+250            android:directBootAware="false"
+250-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:80:13-44
+251            android:enabled="false"
+251-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:81:13-36
+252            android:exported="false" >
+252-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:82:13-37
+253            <intent-filter>
+253-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:84:13-87:29
+254                <action android:name="android.intent.action.BATTERY_OKAY" />
+254-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:85:17-77
+254-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:85:25-74
+255                <action android:name="android.intent.action.BATTERY_LOW" />
+255-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:86:17-76
+255-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:86:25-73
+256            </intent-filter>
+257        </receiver>
+258        <receiver
+258-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:89:9-99:20
+259            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$StorageNotLowProxy"
+259-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:90:13-104
+260            android:directBootAware="false"
+260-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:91:13-44
+261            android:enabled="false"
+261-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:92:13-36
+262            android:exported="false" >
+262-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:93:13-37
+263            <intent-filter>
+263-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:95:13-98:29
+264                <action android:name="android.intent.action.DEVICE_STORAGE_LOW" />
+264-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:96:17-83
+264-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:96:25-80
+265                <action android:name="android.intent.action.DEVICE_STORAGE_OK" />
+265-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:97:17-82
+265-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:97:25-79
+266            </intent-filter>
+267        </receiver>
+268        <receiver
+268-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:100:9-109:20
+269            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$NetworkStateProxy"
+269-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:101:13-103
+270            android:directBootAware="false"
+270-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:102:13-44
+271            android:enabled="false"
+271-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:103:13-36
+272            android:exported="false" >
+272-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:104:13-37
+273            <intent-filter>
+273-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:106:13-108:29
+274                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+274-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:107:17-79
+274-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:107:25-76
+275            </intent-filter>
+276        </receiver>
+277        <receiver
+277-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:110:9-121:20
+278            android:name="androidx.work.impl.background.systemalarm.RescheduleReceiver"
+278-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:111:13-88
+279            android:directBootAware="false"
+279-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:112:13-44
+280            android:enabled="false"
+280-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:113:13-36
+281            android:exported="false" >
+281-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:114:13-37
+282            <intent-filter>
+282-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:116:13-120:29
+283                <action android:name="android.intent.action.BOOT_COMPLETED" />
+283-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:117:17-79
+283-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:117:25-76
+284                <action android:name="android.intent.action.TIME_SET" />
+284-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:118:17-73
+284-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:118:25-70
+285                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+285-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:119:17-81
+285-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:119:25-78
+286            </intent-filter>
+287        </receiver>
+288        <receiver
+288-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:122:9-131:20
+289            android:name="androidx.work.impl.background.systemalarm.ConstraintProxyUpdateReceiver"
+289-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:123:13-99
+290            android:directBootAware="false"
+290-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:124:13-44
+291            android:enabled="@bool/enable_system_alarm_service_default"
+291-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:125:13-72
+292            android:exported="false" >
+292-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:126:13-37
+293            <intent-filter>
+293-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:128:13-130:29
+294                <action android:name="androidx.work.impl.background.systemalarm.UpdateProxies" />
+294-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:129:17-98
+294-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:129:25-95
+295            </intent-filter>
+296        </receiver>
+297        <receiver
+297-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:132:9-142:20
+298            android:name="androidx.work.impl.diagnostics.DiagnosticsReceiver"
+298-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:133:13-78
+299            android:directBootAware="false"
+299-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:134:13-44
+300            android:enabled="true"
+300-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:135:13-35
+301            android:exported="true"
+301-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:136:13-36
+302            android:permission="android.permission.DUMP" >
+302-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:137:13-57
+303            <intent-filter>
+303-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:139:13-141:29
+304                <action android:name="androidx.work.diagnostics.REQUEST_DIAGNOSTICS" />
+304-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:140:17-88
+304-->[androidx.work:work-runtime:2.7.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\41fb2617e110b41f31a8f67ade7f31b4\transformed\work-runtime-2.7.0\AndroidManifest.xml:140:25-85
+305            </intent-filter>
+306        </receiver>
+307
+308        <meta-data
+308-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\71e7b4ea8ffc9411772658eb17481f3d\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:6:9-122
+309            android:name="com.google.android.gms.version"
+309-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\71e7b4ea8ffc9411772658eb17481f3d\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:6:20-65
+310            android:value="@integer/google_play_services_version" />
+310-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\Zinon-Software\.gradle\caches\transforms-3\71e7b4ea8ffc9411772658eb17481f3d\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:6:66-119
+311
+312        <receiver
+312-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\89cb9aab1cb75e338890f7bff1722bfe\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20
+313            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+313-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\89cb9aab1cb75e338890f7bff1722bfe\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:35:13-76
+314            android:directBootAware="false"
+314-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\89cb9aab1cb75e338890f7bff1722bfe\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:36:13-44
+315            android:enabled="true"
+315-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\89cb9aab1cb75e338890f7bff1722bfe\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:37:13-35
+316            android:exported="true"
+316-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\89cb9aab1cb75e338890f7bff1722bfe\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:38:13-36
+317            android:permission="android.permission.DUMP" >
+317-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\89cb9aab1cb75e338890f7bff1722bfe\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:39:13-57
+318            <intent-filter>
+318-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\89cb9aab1cb75e338890f7bff1722bfe\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:40:13-42:29
+319                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+319-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\89cb9aab1cb75e338890f7bff1722bfe\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:41:17-91
+319-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\89cb9aab1cb75e338890f7bff1722bfe\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:41:25-88
+320            </intent-filter>
+321            <intent-filter>
+321-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\89cb9aab1cb75e338890f7bff1722bfe\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:43:13-45:29
+322                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+322-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\89cb9aab1cb75e338890f7bff1722bfe\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:44:17-85
+322-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\89cb9aab1cb75e338890f7bff1722bfe\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:44:25-82
+323            </intent-filter>
+324            <intent-filter>
+324-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\89cb9aab1cb75e338890f7bff1722bfe\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:46:13-48:29
+325                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+325-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\89cb9aab1cb75e338890f7bff1722bfe\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:47:17-88
+325-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\89cb9aab1cb75e338890f7bff1722bfe\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:47:25-85
+326            </intent-filter>
+327            <intent-filter>
+327-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\89cb9aab1cb75e338890f7bff1722bfe\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:49:13-51:29
+328                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+328-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\89cb9aab1cb75e338890f7bff1722bfe\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:50:17-95
+328-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Zinon-Software\.gradle\caches\transforms-3\89cb9aab1cb75e338890f7bff1722bfe\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:50:25-92
+329            </intent-filter>
+330        </receiver>
+331
+332        <service
+332-->[androidx.room:room-runtime:2.2.5] C:\Users\Zinon-Software\.gradle\caches\transforms-3\266b831813736101dd61ec6e827a195a\transformed\room-runtime-2.2.5\AndroidManifest.xml:25:9-28:40
+333            android:name="androidx.room.MultiInstanceInvalidationService"
+333-->[androidx.room:room-runtime:2.2.5] C:\Users\Zinon-Software\.gradle\caches\transforms-3\266b831813736101dd61ec6e827a195a\transformed\room-runtime-2.2.5\AndroidManifest.xml:26:13-74
+334            android:directBootAware="true"
+334-->[androidx.room:room-runtime:2.2.5] C:\Users\Zinon-Software\.gradle\caches\transforms-3\266b831813736101dd61ec6e827a195a\transformed\room-runtime-2.2.5\AndroidManifest.xml:27:13-43
+335            android:exported="false" />
+335-->[androidx.room:room-runtime:2.2.5] C:\Users\Zinon-Software\.gradle\caches\transforms-3\266b831813736101dd61ec6e827a195a\transformed\room-runtime-2.2.5\AndroidManifest.xml:28:13-37
+336    </application>
+337
+338</manifest>

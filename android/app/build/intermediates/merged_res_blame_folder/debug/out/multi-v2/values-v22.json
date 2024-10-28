@@ -1,0 +1,28 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.zainon.whatsapp_group_links.app-mergeDebugResources-44:/values-v22/values-v22.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\Zinon-Software\\.gradle\\caches\\transforms-3\\22e8a5406fac7eab620fd4b31adf407c\\transformed\\appcompat-1.2.0\\res\\values-v22\\values-v22.xml",
+                    "from": {
+                        "startLines": "2,3,4,9",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,130,217,553",
+                        "endLines": "2,3,8,13",
+                        "endColumns": "74,86,12,12",
+                        "endOffsets": "125,212,548,896"
+                    },
+                    "to": {
+                        "startLines": "2,3,4,9",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,130,217,487",
+                        "endLines": "2,3,8,13",
+                        "endColumns": "74,86,12,12",
+                        "endOffsets": "125,212,482,764"
+                    }
+                }
+            ]
+        }
+    ]
+}

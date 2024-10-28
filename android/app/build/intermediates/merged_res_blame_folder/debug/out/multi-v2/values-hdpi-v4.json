@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.zainon.whatsapp_group_links.app-mergeDebugResources-44:/values-hdpi-v4/values-hdpi-v4.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\Zinon-Software\\.gradle\\caches\\transforms-3\\22e8a5406fac7eab620fd4b31adf407c\\transformed\\appcompat-1.2.0\\res\\values-hdpi-v4\\values-hdpi-v4.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "6",
+                        "endColumns": "13",
+                        "endOffsets": "327"
+                    }
+                }
+            ]
+        }
+    ]
+}

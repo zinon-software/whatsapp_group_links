@@ -6,38 +6,40 @@ publish_to: 'none'
 version: 4.2.0+20
 
 environment:
-  sdk: '>=3.1.0 <4.0.0'
+  sdk: ^3.5.0
 
 
 dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.2
+  flutter_localizations :
+    sdk: flutter
 
-  # get: any
+  cupertino_icons: ^1.0.8
+
   # http: any
   # shared_preferences: any
   # dot_navigation_bar: any
   # timeago: any
   # badges: ^2.0.2
-  url_launcher: ^6.1.12
-  google_mobile_ads: ^3.0.0
-  firebase_core: ^2.15.1
-  cloud_firestore: ^4.8.5
-  awesome_dialog: ^3.1.0
+  # get: any
+
+  url_launcher: ^6.3.1
+  google_mobile_ads: ^5.2.0
+  firebase_core: ^3.6.0
+  cloud_firestore: ^5.4.4
+  awesome_dialog: ^3.2.1
 
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_localizations:
-    sdk: flutter
 
-  flutter_lints: ^2.0.0
+  flutter_lints: ^5.0.0
 
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.14.1
 
 flutter_icons:
   android: "launcher_icon"

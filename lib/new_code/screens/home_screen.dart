@@ -10,7 +10,7 @@ import '../models/social_media_link.dart';
 import 'media_link_detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -25,11 +25,13 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     adsManager = AdsManager();
     adsManager.loadBannerAd();
+    adsManager.loadRewardedAd();
   }
 
   @override
   void dispose() {
     adsManager.disposeBannerAds();
+    
     super.dispose();
   }
 
@@ -72,6 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     return InkWell(
                       onTap: () {
+                        adsManager.showRewardedInterstitialAd();
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => MediaLinkDetailScreen(
                             socialMediaLink: link,
@@ -111,6 +114,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          adsManager.showRewardedAd();
+
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => const AddMediaLinkScreen(),
           ));

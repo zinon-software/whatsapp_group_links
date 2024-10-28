@@ -2,12 +2,14 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:linkati/firebase_options.dart';
+
 
 import 'new_code/screens/home_screen.dart';
 
 // SharedPreferences? prefs;
-String? urlServer, bannarIsAd, interstIsAd, nativeIsAd;
+// String? urlServer, bannarIsAd, interstIsAd, nativeIsAd;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +24,7 @@ Future<void> main() async {
 
   // GlobalBindings().dependencies();
 
-  // MobileAds.instance.initialize();
+  MobileAds.instance.initialize();
 
   ErrorWidget.builder = (FlutterErrorDetails details) {
     return Material(
@@ -49,7 +51,7 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -60,18 +62,15 @@ class MyApp extends StatelessWidget {
         colorScheme: const ColorScheme(
           brightness: Brightness.light,
           primary: Colors.green, // لون العنصر الأساسي
-          secondary: Colors.blue, // لون العنصر الثانوي
-          background: Colors.white, // لون الخلفية
+          secondary: Colors.blue, // لون الخلفية
           surface: Colors.white, // لون السطح (مثل خلفية البطاقات)
           error: Colors.red, // لون الخطأ
           onPrimary: Colors.white, // لون النص على العنصر الأساسي
-          onSecondary: Colors.white, // لون النص على العنصر الثانوي
-          onBackground: Colors.black, // لون النص على الخلفية
+          onSecondary: Colors.white, // لون النص على الخلفية
           onSurface: Colors.black, // لون النص على السطح
           onError: Colors.white, // لون النص على الخطأ
           
         ),
-        useMaterial3: true,
         appBarTheme: const AppBarTheme(
           shadowColor: Colors.transparent,
           surfaceTintColor: Colors.transparent,

@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.zainon.whatsapp_group_links.app-mergeDebugResources-44:/values-watch-v20/values-watch-v20.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\Zinon-Software\\.gradle\\caches\\transforms-3\\22e8a5406fac7eab620fd4b31adf407c\\transformed\\appcompat-1.2.0\\res\\values-watch-v20\\values-watch-v20.xml",
+                    "from": {
+                        "startLines": "2,5,8",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,214,385",
+                        "endLines": "4,7,10",
+                        "endColumns": "12,12,12",
+                        "endOffsets": "209,380,553"
+                    }
+                }
+            ]
+        }
+    ]
+}

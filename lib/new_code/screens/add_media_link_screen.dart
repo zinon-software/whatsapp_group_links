@@ -8,7 +8,7 @@ import '../managers/cloud_manager.dart';
 import '../models/social_media_link.dart';
 
 class AddMediaLinkScreen extends StatefulWidget {
-  const AddMediaLinkScreen({Key? key}) : super(key: key);
+  const AddMediaLinkScreen({super.key});
 
   @override
   State<AddMediaLinkScreen> createState() => _AddMediaLinkScreenState();
@@ -28,7 +28,7 @@ class _AddMediaLinkScreenState extends State<AddMediaLinkScreen> {
   void initState() {
     super.initState();
     _adsManager = AdsManager();
-    _adsManager.loadBannerAd(adSize: AdSize.mediumRectangle);
+    _adsManager.loadBannerAd(adSize: AdSize.fullBanner);
   }
 
   @override
@@ -50,8 +50,12 @@ class _AddMediaLinkScreenState extends State<AddMediaLinkScreen> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: _adsManager.getBannerAdWidget(),
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Center(
+                child: _adsManager.getBannerAdWidget(
+                  adSize: AdSize.mediumRectangle,
+                ),
+              ),
             ),
             const SizedBox(height: 40),
             Center(
@@ -129,8 +133,8 @@ class _AddMediaLinkScreenState extends State<AddMediaLinkScreen> {
                             // عرض رسالة إعلامية بنجاح الإضافة باستخدام AwesomeDialog
                             AwesomeDialog(
                               context: context,
-                              dialogType: DialogType.SUCCES,
-                              animType: AnimType.BOTTOMSLIDE,
+                              dialogType: DialogType.success,
+                              animType: AnimType.bottomSlide,
                               title: 'تمت الإضافة بنجاح',
                               desc:
                                   'تمت إضافة الرابط بنجاح إلى قاعدة البيانات.',
