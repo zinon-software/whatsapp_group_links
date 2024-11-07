@@ -79,7 +79,7 @@ class CustomButtonWidget extends StatelessWidget {
                         label ?? '',
                         style: theme.textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: textColor ?? Colors.white,
                           fontSize: fontSize,
                         ),
                       ),

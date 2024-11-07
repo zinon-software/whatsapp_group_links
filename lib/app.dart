@@ -17,7 +17,6 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "Linkati",
       theme: themeData(),
-      themeMode: ThemeMode.dark,
       localizationsDelegates: const [
         GlobalCupertinoLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -80,11 +79,9 @@ ThemeData themeData() {
       ),
     ),
     tabBarTheme: TabBarTheme(
-      // labelPadding: EdgeInsets.symmetric(horizontal: 8),
       indicatorSize: TabBarIndicatorSize.label,
       labelColor: ColorManager.secondaryLight,
       unselectedLabelColor: ColorManager.disabled,
-      // dividerColor: Colors.transparent,
       labelStyle: const TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.bold,

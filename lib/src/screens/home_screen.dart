@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream: cloudManager.linksCollection.snapshots(),
+              stream: cloudManager.linksCollection.orderBy('createDt', descending: true).snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
@@ -94,28 +94,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                 'link': link,
                               },
                             );
-                            
                           },
                           child: Card(
                             child: ListTile(
-                              title: Text(link.title),
-                              subtitle: Row(
-                                children: [
-                                  Text(link.createDt.formatTimeAgoString()),
-                                  const SizedBox(width: 20),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                      borderRadius: BorderRadius.circular(18),
-                                    ),
-                                    padding: const EdgeInsets.all(5),
-                                    child: Text(
-                                      link.type,
-                                      style: const TextStyle(fontSize: 10),
-                                    ),
-                                  ),
-                                ],
+                              leading: CircleAvatar(
+                                backgroundColor: Colors.grey[300],
+                                child: Image.asset(
+                                  'assets/images/${link.type.toLowerCase()}.png',
+                                ),
                               ),
+                              title: Text(link.title),
+                              subtitle: Text(link.createDt.formatTimeAgoString()),
                               trailing: Text('${link.views} مشاهدة'),
                             ),
                           ),

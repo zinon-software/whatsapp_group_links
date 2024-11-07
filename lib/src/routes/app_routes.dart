@@ -1,3 +1,4 @@
+import 'package:in_app_review/in_app_review.dart';
 
 import 'package:flutter/material.dart';
 import 'package:linkati/src/screens/link_details_screen.dart';

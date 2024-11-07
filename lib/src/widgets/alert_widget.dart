@@ -16,7 +16,6 @@ class AppAlert {
   static bool _isThereCurrentDialogShowing(BuildContext context) =>
       ModalRoute.of(context)?.isCurrent != true;
 
-  
   static Future<void> loading(BuildContext context) {
     FocusScope.of(context).unfocus();
     dismissDialog(context);
@@ -41,9 +40,9 @@ class AppAlert {
                 padding: const EdgeInsets.all(10),
                 child: Center(
                   child: const CircularProgressIndicator(
-                    // color: Theme.of(context).textTheme.displayLarge!.color!,
-                    // size: 45.0.w,
-                  ),
+                      // color: Theme.of(context).textTheme.displayLarge!.color!,
+                      // size: 45.0.w,
+                      ),
                 ),
               ),
             ),
@@ -53,8 +52,7 @@ class AppAlert {
     );
   }
 
-  
-  static Future<void> customAbberDialog(
+  static Future<void> customDialog(
     BuildContext context, {
     IconData? icon,
     Color? btnCancelColor,
@@ -127,10 +125,8 @@ class AppAlert {
         ),
       ),
       isDense: true,
-
       padding: const EdgeInsets.all(8),
       dialogBorderRadius: BorderRadius.circular(15),
-      
       dismissOnTouchOutside: dismissOn,
       dismissOnBackKeyPress: dismissOn,
     ).show();

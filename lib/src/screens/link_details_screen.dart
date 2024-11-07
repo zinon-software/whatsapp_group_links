@@ -64,6 +64,14 @@ class _LinkDetailsScreenState extends State<LinkDetailsScreen> {
                   color: Colors.black,
                   fontWeight: FontWeight.bold),
             ),
+            const SizedBox(height: 10),
+
+            Image.asset(
+              'assets/images/${widget.link.type.toLowerCase()}.png',
+              height: 100,
+              width: 100,
+            ),
+            Text('${widget.link.views} مشاهدة'),
 
             Spacer(),
             CustomButtonWidget(

@@ -116,13 +116,14 @@ class _LinkFormScreenState extends State<LinkFormScreen> {
                             await cloudManager.addLink(newLink);
                             // ignore: use_build_context_synchronously
                             // عرض رسالة إعلامية بنجاح الإضافة باستخدام AwesomeDialog
-                            AppAlert.customAbberDialog(
+                            AppAlert.customDialog(
                               // ignore: use_build_context_synchronously
                               context,
                               title: "تمت إضافة الرابط بنجاح",
                               subTitle:
                                   "تمت أضافة الرابط بنجاح ألى قاعدة البيانات.",
                               confirmText: "إنشاء رابط جديد",
+                              icon: Icons.check,
                               onConfirm: () {
                                 _titleController.clear();
                                 _urlController.clear();
@@ -151,13 +152,23 @@ class _LinkFormScreenState extends State<LinkFormScreen> {
 
   String determineType(String url) {
     if (url.contains("facebook")) {
-      return "Facebook";
-    } else if (url.contains("twitter")) {
-      return "Twitter";
+      return "facebook";
+    } else if (url.contains("twitter") || url.contains("x")) {
+      return "twitter";
     } else if (url.contains("whatsapp")) {
-      return "WhatsApp";
+      return "whatsapp";
+    } else if (url.contains("telegram")) {
+      return "telegram";
+    } else if (url.contains("instagram")) {
+      return "instagram";
+    } else if (url.contains("snapchat")) {
+      return "snapchat";
+    } else if (url.contains("tiktok")) {
+      return "tiktok";
+    } else if (url.contains("linkedin")) {
+      return "linkedin";
     } else {
-      return "Other";
+      return "other";
     }
   }
 }
