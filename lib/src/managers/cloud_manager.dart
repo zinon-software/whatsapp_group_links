@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../models/social_media_link.dart';
+import '../models/link_model.dart';
 
 class CloudManager {
   final CollectionReference linksCollection =
       FirebaseFirestore.instance.collection('social_media_links');
 
-  Future<void> addSocialMediaLink(SocialMediaLink link) async {
+  Future<void> addLink(LinkModel link) async {
     try {
       await linksCollection.add(link.toMap());
       print('Social media link added successfully.');
@@ -16,7 +16,6 @@ class CloudManager {
   }
 
   Future<void> incrementViews(String documentId) async {
-    print(documentId);
     try {
       final DocumentReference linkDocRef = linksCollection.doc(documentId);
       await FirebaseFirestore.instance.runTransaction((transaction) async {
@@ -24,7 +23,7 @@ class CloudManager {
 
         if (linkSnapshot.exists) {
           final int currentViews = linkSnapshot['views'];
-          await transaction.update(linkDocRef, {'views': currentViews + 1});
+          transaction.update(linkDocRef, {'views': currentViews + 1});
         }
       });
 

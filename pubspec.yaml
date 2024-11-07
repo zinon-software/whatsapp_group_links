@@ -3,7 +3,7 @@ description: A new Flutter project.
 
 publish_to: 'none' 
 
-version: 5.0.0+21
+version: 5.0.1+22
 
 environment:
   sdk: ^3.5.0
@@ -23,6 +23,7 @@ dependencies:
   firebase_core: ^3.6.0
   cloud_firestore: ^5.4.4
   awesome_dialog: ^3.2.1
+  in_app_review: ^2.0.9
 
 
 

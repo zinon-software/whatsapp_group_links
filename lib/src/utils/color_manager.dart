@@ -35,4 +35,9 @@ class ColorManager {
   // Adjusted opacities for better contrast and readability
   static Color hidden = const Color(0xFFFAFAFA).withOpacity(0.9);
   static Color disabled = const Color(0xFFFECEAB).withOpacity(0.9);
+
+  static const Color fillColor = Color(0xFFe4ecf4);
+
+  static const Color black = Color(0xFF464042);
+
 }

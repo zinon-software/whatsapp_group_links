@@ -5,17 +5,17 @@ import 'package:linkati/src/widgets/custom_button_widget.dart';
 
 import '../managers/ads_manager.dart';
 import '../managers/cloud_manager.dart';
-import '../models/social_media_link.dart';
+import '../models/link_model.dart';
 import '../widgets/custom_text_field.dart';
 
-class AddMediaLinkScreen extends StatefulWidget {
-  const AddMediaLinkScreen({super.key});
+class LinkFormScreen extends StatefulWidget {
+  const LinkFormScreen({super.key});
 
   @override
-  State<AddMediaLinkScreen> createState() => _AddMediaLinkScreenState();
+  State<LinkFormScreen> createState() => _LinkFormScreenState();
 }
 
-class _AddMediaLinkScreenState extends State<AddMediaLinkScreen> {
+class _LinkFormScreenState extends State<LinkFormScreen> {
   final CloudManager cloudManager = CloudManager();
 
   late final TextEditingController _titleController;
@@ -101,7 +101,7 @@ class _AddMediaLinkScreenState extends State<AddMediaLinkScreen> {
                           if (_formKey.currentState!.validate()) {
                             // Create a new social media link
                             String type = determineType(_urlController.text);
-                            SocialMediaLink newLink = SocialMediaLink(
+                            LinkModel newLink = LinkModel(
                               title: _titleController.text,
                               createDt: DateTime.now(),
                               url: _urlController.text,
@@ -113,23 +113,23 @@ class _AddMediaLinkScreenState extends State<AddMediaLinkScreen> {
                             AppAlert.loading(context);
 
                             // Add the link to Firestore
-                            await cloudManager.addSocialMediaLink(newLink);
+                            await cloudManager.addLink(newLink);
                             // ignore: use_build_context_synchronously
                             // عرض رسالة إعلامية بنجاح الإضافة باستخدام AwesomeDialog
-                            AppAlert.confirm(
+                            AppAlert.customAbberDialog(
                               // ignore: use_build_context_synchronously
                               context,
                               title: "تمت إضافة الرابط بنجاح",
-                              body:
+                              subTitle:
                                   "تمت أضافة الرابط بنجاح ألى قاعدة البيانات.",
-                              okTixt: "إنشاء رابط جديد",
+                              confirmText: "إنشاء رابط جديد",
                               onConfirm: () {
                                 _titleController.clear();
                                 _urlController.clear();
                               },
                               dismissOn: false,
-                              cancelTixt: "إغلق",
-                              onCancelBtnTap: () {
+                              cancelText: "إغلق",
+                              onCancel: () {
                                 AppAlert.dismissDialog(context);
                                 Navigator.pop(context);
                               },

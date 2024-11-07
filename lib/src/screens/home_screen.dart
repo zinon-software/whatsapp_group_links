@@ -2,12 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:linkati/src/extensions/date_format_extension.dart';
-import 'package:linkati/src/screens/add_media_link_screen.dart';
+import 'package:linkati/src/routes/app_routes.dart';
 
 import '../managers/ads_manager.dart';
 import '../managers/cloud_manager.dart';
-import '../models/social_media_link.dart';
-import 'media_link_detail_screen.dart';
+import '../models/link_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -74,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     var linkData = snapshot.data!.docs[index].data()
                         as Map<String, dynamic>;
 
-                    var link = SocialMediaLink.fromJson(linkData);
+                    var link = LinkModel.fromJson(linkData);
                     link.documentId = snapshot.data!.docs[index].id;
 
                     return Column(
@@ -89,11 +88,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         InkWell(
                           onTap: () {
                             _adsManager.showRewardedAd();
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => MediaLinkDetailScreen(
-                                socialMediaLink: link,
-                              ),
-                            ));
+                            Navigator.of(context).pushNamed(
+                              AppRoutes.linkDetailsRoute,
+                              arguments: {
+                                'link': link,
+                              },
+                            );
+                            
                           },
                           child: Card(
                             child: ListTile(
@@ -131,10 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _adsManager.showRewardedAd();
-
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const AddMediaLinkScreen(),
-          ));
+          Navigator.of(context).pushNamed(AppRoutes.linkFormRoute);
         },
         child: const Icon(CupertinoIcons.add),
       ),

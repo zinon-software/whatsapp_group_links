@@ -1,23 +1,23 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:linkati/src/models/social_media_link.dart';
+import 'package:linkati/src/models/link_model.dart';
 import 'package:linkati/src/widgets/custom_button_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../managers/ads_manager.dart';
 import '../managers/cloud_manager.dart';
 
-class MediaLinkDetailScreen extends StatefulWidget {
-  const MediaLinkDetailScreen({super.key, required this.socialMediaLink});
+class LinkDetailsScreen extends StatefulWidget {
+  const LinkDetailsScreen({super.key, required this.link});
 
-  final SocialMediaLink socialMediaLink;
+  final LinkModel link;
 
   @override
-  State<MediaLinkDetailScreen> createState() => _MediaLinkDetailScreenState();
+  State<LinkDetailsScreen> createState() => _LinkDetailsScreenState();
 }
 
-class _MediaLinkDetailScreenState extends State<MediaLinkDetailScreen> {
+class _LinkDetailsScreenState extends State<LinkDetailsScreen> {
   late AdsManager _adsManager;
 
   @override
@@ -36,10 +36,10 @@ class _MediaLinkDetailScreenState extends State<MediaLinkDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final CloudManager cloudManager = CloudManager();
-    cloudManager.incrementViews(widget.socialMediaLink.documentId ?? '');
+    cloudManager.incrementViews(widget.link.documentId ?? '');
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.socialMediaLink.title),
+        title: Text(widget.link.title),
       ),
       body: Center(
         child: Column(
@@ -58,7 +58,7 @@ class _MediaLinkDetailScreenState extends State<MediaLinkDetailScreen> {
 
             const SizedBox(height: 10),
             Text(
-              widget.socialMediaLink.title,
+              widget.link.title,
               style: const TextStyle(
                   fontSize: 20,
                   color: Colors.black,
@@ -68,8 +68,8 @@ class _MediaLinkDetailScreenState extends State<MediaLinkDetailScreen> {
             Spacer(),
             CustomButtonWidget(
               onPressed: () async {
-                if (widget.socialMediaLink.isActive) {
-                  launchUrl(Uri.parse(widget.socialMediaLink.url));
+                if (widget.link.isActive) {
+                  launchUrl(Uri.parse(widget.link.url));
                 } else {
                   AwesomeDialog(
                     context: context,
@@ -83,7 +83,7 @@ class _MediaLinkDetailScreenState extends State<MediaLinkDetailScreen> {
                   ).show();
                 }
               },
-              label: 'الانتقال الى ${widget.socialMediaLink.type}',
+              label: 'الانتقال الى ${widget.link.type}',
             ),
             Spacer(),
           ],

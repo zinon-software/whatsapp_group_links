@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class SocialMediaLink {
+class LinkModel {
   String? documentId;
   late String title;
   late DateTime createDt;
@@ -9,7 +9,7 @@ class SocialMediaLink {
   late String type;
   late bool isActive;
 
-  SocialMediaLink({
+  LinkModel({
     this.documentId,
     required this.title,
     required this.createDt,
@@ -19,8 +19,7 @@ class SocialMediaLink {
     required this.isActive,
   });
 
-  factory SocialMediaLink.fromJson(Map<String, dynamic> json ) =>
-      SocialMediaLink(
+  factory LinkModel.fromJson(Map<String, dynamic> json) => LinkModel(
         title: json["title"],
         createDt: (json['createDt'] as Timestamp).toDate(),
         url: json["url"],
