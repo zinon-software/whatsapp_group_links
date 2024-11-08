@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -93,6 +92,8 @@ class UsersCubit extends Cubit<UsersState> {
     repository.updateUser(user);
 
     currentUser = user;
+
+    emit(UserSuccessState());
   }
 
   void signOut() {

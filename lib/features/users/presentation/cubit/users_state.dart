@@ -1,17 +1,14 @@
 part of 'users_cubit.dart';
 
-abstract class UsersState extends Equatable {
+abstract class UsersState {
   const UsersState();
-
-  @override
-  List<Object> get props => [];
 }
 
-final class UsersInitialState extends UsersState {
+class UsersInitialState extends UsersState {
   const UsersInitialState();
 }
 
-final class UserSuccessState extends UsersState {
+class UserSuccessState extends UsersState {
   const UserSuccessState();
 }
 
@@ -20,16 +17,14 @@ class SignInWithGoogleLoadingState extends UsersState {
 }
 
 class SignInWithGoogleErrorState extends UsersState {
-  final String error;
-  const SignInWithGoogleErrorState({required this.error});
+  String error;
+  SignInWithGoogleErrorState({required this.error});
 }
 
 class LoginRouteToHomeState extends UsersState {
   const LoginRouteToHomeState();
 }
 
-
 class LogoutRouteToLoginState extends UsersState {
   const LogoutRouteToLoginState();
 }
-
