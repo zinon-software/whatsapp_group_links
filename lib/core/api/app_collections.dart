@@ -21,6 +21,8 @@ class AppCollections {
 
   CollectionReference get questions =>
       _db.collection('challenges').doc("questions").collection("questions");
+  CollectionReference get sections =>
+      _db.collection('challenges').doc("sections").collection("sections");
   CollectionReference get sessions =>
       _db.collection('challenges').doc("sessions").collection("sessions");
 
