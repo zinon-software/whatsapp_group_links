@@ -26,7 +26,10 @@ class UsersCubit extends Cubit<UsersState> {
       final uid = auth.currentUser!.uid;
       (await repository.fetchUser(uid)).fold(
         (error) => null,
-        (response) => user = response,
+        (response) {
+           user = response;
+           emit(UserSuccessState());
+        },
       );
     } catch (e) {
       // rethrow;

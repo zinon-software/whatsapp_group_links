@@ -8,7 +8,11 @@ abstract class UsersState extends Equatable {
 }
 
 final class UsersInitialState extends UsersState {
-  UsersInitialState();
+  const UsersInitialState();
+}
+
+final class UserSuccessState extends UsersState {
+  const UserSuccessState();
 }
 
 class SignInWithGoogleLoadingState extends UsersState {

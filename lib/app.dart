@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:linkati/config/app_injector.dart';
 import 'package:linkati/features/challenges/presentation/cubit/challenges_cubit.dart';
 import 'package:linkati/features/users/presentation/cubit/users_cubit.dart';
@@ -14,6 +15,10 @@ import 'features/users/data/repositories/users_repositories.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
+
+  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  static FirebaseAnalyticsObserver observer =
+      FirebaseAnalyticsObserver(analytics: analytics);
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +47,7 @@ class App extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: "Linkati",
         theme: AppThemes.light(),
+        navigatorObservers: <NavigatorObserver>[observer],
         localizationsDelegates: const [
           GlobalCupertinoLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,

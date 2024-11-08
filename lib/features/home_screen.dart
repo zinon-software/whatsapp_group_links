@@ -68,18 +68,25 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.all(8.0),
             child: _adsManager.getBannerAdWidget(),
           ),
-          if (_usersCubit.user?.permissions.isAdmin ?? false)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CustomButtonWidget(
-                width: double.infinity,
-                onPressed: () {
-                  Navigator.of(context)
-                      .pushNamed(AppRoutes.linksDashboardRoute);
-                },
-                label: "لوحة التحكم",
-              ),
-            ),
+          BlocBuilder<UsersCubit, UsersState>(
+            bloc: _usersCubit,
+            builder: (context, state) {
+              if (_usersCubit.user?.permissions.isAdmin ?? false) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CustomButtonWidget(
+                    width: double.infinity,
+                    onPressed: () {
+                      Navigator.of(context)
+                          .pushNamed(AppRoutes.linksDashboardRoute);
+                    },
+                    label: "لوحة التحكم",
+                  ),
+                );
+              }
+              return const SizedBox.shrink();
+            },
+          ),
           Expanded(
             child: LinksStreamWidget(adsManager: _adsManager),
           ),
