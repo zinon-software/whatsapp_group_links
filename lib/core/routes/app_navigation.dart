@@ -24,6 +24,7 @@ class AppNavigation {
           view: const LoginScreen(),
         );
 
+      // start links
       case AppRoutes.linkFormRoute:
         return _moveRoute(
           settings: settings,
@@ -37,6 +38,20 @@ class AppNavigation {
             link: query['link'] as LinkModel,
           ),
         );
+
+        case AppRoutes.bannedWordsRoute:
+        return _moveRoute(
+          settings: settings,
+          view:  BannedWordsScreen(words: query['words'] as List<String>),
+        );
+
+      case AppRoutes.linksDashboardRoute:
+        return _moveRoute(
+          settings: settings,
+          view: const LinksDashboardScreen(),
+        );
+      
+      // end links
 
       default:
         return _moveRoute(

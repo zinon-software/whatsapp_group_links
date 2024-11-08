@@ -54,7 +54,7 @@ class _LinkFormScreenState extends State<LinkFormScreen> {
       ),
       body: BlocListener<LinksCubit, LinksState>(
         listener: (context, state) {
-          if (state is CreateLinkErrorState) {
+          if (state is ManageLinkErrorState) {
             AppAlert.customDialog(
               context,
               title: "خطاء في الحساب",
@@ -62,11 +62,11 @@ class _LinkFormScreenState extends State<LinkFormScreen> {
             );
           }
 
-          if (state is CreateLinkLoadingState) {
+          if (state is ManageLinkLoadingState) {
             AppAlert.loading(context);
           }
 
-          if (state is CreateLinkSuccessState) {
+          if (state is ManageLinkSuccessState) {
             AppAlert.customDialog(
               // ignore: use_build_context_synchronously
               context,
@@ -144,10 +144,10 @@ class _LinkFormScreenState extends State<LinkFormScreen> {
                                 id: '',
                                 title: _titleController.text,
                                 createDt: DateTime.now(),
-                                url: _urlController.text,
+                                url: _urlController.text.trim(),
                                 views: 0,
                                 type: type,
-                                isActive: false,
+                                isActive: true,
                               );
 
                               _linksCubit.createLink(newLink);

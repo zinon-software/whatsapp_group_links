@@ -12,16 +12,53 @@ class LinksCubit extends Cubit<LinksState> {
   LinksCubit({required this.repository}) : super(LinksInitialState());
 
   void createLink(LinkModel newLink) async {
-    emit(CreateLinkLoadingState());
+    emit(ManageLinkLoadingState());
 
     (await repository.createLink(newLink)).fold((failure) {
-      emit(CreateLinkErrorState(failure));
+      emit(ManageLinkErrorState(failure));
     }, (response) {
-      emit(CreateLinkSuccessState());
+      emit(ManageLinkSuccessState(response));
     });
   }
 
-  
+  void createBannedWord(String word) async {
+    emit(ManageLinkLoadingState());
+
+    (await repository.createBannedWord(word)).fold(
+      (failure) {
+        emit(ManageLinkErrorState(failure));
+      },
+      (response) {
+        emit(ManageLinkSuccessState(response));
+      },
+    );
+  }
+
+  void deleteBannedWord(String word) async {
+    emit(ManageLinkLoadingState());
+
+    (await repository.deleteBannedWord(word)).fold(
+      (failure) {
+        emit(ManageLinkErrorState(failure));
+      },
+      (response) {
+        emit(ManageLinkSuccessState(response));
+      },
+    );
+  }
+
+  void changeLinkActive(String id, bool isActive)async {
+    emit(ManageLinkLoadingState());
+
+    (await repository.changeLinkActive(id, isActive)).fold(
+      (failure) {
+        emit(ManageLinkErrorState(failure));
+      },
+      (response) {
+        emit(ManageLinkSuccessState(response));
+      },
+    );
+  }
 
   String determineType(String url) {
     if (url.contains("facebook")) {
@@ -44,7 +81,4 @@ class LinksCubit extends Cubit<LinksState> {
       return "other";
     }
   }
-
 }
-
-

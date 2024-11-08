@@ -12,10 +12,10 @@ abstract class LinksRepository {
   Future<Either<String, List<LinkModel>>> fetchLinks();
   Future<Either<String, String>> deleteLink(String id);
   Future<Either<String, String>> updateLink(LinkModel link);
-  Future<Either<String, String>> activateLink(String id);
+  Future<Either<String, String>> changeLinkActive(String id, bool isActive);
 
   // banned words
-  Future<Either<String, String>> addBannedWord(String word);
+  Future<Either<String, String>> createBannedWord(String word);
   Future<Either<String, List<String>>> fetchBannedWords();
   Future<Either<String, String>> deleteBannedWord(String word);
 }
@@ -27,13 +27,13 @@ class LinksRepositoryImpl implements LinksRepository {
   LinksRepositoryImpl(this.datasources, this.connectionStatus);
 
   @override
-  Future<Either<String, String>> activateLink(String id) async {
+  Future<Either<String, String>> changeLinkActive(String id, bool isActive) async {
     if (await connectionStatus.isNotConnected) {
       return const Left("تحقق من جودة اتصالك بالانترنت");
     }
 
     try {
-      final response = await datasources.activateLink(id);
+      final response = await datasources.changeLinkActive(id, isActive);
       return Right(response);
     } catch (e) {
       return Left(handleException(e));
@@ -111,7 +111,7 @@ class LinksRepositoryImpl implements LinksRepository {
   }
 
   @override
-  Future<Either<String, String>> addBannedWord(String word) async {
+  Future<Either<String, String>> createBannedWord(String word) async {
     if (await connectionStatus.isNotConnected) {
       return const Left("تحقق من جودة اتصالك بالانترنت");
     }

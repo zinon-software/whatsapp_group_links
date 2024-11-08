@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import '../utils/color_manager.dart';
 import 'custom_button_widget.dart';
 
-
 class AppAlert {
   const AppAlert._();
 
@@ -60,8 +59,8 @@ class AppAlert {
     String? subTitle,
     String? title,
     Color? iconColor,
-    String? cancelText,
-    String? confirmText,
+    String? cancelText = "إغلاق",
+    String? confirmText = "تأكيد",
     void Function()? onConfirm,
     void Function()? onCancel,
     bool dismissOn = true,
@@ -76,14 +75,15 @@ class AppAlert {
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         child: Column(
           children: [
-            Container(
-              decoration: const BoxDecoration(shape: BoxShape.circle),
-              child: Icon(
-                size: 45,
-                icon ?? Icons.error_outline,
-                color: iconColor ?? ColorManager.error,
+            if (icon != null)
+              Container(
+                decoration: const BoxDecoration(shape: BoxShape.circle),
+                child: Icon(
+                  size: 45,
+                  icon,
+                  color: iconColor,
+                ),
               ),
-            ),
             SizedBox(height: 5),
             Text(
               title ?? "",
@@ -103,23 +103,22 @@ class AppAlert {
             subTitle == null ? const SizedBox() : SizedBox(height: 20),
             Row(
               children: [
+                if (onConfirm != null)
+                  Expanded(
+                    child: CustomButtonWidget(
+                      onPressed: onConfirm,
+                      label: confirmText,
+                    ),
+                  ),
+                if (onConfirm != null) const SizedBox(width: 10),
                 Expanded(
                   child: CustomButtonWidget(
-                    onPressed: onConfirm,
-                    label: confirmText ?? "",
+                    backgroundColor: ColorManager.fillColor,
+                    onPressed: onCancel ?? () => dismissDialog(context),
+                    label: cancelText,
+                    textColor: Colors.black,
                   ),
                 ),
-                if (onCancel != null) const SizedBox(width: 10),
-                onCancel != null
-                    ? Expanded(
-                        child: CustomButtonWidget(
-                          backgroundColor: ColorManager.fillColor,
-                          onPressed: onCancel,
-                          label: cancelText ?? "",
-                          textColor: Colors.black,
-                        ),
-                      )
-                    : const SizedBox(),
               ],
             )
           ],

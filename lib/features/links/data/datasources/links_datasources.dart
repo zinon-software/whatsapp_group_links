@@ -10,7 +10,7 @@ abstract class LinksDatasources {
   Future<List<LinkModel>> fetchLinks();
   Future<String> deleteLink(String id);
   Future<String> updateLink(LinkModel link);
-  Future<String> activateLink(String id);
+  Future<String> changeLinkActive(String id, bool isActive);
 
   // banned words
   Future<String> addBannedWord(String word);
@@ -33,6 +33,10 @@ class LinksDatasourcesImpl implements LinksDatasources {
       if (bannedWordsData.contains(link.title)) {
         return throw Exception("تم حظر نشر الرابط بسبب مخالفتك لسياسة النشر");
       }
+      if (bannedWordsData.contains(link.url)) {
+        return throw Exception("تم حظر نشر الرابط بسبب مخالفتك لسياسة النشر");
+      }
+
       final DocumentReference linkDocRef = links.doc();
 
       await links.doc(linkDocRef.id).set(link.toJson(id: linkDocRef.id));
@@ -43,9 +47,9 @@ class LinksDatasourcesImpl implements LinksDatasources {
   }
 
   @override
-  Future<String> activateLink(String id) async {
+  Future<String> changeLinkActive(String id, bool isActive) async {
     try {
-      await links.doc(id).update({'is_active': true});
+      await links.doc(id).update({'is_active': isActive});
       return 'Link activated successfully';
     } catch (e) {
       rethrow;

@@ -20,10 +20,11 @@ class App extends StatelessWidget {
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider(
+          lazy: false,
           create: (__) => UsersCubit(
             repository: instance<UsersRepository>(),
             auth: FirebaseAuth.instance,
-          ),
+          )..fetchMyUserAccount(),
         ),
         RepositoryProvider(
           create: (__) => ChallengesCubit(),

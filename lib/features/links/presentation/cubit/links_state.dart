@@ -23,21 +23,28 @@ class LinksErrorState extends LinksState {
 class LinksSuccessState extends LinksState {
   final List<LinkModel> links; // list of links
 
-  const LinksSuccessState(this.links);  
+  const LinksSuccessState(this.links);
 
   @override
   List<Object> get props => [links];
 }
 
-class CreateLinkLoadingState extends LinksState {}
+class ManageLinkLoadingState extends LinksState {}
 
-class CreateLinkErrorState extends LinksState {
+class ManageLinkErrorState extends LinksState {
   final String message; // error message
 
-  const CreateLinkErrorState(this.message);
+  const ManageLinkErrorState(this.message);
 
   @override
   List<Object> get props => [message];
 }
 
-class CreateLinkSuccessState extends LinksState {}
+class ManageLinkSuccessState extends LinksState {
+  final String message; // success message
+
+  const ManageLinkSuccessState(this.message);
+
+  @override
+  List<Object> get props => [message];
+}

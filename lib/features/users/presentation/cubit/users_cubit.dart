@@ -18,6 +18,21 @@ class UsersCubit extends Cubit<UsersState> {
   UsersCubit({required this.repository, required this.auth})
       : super(UsersInitialState());
 
+  void fetchMyUserAccount() async {
+    try {
+      if (auth.currentUser == null) {
+        return;
+      }
+      final uid = auth.currentUser!.uid;
+      (await repository.fetchUser(uid)).fold(
+        (error) => null,
+        (response) => user = response,
+      );
+    } catch (e) {
+      // rethrow;
+    }
+  }
+
   void onSignInWithGoogleEvent() async {
     emit(SignInWithGoogleLoadingState());
 
@@ -55,7 +70,7 @@ class UsersCubit extends Cubit<UsersState> {
   }
 
   Future<void> _onSaveUser(String uid) async {
-    final user = UserModel(
+    user = UserModel(
       id: uid,
       name: auth.currentUser!.displayName ?? 'No Name',
       email: auth.currentUser!.email ?? 'No Email',
@@ -66,15 +81,16 @@ class UsersCubit extends Cubit<UsersState> {
       permissions: PermissionModel(),
     );
 
-    repository.createUser(user);
+    repository.createUser(user!);
   }
 
   Future<void> _onUpdateUser(String uid) async {
-    // final user = repository.
-
     (await repository.fetchUser(uid)).fold(
       (error) => null,
-      (user) => repository.updateUser(user),
+      (responce) {
+        user = responce;
+        repository.updateUser(responce);
+      },
     );
   }
 }
