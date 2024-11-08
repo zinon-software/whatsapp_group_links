@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:linkati/config/app_injector.dart';
-import 'package:linkati/src/extensions/date_format_extension.dart';
+import 'package:linkati/core/extensions/date_format_extension.dart';
 
 import '../../../../core/api/app_collections.dart';
 import '../../../../core/routes/app_routes.dart';

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:linkati/src/extensions/date_format_extension.dart';
+import 'package:linkati/core/extensions/date_format_extension.dart';
 
 import '../../../../config/app_injector.dart';
 import '../../../../core/ads/ads_manager.dart';
