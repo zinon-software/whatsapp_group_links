@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LinkModel {
-  String? documentId;
+  final String id;
   late String title;
   late DateTime createDt;
   late String url;
@@ -10,7 +10,7 @@ class LinkModel {
   late bool isActive;
 
   LinkModel({
-    this.documentId,
+    required this.id,
     required this.title,
     required this.createDt,
     required this.url,
@@ -20,22 +20,24 @@ class LinkModel {
   });
 
   factory LinkModel.fromJson(Map<String, dynamic> json) => LinkModel(
+        id: json["id"],
         title: json["title"],
-        createDt: (json['createDt'] as Timestamp).toDate(),
+        createDt: (json['create_dt'] as Timestamp).toDate(),
         url: json["url"],
         views: json["views"],
         type: json["type"],
-        isActive: json["isActive"],
+        isActive: json["is_active"],
       );
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson({String? id}) {
     return {
+      'id': id ?? this.id,
       'title': title,
-      'createDt': createDt,
+      'create_dt': createDt,
       'url': url,
       'views': views,
       'type': type,
-      'isActive': isActive
+      'is_active': isActive
     };
   }
 }

@@ -30,10 +30,7 @@ class DefaultFirebaseOptions {
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -52,7 +49,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '623939344647',
     projectId: 'whatsapp-group-link-bef0d',
     authDomain: 'whatsapp-group-link-bef0d.firebaseapp.com',
-    storageBucket: 'whatsapp-group-link-bef0d.appspot.com',
+    storageBucket: 'whatsapp-group-link-bef0d.firebasestorage.app',
     measurementId: 'G-1BRQX2L99H',
   );
 
@@ -61,7 +58,7 @@ class DefaultFirebaseOptions {
     appId: '1:623939344647:android:dc50c2f036ce6492abcda2',
     messagingSenderId: '623939344647',
     projectId: 'whatsapp-group-link-bef0d',
-    storageBucket: 'whatsapp-group-link-bef0d.appspot.com',
+    storageBucket: 'whatsapp-group-link-bef0d.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -69,8 +66,20 @@ class DefaultFirebaseOptions {
     appId: '1:623939344647:ios:1be5d2cfe0c4b68dabcda2',
     messagingSenderId: '623939344647',
     projectId: 'whatsapp-group-link-bef0d',
-    storageBucket: 'whatsapp-group-link-bef0d.appspot.com',
+    storageBucket: 'whatsapp-group-link-bef0d.firebasestorage.app',
+    androidClientId: '623939344647-gr6aq5u1gnvmg1vlq3qa32hbn0qqq326.apps.googleusercontent.com',
     iosClientId: '623939344647-q42qjkl9fqgjvm4nr78rabsttgsjgvmr.apps.googleusercontent.com',
     iosBundleId: 'com.zainon.whatsappGroupLinks',
   );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyBTmPZR1aQYWMyNIFTlP-ehhAUgmufu_uU',
+    appId: '1:623939344647:web:3bcbe496cd5aa6bbabcda2',
+    messagingSenderId: '623939344647',
+    projectId: 'whatsapp-group-link-bef0d',
+    authDomain: 'whatsapp-group-link-bef0d.firebaseapp.com',
+    storageBucket: 'whatsapp-group-link-bef0d.firebasestorage.app',
+    measurementId: 'G-78P0JEV0RR',
+  );
+
 }

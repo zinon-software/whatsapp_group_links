@@ -1,12 +1,12 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:linkati/src/models/link_model.dart';
-import 'package:linkati/src/widgets/custom_button_widget.dart';
+import 'package:linkati/features/links/data/models/link_model.dart';
+import 'package:linkati/core/widgets/custom_button_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../managers/ads_manager.dart';
-import '../managers/cloud_manager.dart';
+import '../../../../core/ads/ads_manager.dart';
+import '../../../../src/managers/cloud_manager.dart';
 
 class LinkDetailsScreen extends StatefulWidget {
   const LinkDetailsScreen({super.key, required this.link});
@@ -36,7 +36,7 @@ class _LinkDetailsScreenState extends State<LinkDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final CloudManager cloudManager = CloudManager();
-    cloudManager.incrementViews(widget.link.documentId ?? '');
+    cloudManager.incrementViews(widget.link.id);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.link.title),

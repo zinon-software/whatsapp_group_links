@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../models/link_model.dart';
+import '../../features/links/data/models/link_model.dart';
 
 class CloudManager {
   final CollectionReference linksCollection =
@@ -8,7 +8,7 @@ class CloudManager {
 
   Future<void> addLink(LinkModel link) async {
     try {
-      await linksCollection.add(link.toMap());
+      await linksCollection.add(link.toJson());
       print('Social media link added successfully.');
     } catch (e) {
       print('Error adding social media link: $e');
@@ -32,4 +32,30 @@ class CloudManager {
       print('Error incrementing views: $e');
     }
   }
+
+  
+
+  String determineType(String url) {
+    if (url.contains("facebook")) {
+      return "facebook";
+    } else if (url.contains("twitter") || url.contains("x")) {
+      return "twitter";
+    } else if (url.contains("whatsapp")) {
+      return "whatsapp";
+    } else if (url.contains("telegram")) {
+      return "telegram";
+    } else if (url.contains("instagram")) {
+      return "instagram";
+    } else if (url.contains("snapchat")) {
+      return "snapchat";
+    } else if (url.contains("tiktok")) {
+      return "tiktok";
+    } else if (url.contains("linkedin")) {
+      return "linkedin";
+    } else {
+      return "other";
+    }
+  }
 }
+
+

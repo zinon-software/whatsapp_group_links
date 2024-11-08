@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "623939344647",
     "project_id": "whatsapp-group-link-bef0d",
-    "storage_bucket": "whatsapp-group-link-bef0d.appspot.com"
+    "storage_bucket": "whatsapp-group-link-bef0d.firebasestorage.app"
   },
   "client": [
     {
@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "623939344647-uh94sfs0pdpfo5ble3jl6b7m52gde6uf.apps.googleusercontent.com",
+          "client_id": "623939344647-gr6aq5u1gnvmg1vlq3qa32hbn0qqq326.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zainon.whatsapp_group_links",
+            "certificate_hash": "b6d20a665780f2397f497e32f173c1118b2f213a"
+          }
+        },
+        {
+          "client_id": "623939344647-7uqhmq135jvtcuh2ef6quh2sco1hv99o.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,7 +35,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "623939344647-uh94sfs0pdpfo5ble3jl6b7m52gde6uf.apps.googleusercontent.com",
+              "client_id": "623939344647-7uqhmq135jvtcuh2ef6quh2sco1hv99o.apps.googleusercontent.com",
               "client_type": 3
             },
             {

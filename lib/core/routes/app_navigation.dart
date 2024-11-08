@@ -18,6 +18,12 @@ class AppNavigation {
           view: const HomeScreen(),
         );
 
+      case AppRoutes.loginRoute:
+        return _moveRoute(
+          settings: settings,
+          view: const LoginScreen(),
+        );
+
       case AppRoutes.linkFormRoute:
         return _moveRoute(
           settings: settings,
