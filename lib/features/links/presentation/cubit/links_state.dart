@@ -48,3 +48,47 @@ class ManageLinkSuccessState extends LinksState {
   @override
   List<Object> get props => [message];
 }
+
+
+class CreateLinkLoadingState extends LinksState {}
+
+class CreateLinkErrorState extends LinksState {
+  final String message; // error message
+
+  const CreateLinkErrorState(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
+class CreateLinkSuccessState extends LinksState {
+  final String message; // success message
+
+  const CreateLinkSuccessState(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
+
+class CreateBannedWordLoadingState extends LinksState {}
+
+class CreateBannedWordErrorState extends LinksState {
+  final String message; // error message
+
+  const CreateBannedWordErrorState(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
+class CreateBannedWordSuccessState extends LinksState {
+  final String message; // success message
+
+  const CreateBannedWordSuccessState(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
+

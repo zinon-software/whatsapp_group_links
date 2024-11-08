@@ -54,26 +54,29 @@ class _LinkFormScreenState extends State<LinkFormScreen> {
       ),
       body: BlocListener<LinksCubit, LinksState>(
         listener: (context, state) {
-          if (state is ManageLinkErrorState) {
+          if (state is CreateLinkErrorState) {
             AppAlert.customDialog(
               context,
-              title: "خطاء في الحساب",
+              title: "خطاء في اضافة الرابط",
               subTitle: state.message,
+              icon: Icons.error,
+              iconColor: Colors.red,
+              cancelText: "إغلق",
             );
           }
 
-          if (state is ManageLinkLoadingState) {
+          if (state is CreateLinkLoadingState) {
             AppAlert.loading(context);
           }
 
-          if (state is ManageLinkSuccessState) {
+          if (state is CreateLinkSuccessState) {
             AppAlert.customDialog(
-              // ignore: use_build_context_synchronously
               context,
               title: "تمت إضافة الرابط بنجاح",
               subTitle: "تمت أضافة الرابط بنجاح ألى قاعدة البيانات.",
               confirmText: "إنشاء رابط جديد",
               icon: Icons.check,
+              iconColor: Colors.green,
               onConfirm: () {
                 _titleController.clear();
                 _urlController.clear();

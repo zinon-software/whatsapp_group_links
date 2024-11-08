@@ -12,24 +12,24 @@ class LinksCubit extends Cubit<LinksState> {
   LinksCubit({required this.repository}) : super(LinksInitialState());
 
   void createLink(LinkModel newLink) async {
-    emit(ManageLinkLoadingState());
+    emit(CreateLinkLoadingState());
 
     (await repository.createLink(newLink)).fold((failure) {
-      emit(ManageLinkErrorState(failure));
+      emit(CreateLinkErrorState(failure));
     }, (response) {
-      emit(ManageLinkSuccessState(response));
+      emit(CreateLinkSuccessState(response));
     });
   }
 
   void createBannedWord(String word) async {
-    emit(ManageLinkLoadingState());
+    emit(CreateBannedWordLoadingState());
 
     (await repository.createBannedWord(word)).fold(
       (failure) {
-        emit(ManageLinkErrorState(failure));
+        emit(CreateBannedWordErrorState(failure));
       },
       (response) {
-        emit(ManageLinkSuccessState(response));
+        emit(CreateBannedWordSuccessState(response));
       },
     );
   }

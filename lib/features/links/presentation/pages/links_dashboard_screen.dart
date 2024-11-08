@@ -36,6 +36,7 @@ class LinksDashboardScreen extends StatelessWidget {
               context,
               subTitle: state.message,
               icon: Icons.check,
+              iconColor: Colors.green,
             );
           }
         },
@@ -63,32 +64,26 @@ class LinksDashboardScreen extends StatelessWidget {
                   }
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (context, index) {
-                        var linkData = snapshot.data!.docs[index].data()
-                            as Map<String, dynamic>;
-
-                        var bannedWord = linkData['word'].toString();
-
-                        return InkWell(
-                          onTap: () {
-                            linksCubit.deleteBannedWord(bannedWord);
-                          },
-                          child: Card(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                bannedWord,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
+                    child: Wrap(
+                      children: snapshot.data!.docs
+                          .map(
+                            (doc) => InkWell(
+                              onTap: () {
+                                linksCubit.deleteBannedWord(doc['word']);
+                              },
+                              child: Card(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Text(
+                                    doc['word'],
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      },
+                          )
+                          .toList(),
                     ),
                   );
                 },

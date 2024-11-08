@@ -17,14 +17,19 @@ class BannedWordsScreen extends StatelessWidget {
       body: BlocListener<LinksCubit, LinksState>(
         bloc: linksCubit,
         listener: (context, state) {
-          if (state is ManageLinkErrorState) {
+          if (state is CreateBannedWordErrorState) {
             AppAlert.customDialog(context, subTitle: state.message);
           }
-          if (state is ManageLinkLoadingState) {
+          if (state is CreateBannedWordLoadingState) {
             AppAlert.loading(context);
           }
-          if (state is ManageLinkSuccessState) {
-            AppAlert.customDialog(context, subTitle: "تمت أضافة الكلمة بنجاح");
+          if (state is CreateBannedWordSuccessState) {
+            AppAlert.customDialog(
+              context,
+              subTitle: "تمت أضافة الكلمة بنجاح",
+              icon: Icons.check,
+              iconColor: Colors.green,
+            );
           }
         },
         child: Padding(

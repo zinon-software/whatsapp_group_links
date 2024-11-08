@@ -111,7 +111,7 @@ class LinksDatasourcesImpl implements LinksDatasources {
   @override
   Future<String> addBannedWord(String word) async {
     try {
-      await bannedWords.doc(word).set(word);
+      await bannedWords.doc(word).set({'word': word});
       return 'Word added successfully';
     } catch (e) {
       rethrow;
@@ -136,8 +136,9 @@ class LinksDatasourcesImpl implements LinksDatasources {
   Future<List<String>> fetchBannedWords() async {
     try {
       final QuerySnapshot querySnapshot = await bannedWords.get();
-      final List<String> bannedWordsData =
-          querySnapshot.docs.map((doc) => doc.data() as String).toList();
+      final List<String> bannedWordsData = querySnapshot.docs
+          .map((doc) => doc['word'] as String)
+          .toList();
       return bannedWordsData;
     } catch (e) {
       rethrow;
