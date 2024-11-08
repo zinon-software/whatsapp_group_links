@@ -20,6 +20,7 @@ class LoginScreen extends StatelessWidget {
         bloc: usersCubit,
         listener: (context, state) {
           if (state is LoginRouteToHomeState) {
+            usersCubit.fetchMyUserAccount();
             AppAlert.dismissDialog(context);
             Navigator.pushReplacementNamed(context, AppRoutes.homeRoute);
           }
@@ -64,7 +65,7 @@ class LoginScreen extends StatelessWidget {
                     height: screenHeight * 0.02,
                   ),
                   const Text(
-                    'أدخل رقم هاتفك المحمول لتلقي رمز التحقق',
+                    'مرحبا بعودتك',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 18,
@@ -74,6 +75,42 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(
                     height: screenHeight * 0.04,
                   ),
+                  // سياسة الخصوصية
+                  Text(
+                    "بالنقر على تسجيل الدخول",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "فأنت توافق على ",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(
+                            context,
+                            AppRoutes.privacyPolicyRoute,
+                          );
+                        },
+                        child: const Text(
+                          'سياسة الخصوصية',
+                          style: TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  // تسجيل الدخول بواسطة Google
                   CustomButtonWidget(
                     label: "تسجيل الدخول بواسطة Google",
                     height: 45,

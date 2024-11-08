@@ -8,6 +8,7 @@ class UserModel {
   final String phoneNumber;
   final PermissionModel permissions;
   final int score;
+  final String? country;
 
   UserModel({
     required this.id,
@@ -19,6 +20,7 @@ class UserModel {
     required this.phoneNumber,
     required this.permissions,
     this.score = 0,
+    this.country,
   });
 
   // إنشاء كائن UserModel من مستند Firestore
@@ -37,6 +39,7 @@ class UserModel {
         json['permissions'] as Map<String, dynamic>,
       ),
       score: json['score'] ?? 0,
+      country: json['country'],
     );
   }
 
@@ -51,7 +54,8 @@ class UserModel {
       'last_login_at': lastLoginAt.toIso8601String(),
       'phone_number': phoneNumber,
       "permissions": permissions.toJson(),
-      'score': score
+      'score': score,
+      'country': country,
     };
   }
 
@@ -65,6 +69,7 @@ class UserModel {
     String? phoneNumber,
     PermissionModel? permissions,
     int? score,
+    String? country,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -76,6 +81,7 @@ class UserModel {
       phoneNumber: phoneNumber ?? this.phoneNumber,
       permissions: permissions ?? this.permissions,
       score: score ?? this.score,
+      country: country ?? this.country,
     );
   }
 }

@@ -13,12 +13,12 @@ class UsersCubit extends Cubit<UsersState> {
   final UsersRepository repository;
   final FirebaseAuth auth;
 
-  UserModel? user;
+  UserModel? currentUser;
 
   UsersCubit({required this.repository, required this.auth})
       : super(UsersInitialState());
 
-  void fetchMyUserAccount() async {
+  Future<void> fetchMyUserAccount() async {
     try {
       if (auth.currentUser == null) {
         return;
@@ -27,8 +27,8 @@ class UsersCubit extends Cubit<UsersState> {
       (await repository.fetchUser(uid)).fold(
         (error) => null,
         (response) {
-           user = response;
-           emit(UserSuccessState());
+          currentUser = response;
+          emit(UserSuccessState());
         },
       );
     } catch (e) {
@@ -58,10 +58,12 @@ class UsersCubit extends Cubit<UsersState> {
           await auth.signInWithCredential(credential);
 
       if (userCredential.additionalUserInfo?.isNewUser == true) {
-        _onSaveUser(auth.currentUser!.uid);
+        auth.currentUser?.reload();
+        onCreateUser(auth.currentUser!.uid);
       } else {
         auth.currentUser?.reload();
-        _onUpdateUser(auth.currentUser!.uid);
+        await fetchMyUserAccount();
+        if (currentUser != null) onUpdateUser(currentUser!);
       }
 
       emit(LoginRouteToHomeState());
@@ -72,8 +74,8 @@ class UsersCubit extends Cubit<UsersState> {
     }
   }
 
-  Future<void> _onSaveUser(String uid) async {
-    user = UserModel(
+  Future<void> onCreateUser(String uid) async {
+    currentUser = UserModel(
       id: uid,
       name: auth.currentUser!.displayName ?? 'No Name',
       email: auth.currentUser!.email ?? 'No Email',
@@ -84,16 +86,21 @@ class UsersCubit extends Cubit<UsersState> {
       permissions: PermissionModel(),
     );
 
-    repository.createUser(user!);
+    repository.createUser(currentUser!);
   }
 
-  Future<void> _onUpdateUser(String uid) async {
-    (await repository.fetchUser(uid)).fold(
-      (error) => null,
-      (responce) {
-        user = responce;
-        repository.updateUser(responce);
-      },
-    );
+  Future<void> onUpdateUser(UserModel user) async {
+    repository.updateUser(user);
+
+    currentUser = user;
+  }
+
+  void signOut() {
+    auth.signOut();
+
+    currentUser = null;
+    auth.currentUser?.reload();
+
+    emit(LogoutRouteToLoginState());
   }
 }

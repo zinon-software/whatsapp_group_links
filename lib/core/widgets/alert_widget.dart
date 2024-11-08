@@ -54,6 +54,7 @@ class AppAlert {
 
   static Future<void> customDialog(
     BuildContext context, {
+    Widget? child,
     IconData? icon,
     Color? btnCancelColor,
     String? subTitle,
@@ -71,7 +72,7 @@ class AppAlert {
       animType: AnimType.scale,
       dialogType: DialogType.noHeader,
       headerAnimationLoop: false,
-      body: Padding(
+      body: child ?? Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         child: Column(
           children: [

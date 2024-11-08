@@ -29,3 +29,7 @@ class LoginRouteToHomeState extends UsersState {
 }
 
 
+class LogoutRouteToLoginState extends UsersState {
+  const LogoutRouteToLoginState();
+}
+

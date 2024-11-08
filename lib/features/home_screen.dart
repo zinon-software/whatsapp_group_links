@@ -45,21 +45,29 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text("قروباتي")),
+        title: const Center(child: Text("مجموعاتي")),
         actions: [
-          if (_usersCubit.auth.currentUser == null)
-            IconButton(
-              icon: const Icon(Icons.login),
-              onPressed: () {
-                Navigator.pushNamed(context, AppRoutes.loginRoute);
-              },
-            )
-          else
-            // user account
-            IconButton(
-              icon: const Icon(Icons.account_circle),
-              onPressed: () {},
-            ),
+          BlocBuilder<UsersCubit, UsersState>(
+            bloc: _usersCubit,
+            builder: (context, state) {
+              if (_usersCubit.auth.currentUser == null) {
+                return IconButton(
+                  icon: const Icon(Icons.login),
+                  onPressed: () {
+                    Navigator.pushNamed(context, AppRoutes.loginRoute);
+                  },
+                );
+              } else {
+                // user account
+                return IconButton(
+                  icon: const Icon(Icons.account_circle),
+                  onPressed: () {
+                    Navigator.pushNamed(context, AppRoutes.accountRoute);
+                  },
+                );
+              }
+            },
+          )
         ],
       ),
       body: Column(
@@ -71,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
           BlocBuilder<UsersCubit, UsersState>(
             bloc: _usersCubit,
             builder: (context, state) {
-              if (_usersCubit.user?.permissions.isAdmin ?? false) {
+              if (_usersCubit.currentUser?.permissions.isAdmin ?? false) {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: CustomButtonWidget(

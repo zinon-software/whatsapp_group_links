@@ -91,7 +91,7 @@ class CustomButtonWidget extends StatelessWidget {
                   assetIcon!,
                   height: iconSize,
                   fit: BoxFit.fill,
-                  color: textColor,
+                  color: textColor ?? Colors.white,
                 ),
               ),
             if (icon != null)
@@ -99,7 +99,7 @@ class CustomButtonWidget extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Icon(
                   icon,
-                  color: textColor,
+                  color: textColor ?? Colors.white,
                   size: iconSize,
                 ),
               ),

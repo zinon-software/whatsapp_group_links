@@ -10,7 +10,6 @@ class AppNavigation {
     // ignore: prefer_typing_uninitialized_variables
     final query = settings.arguments as Map<String, dynamic>? ?? {};
 
-
     switch (settings.name) {
       case AppRoutes.homeRoute:
         return _moveRoute(
@@ -18,11 +17,26 @@ class AppNavigation {
           view: const HomeScreen(),
         );
 
+      // start users
       case AppRoutes.loginRoute:
         return _moveRoute(
           settings: settings,
           view: const LoginScreen(),
         );
+
+      case AppRoutes.accountRoute:
+        return _moveRoute(
+          settings: settings,
+          view: const AccountScreen(),
+        );
+
+      case AppRoutes.privacyPolicyRoute:
+        return _moveRoute(
+          settings: settings,
+          view: const PrivacyPolicyScreen(),
+        );
+
+      // end users
 
       // start links
       case AppRoutes.linkFormRoute:
@@ -39,10 +53,10 @@ class AppNavigation {
           ),
         );
 
-        case AppRoutes.bannedWordsRoute:
+      case AppRoutes.bannedWordsRoute:
         return _moveRoute(
           settings: settings,
-          view:  BannedWordsScreen(words: query['words'] as List<String>),
+          view: BannedWordsScreen(words: query['words'] as List<String>),
         );
 
       case AppRoutes.linksDashboardRoute:
@@ -50,7 +64,7 @@ class AppNavigation {
           settings: settings,
           view: const LinksDashboardScreen(),
         );
-      
+
       // end links
 
       default:
@@ -66,7 +80,7 @@ class AppNavigation {
     required RouteSettings settings,
   }) {
     appReview();
-    
+
     return PageRouteBuilder(
       settings: settings,
       pageBuilder: (context, animation, secondaryAnimation) => view,

@@ -4,7 +4,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     
     <application
-        android:label="قروباتي"
+        android:label="مجموعاتي"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon"
         android:enableOnBackInvokedCallback="true">
