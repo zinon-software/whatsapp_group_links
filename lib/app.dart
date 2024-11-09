@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:linkati/config/app_injector.dart';
+import 'package:linkati/features/challenges/data/repositories/challenges_repositories.dart';
 import 'package:linkati/features/challenges/presentation/cubit/challenges_cubit.dart';
 import 'package:linkati/features/users/presentation/cubit/users_cubit.dart';
 
@@ -32,7 +33,9 @@ class App extends StatelessWidget {
           )..fetchMyUserAccount(),
         ),
         RepositoryProvider(
-          create: (__) => ChallengesCubit(),
+          create: (__) => ChallengesCubit(
+            repository: instance<ChallengesRepository>(),
+          ),
         ),
         RepositoryProvider(
           create: (__) => LinksCubit(

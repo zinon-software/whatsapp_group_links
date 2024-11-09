@@ -1,12 +1,14 @@
+import 'package:dartz/dartz.dart';
+import 'package:linkati/core/api/error_handling.dart';
+import 'package:linkati/features/challenges/data/models/section_model.dart';
+
 import '../../../../core/network/connection_status.dart';
 import '../datasources/challenges_datasources.dart';
 
 abstract class ChallengesRepository {
-  // Future<Either<String, String>> updatePermission(
-  //   String userId,
-  //   String feild,
-  //   bool newStatus,
-  // );
+  Future<Either<String, String>> createSection(SectionModel section);
+  Future<Either<String, String>> updateSection(SectionModel section);
+  
 }
 
 class ChallengesRepositoryImpl implements ChallengesRepository {
@@ -15,21 +17,31 @@ class ChallengesRepositoryImpl implements ChallengesRepository {
 
   ChallengesRepositoryImpl(this.datasources, this.connectionStatus);
 
-  // @override
-  // Future<Either<String, String>> updatePermission(
-  //     String userId, String feild, bool newStatus) async {
-  //   if (await connectionStatus.isNotConnected) {
-  //     return const Left("تحقق من جودة اتصالك بالانترنت");
-  //   }
+  @override
+  Future<Either<String, String>> createSection(SectionModel section) async {
+    if (await connectionStatus.isNotConnected) {
+      return const Left("تحقق من جودة اتصالك بالانترنت");
+    }
 
-  //   try {
-  //     final response =
-  //         await datasources.updatePermission(userId, feild, newStatus);
-  //     return Right(response);
-  //   } on FirebaseException catch (e) {
-  //     return Left(handleFirebaseException(e));
-  //   } on Exception catch (e) {
-  //     return Left("خطأ: $e");
-  //   }
-  // }
+    try {
+      final response = await datasources.createSection(section);
+      return Right(response);
+    } catch (e) {
+      return Left(handleException(e));
+    }
+  }
+  
+  @override
+  Future<Either<String, String>> updateSection(SectionModel section)  async{
+    if (await connectionStatus.isNotConnected) {
+      return const Left("تحقق من جودة اتصالك بالانترنت");
+    }
+
+    try {
+      final response = await datasources.updateSection(section);
+      return Right(response);
+    } catch (e) {
+      return Left(handleException(e));
+    }
+  }
 }

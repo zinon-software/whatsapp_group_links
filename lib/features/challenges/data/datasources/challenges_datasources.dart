@@ -10,6 +10,7 @@ abstract class ChallengesDatasources {
   Future<String> createSession(SessionModel session);
   // sections
   Future<String> createSection(SectionModel section);
+  Future<String> updateSection(SectionModel section);
 }
 
 class ChallengesDatasourcesImpl implements ChallengesDatasources {
@@ -57,6 +58,16 @@ class ChallengesDatasourcesImpl implements ChallengesDatasources {
       await sessions.doc(docRef.id).set(
             session.toJson(id: docRef.id),
           );
+      return 'success';
+    } catch (e) {
+      rethrow;
+    }
+  }
+  
+  @override
+  Future<String> updateSection(SectionModel section) async{
+    try {
+      await sections.doc(section.id).update(section.toJson());
       return 'success';
     } catch (e) {
       rethrow;

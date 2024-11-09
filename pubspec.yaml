@@ -41,6 +41,7 @@ dependencies:
   flutter_local_notifications: ^18.0.0
 
   flutter_svg: ^2.0.14
+  cached_network_image: ^3.4.1
 
 
 dev_dependencies:

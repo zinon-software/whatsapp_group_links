@@ -36,6 +36,12 @@ class AppNavigation {
           view: const PrivacyPolicyScreen(),
         );
 
+      case AppRoutes.usersRankRoute:
+        return _moveRoute(
+          settings: settings,
+          view: const UsersRankScreen(),
+        );
+
       // end users
 
       // start links
@@ -79,10 +85,24 @@ class AppNavigation {
       // end links
 
       // start challenges
-      case AppRoutes.challengesSectionsRoute:
+      case AppRoutes.sectionsRoute:
         return _moveRoute(
           settings: settings,
-          view: const ChallengesSectionsScreen(),
+          view: const SectionsScreen(),
+        );
+
+      case AppRoutes.challengesDashboardRoute:
+        return _moveRoute(
+          settings: settings,
+          view: const ChallengesDashboardScreen(),
+        );
+
+      case AppRoutes.sectionFormRoute:
+        return _moveRoute(
+          settings: settings,
+          view: SectionFormScreen(
+            section: query['section'] as SectionModel?,
+          ),
         );
       // end challenges
 

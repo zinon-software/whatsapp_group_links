@@ -110,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 } else {
                   Navigator.of(context).pushNamed(
-                    AppRoutes.challengesSectionsRoute,
+                    AppRoutes.sectionsRoute,
                   );
                 }
               },
@@ -182,7 +182,102 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
-                          height: 40,
+                          height: 30,
+                          width: 80,
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            "جديد",
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge!
+                                .copyWith(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.of(context).pushNamed(
+                  AppRoutes.usersRankRoute,
+                );
+              },
+              child: Container(
+                height: 120,
+                width: double.infinity,
+                margin: const EdgeInsets.all(8),
+                padding: EdgeInsets.all(0),
+                decoration: BoxDecoration(
+                    color: ColorManager.aed5e5,
+                    borderRadius: BorderRadius.circular(8),
+                    shape: BoxShape.rectangle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: ColorManager.aed5e5.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: const Offset(0, 3),
+                      ),
+                    ]),
+                child: Stack(
+                  alignment: Alignment.centerRight,
+                  children: [
+                    SvgPicture.asset(
+                      'assets/svg/rank.svg',
+                      height: 120,
+                      width: 120,
+                      semanticsLabel: 'A red up arrow',
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.r_mobiledata,
+                              color: ColorManager.f255176,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              "ترتيب المتسابقين",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge!
+                                  .copyWith(color: ColorManager.f255176),
+                            ),
+                            const SizedBox(width: 20),
+                            Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: const Icon(
+                                Icons.chevron_right,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          height: 30,
                           width: 80,
                           decoration: BoxDecoration(
                             color: Colors.green,
