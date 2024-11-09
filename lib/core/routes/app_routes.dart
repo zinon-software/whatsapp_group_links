@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:in_app_review/in_app_review.dart';
 
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import '../../features/links/data/models/link_model.dart';
 import '../../features/links/presentation/pages/banned_words_screen.dart';
 import '../../features/links/presentation/pages/links_dashboard_screen.dart';
 import '../../features/links/presentation/pages/link_form_screen.dart';
+import '../../features/links/presentation/pages/links_screen.dart';
 import '../../features/users/presentation/pages/login_screen.dart';
 import '../../features/users/presentation/pages/privacy_policy_screen.dart';
 
@@ -27,4 +29,5 @@ class AppRoutes {
   static const String linkFormRoute = '/link_form_route';
   static const String bannedWordsRoute = '/banned_words_route';
   static const String linksDashboardRoute = '/links_dashboard_route';
+  static const String linksRoute = '/links_route';
 }

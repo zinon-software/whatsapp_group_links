@@ -42,7 +42,9 @@ class AppNavigation {
       case AppRoutes.linkFormRoute:
         return _moveRoute(
           settings: settings,
-          view: const LinkFormScreen(),
+          view: LinkFormScreen(
+            link: query['link'] as LinkModel?,
+          ),
         );
 
       case AppRoutes.linkDetailsRoute:
@@ -63,6 +65,15 @@ class AppNavigation {
         return _moveRoute(
           settings: settings,
           view: const LinksDashboardScreen(),
+        );
+
+      case AppRoutes.linksRoute:
+        return _moveRoute(
+          settings: settings,
+          view: LinksScreen(
+            title: query['title'] as String,
+            query: query['query'] as Query<Object?>,
+          ),
         );
 
       // end links

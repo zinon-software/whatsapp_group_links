@@ -198,7 +198,7 @@ class AdsManager {
     // التحقق مما إذا كان الإعلان المكافأة السابق قد تم عرضه قبل أكثر من 30 ثانية أم لا
     if (_lastRewardedAdTime != null &&
         DateTime.now().difference(_lastRewardedAdTime!) <
-            const Duration(seconds: 30)) {
+            const Duration(seconds: 40)) {
       log('تحذير: لم يتم عرض الإعلان المكافأة الجديد بعد 30 ثانية.');
       return;
     }

@@ -6,7 +6,9 @@ import 'package:linkati/core/widgets/custom_button_widget.dart';
 import 'package:linkati/features/users/presentation/cubit/users_cubit.dart';
 
 import '../../core/ads/ads_manager.dart';
-import 'links/presentation/widgets/links_stream_widget.dart';
+import '../config/app_injector.dart';
+import '../core/api/app_collections.dart';
+import 'links/presentation/widgets/home_links_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,25 +19,20 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late final UsersCubit _usersCubit;
-  late final ScrollController _scrollController;
 
   late AdsManager _adsManager;
 
   @override
   void initState() {
-    _scrollController = ScrollController();
     _usersCubit = context.read<UsersCubit>();
     super.initState();
     _adsManager = AdsManager();
-    _adsManager.loadBannerAd();
     _adsManager.loadRewardedAd();
     _adsManager.loadNativeAd();
   }
 
   @override
   void dispose() {
-    _scrollController.dispose();
-    _adsManager.disposeBannerAds();
     _adsManager.disposeNativeAd();
 
     super.dispose();
@@ -70,35 +67,138 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: _adsManager.getBannerAdWidget(),
-          ),
-          BlocBuilder<UsersCubit, UsersState>(
-            bloc: _usersCubit,
-            builder: (context, state) {
-              if (_usersCubit.currentUser?.permissions.isAdmin ?? false) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CustomButtonWidget(
-                    width: double.infinity,
-                    onPressed: () {
-                      Navigator.of(context)
-                          .pushNamed(AppRoutes.linksDashboardRoute);
-                    },
-                    label: "لوحة التحكم",
-                  ),
-                );
-              }
-              return const SizedBox.shrink();
-            },
-          ),
-          Expanded(
-            child: LinksStreamWidget(adsManager: _adsManager),
-          ),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            BlocBuilder<UsersCubit, UsersState>(
+              bloc: _usersCubit,
+              builder: (context, state) {
+                if (_usersCubit.currentUser?.permissions.isAdmin ?? false) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CustomButtonWidget(
+                      width: double.infinity,
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pushNamed(AppRoutes.linksDashboardRoute);
+                      },
+                      label: "لوحة التحكم",
+                    ),
+                  );
+                }
+                return const SizedBox.shrink();
+              },
+            ),
+            HomeLinksWidget(
+              query: instance<AppCollections>()
+                  .links
+                  .orderBy("views", descending: true),
+              title: "الاكثر مشاهدة",
+              adsManager: _adsManager,
+            ),
+            HomeLinksWidget(
+              adsManager: _adsManager,
+              title: "الاحدث",
+              query: instance<AppCollections>()
+                  .links
+                  .orderBy('create_dt', descending: true),
+            ),
+            HomeLinksWidget(
+              query: instance<AppCollections>()
+                  .links
+                  .orderBy("create_dt", descending: false),
+              title: "الاقدم",
+              adsManager: _adsManager,
+            ),
+
+            HomeLinksWidget(
+              query: instance<AppCollections>()
+                  .links
+                  .where("type", isEqualTo: "whatsapp"),
+              title: "مجموعات واتساب",
+              adsManager: _adsManager,
+            ),
+            // telegram
+            HomeLinksWidget(
+              adsManager: _adsManager,
+              query: instance<AppCollections>()
+                  .links
+                  .where("type", isEqualTo: "telegram"),
+              title: "مجموعات وقنوات تيليجرام",
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Center(
+                child: _adsManager.getNativeAdWidget(),
+              ),
+            ),
+            // ficebook
+            HomeLinksWidget(
+              adsManager: _adsManager,
+              query: instance<AppCollections>()
+                  .links
+                  .where("type", isEqualTo: "facebook"),
+              title: "مجموعات وصفحات فيسبوك",
+            ),
+            // twitter
+            HomeLinksWidget(
+              adsManager: _adsManager,
+              query: instance<AppCollections>()
+                  .links
+                  .where("type", isEqualTo: "twitter"),
+              title: "حسابات تويتر",
+            ),
+            // instagram
+            HomeLinksWidget(
+              adsManager: _adsManager,
+              query: instance<AppCollections>()
+                  .links
+                  .where("type", isEqualTo: "instagram"),
+              title: "حسابات انستجرام",
+            ),
+
+            // snapchat
+            HomeLinksWidget(
+              adsManager: _adsManager,
+              query: instance<AppCollections>()
+                  .links
+                  .where("type", isEqualTo: "snapchat"),
+              title: "حسابات سنابشات",
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Center(
+                child: _adsManager.getNativeAdWidget(),
+              ),
+            ),
+            // tiktok
+            HomeLinksWidget(
+              adsManager: _adsManager,
+              query: instance<AppCollections>()
+                  .links
+                  .where("type", isEqualTo: "tiktok"),
+              title: "حسابات تيك توك",
+            ),
+            // youtube
+            HomeLinksWidget(
+              adsManager: _adsManager,
+              query: instance<AppCollections>()
+                  .links
+                  .where("type", isEqualTo: "youtube"),
+              title: "قنوات يوتيوب",
+            ),
+            // other
+            HomeLinksWidget(
+              query: instance<AppCollections>()
+                  .links
+                  .where("type", isEqualTo: "other"),
+              title: "روابط اخرى",
+              adsManager: _adsManager,
+            ),
+            const SizedBox(height: 100),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

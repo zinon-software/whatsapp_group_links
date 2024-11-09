@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -10,7 +11,8 @@ import '../../../../core/widgets/custom_text_field.dart';
 import '../../data/models/link_model.dart';
 
 class LinkFormScreen extends StatefulWidget {
-  const LinkFormScreen({super.key});
+  const LinkFormScreen({super.key, this.link});
+  final LinkModel? link;
 
   @override
   State<LinkFormScreen> createState() => _LinkFormScreenState();
@@ -21,8 +23,7 @@ class _LinkFormScreenState extends State<LinkFormScreen> {
 
   late final TextEditingController _titleController;
   late final TextEditingController _urlController;
-  final GlobalKey<FormState> _formKey =
-      GlobalKey<FormState>(); // Added form key
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   late AdsManager _adsManager; // إضافة المتغير هنا
 
@@ -35,6 +36,10 @@ class _LinkFormScreenState extends State<LinkFormScreen> {
     _urlController = TextEditingController();
     _adsManager = AdsManager();
     _adsManager.loadBannerAd(adSize: AdSize.fullBanner);
+    if (widget.link != null) {
+      _titleController.text = widget.link!.title;
+      _urlController.text = widget.link!.url;
+    }
   }
 
   @override
@@ -142,21 +147,30 @@ class _LinkFormScreenState extends State<LinkFormScreen> {
                             if (_formKey.currentState!.validate()) {
                               // Create a new social media link
                               String type = _linksCubit
-                                  .determineType(_urlController.text);
+                                  .determinePlatform(_urlController.text);
                               LinkModel newLink = LinkModel(
-                                id: '',
+                                id: widget.link?.id ?? '',
                                 title: _titleController.text,
-                                createDt: DateTime.now(),
+                                createDt:
+                                    widget.link?.createDt ?? DateTime.now(),
                                 url: _urlController.text.trim(),
-                                views: 0,
+                                views: widget.link?.views ?? 0,
                                 type: type,
-                                isActive: true,
+                                isActive: widget.link?.isActive ?? true,
                               );
 
-                              _linksCubit.createLink(newLink);
+                              if (widget.link != null) {
+                                _linksCubit.updateLink(newLink);
+                              } else {
+                                _linksCubit.createLink(newLink.copyWith(
+                                  user: FirebaseAuth.instance.currentUser?.uid,
+                                ));
+                              }
                             }
                           },
-                          label: 'إضافة الرابط',
+                          label: widget.link != null
+                              ? 'تحديث الرابط'
+                              : 'إضافة الرابط',
                         ),
                       ],
                     ),

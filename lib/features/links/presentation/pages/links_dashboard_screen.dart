@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:linkati/config/app_injector.dart';
 import 'package:linkati/core/extensions/date_format_extension.dart';
+import 'package:linkati/core/widgets/custom_button_widget.dart';
 
 import '../../../../core/api/app_collections.dart';
 import '../../../../core/routes/app_routes.dart';
@@ -91,7 +92,10 @@ class LinksDashboardScreen extends StatelessWidget {
               SizedBox(height: 10),
               Title(color: Colors.black, child: const Text("قائمة المجموعات")),
               StreamBuilder<QuerySnapshot>(
-                stream: instance<AppCollections>().links.snapshots(),
+                stream: instance<AppCollections>()
+                    .links
+                    .orderBy('create_dt', descending: true)
+                    .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
@@ -125,74 +129,101 @@ class LinksDashboardScreen extends StatelessWidget {
                             );
                           },
                           child: Card(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
+                            child: ListTile(
+                              contentPadding: EdgeInsets.all(8),
+                              leading: Text("${index + 1}"),
+                              title: Text(
+                                link.title,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              subtitle: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text((index + 1).toString()),
-                                  ),
+                                  if (link.isActive == true)
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[300],
+                                        borderRadius: BorderRadius.circular(18),
+                                      ),
+                                      padding: const EdgeInsets.all(5),
+                                      child: const Icon(
+                                        CupertinoIcons.checkmark_seal_fill,
+                                        color: Colors.green,
+                                      ),
+                                    ),
                                   Expanded(
-                                    child: ListTile(
-                                      title: Text(
-                                        link.title,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      subtitle: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          if (link.isActive == true)
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                color: Colors.grey[300],
-                                                borderRadius:
-                                                    BorderRadius.circular(18),
-                                              ),
-                                              padding: const EdgeInsets.all(5),
-                                              child: const Icon(
-                                                CupertinoIcons
-                                                    .checkmark_seal_fill,
-                                                color: Colors.green,
-                                              ),
-                                            ),
-                                          Expanded(
-                                            child: Text(
-                                              link.createDt
-                                                  .formatTimeAgoString(),
-                                            ),
-                                          ),
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              color: Colors.grey[300],
-                                              borderRadius:
-                                                  BorderRadius.circular(18),
-                                            ),
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 10,
-                                              vertical: 5,
-                                            ),
-                                            child: Text(
-                                              link.type,
-                                              style:
-                                                  const TextStyle(fontSize: 10),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      trailing: TextButton(
+                                    child: Text(
+                                      link.createDt.formatTimeAgoString(),
+                                    ),
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[300],
+                                      borderRadius: BorderRadius.circular(18),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 5,
+                                    ),
+                                    child: Text(
+                                      link.type,
+                                      style: const TextStyle(fontSize: 10),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              trailing: IconButton(
+                                onPressed: () {
+                                  AppAlert.customDialog(
+                                    context,
+                                    child: Column(
+                                      children: [
+                                        CustomButtonWidget(
+                                          width: double.infinity,
+                                          height: 50,
                                           onPressed: () {
                                             linksCubit.changeLinkActive(
                                               link.id,
                                               !link.isActive,
                                             );
                                           },
-                                          child: Text('${link.isActive}')),
+                                          label: link.isActive
+                                              ? 'Deactivate Link'
+                                              : 'Activate Link',
+                                        ),
+                                        SizedBox(height: 10),
+                                        // edit
+                                        CustomButtonWidget(
+                                          width: double.infinity,
+                                          height: 50,
+                                          backgroundColor: Colors.green,
+                                          onPressed: () {
+                                            AppAlert.dismissDialog(context);
+                                            Navigator.of(context).pushNamed(
+                                              AppRoutes.linkFormRoute,
+                                              arguments: {'link': link},
+                                            );
+                                          },
+                                          label: 'Edit Link',
+                                        ),
+                                        SizedBox(height: 10),
+                                        // delete
+                                        CustomButtonWidget(
+                                          width: double.infinity,
+                                          height: 50,
+                                          backgroundColor: Colors.red,
+                                          onPressed: () {
+                                            linksCubit.deleteLink(link.id);
+                                          },
+                                          label: 'Delete Link',
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ],
+                                  );
+                                },
+                                icon: const Icon(Icons.more_vert),
                               ),
                             ),
                           ),

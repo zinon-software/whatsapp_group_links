@@ -67,9 +67,9 @@ class UsersCubit extends Cubit<UsersState> {
 
       emit(LoginRouteToHomeState());
     } on PlatformException catch (e) {
-      emit(SignInWithGoogleErrorState(error: e.message ?? ''));
+      emit(SignInWithGoogleErrorState(error: '${e.message} ${e.code}'));
     } catch (e) {
-      emit(SignInWithGoogleErrorState(error: e.toString()));
+      emit(SignInWithGoogleErrorState(error: '$e ${e.hashCode}'));
     }
   }
 
