@@ -22,9 +22,7 @@ class LinkItemWidget extends StatelessWidget {
         _adsManager.showRewardedAd();
         Navigator.of(context).pushNamed(
           AppRoutes.linkDetailsRoute,
-          arguments: {
-            'link': link,
-          },
+          arguments: {'link': link},
         );
       },
       child: Card(

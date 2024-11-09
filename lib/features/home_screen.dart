@@ -116,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
               query: instance<AppCollections>()
                   .links
                   .where("type", isEqualTo: "whatsapp"),
-              title: "مجموعات واتساب",
+              title: "مجموعات واتساب WhatsApp",
               adsManager: _adsManager,
             ),
             // telegram
@@ -125,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
               query: instance<AppCollections>()
                   .links
                   .where("type", isEqualTo: "telegram"),
-              title: "مجموعات وقنوات تيليجرام",
+              title: "مجموعات وقنوات تيليجرام Telegram",
             ),
             Padding(
               padding: const EdgeInsets.all(20.0),
@@ -139,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
               query: instance<AppCollections>()
                   .links
                   .where("type", isEqualTo: "facebook"),
-              title: "مجموعات وصفحات فيسبوك",
+              title: "مجموعات وصفحات فيسبوك Facebook",
             ),
             // twitter
             HomeLinksWidget(
@@ -147,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
               query: instance<AppCollections>()
                   .links
                   .where("type", isEqualTo: "twitter"),
-              title: "حسابات تويتر",
+              title: "حسابات تويتر Twitter",
             ),
             // instagram
             HomeLinksWidget(
@@ -155,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
               query: instance<AppCollections>()
                   .links
                   .where("type", isEqualTo: "instagram"),
-              title: "حسابات انستجرام",
+              title: "حسابات انستجرام Instagram",
             ),
 
             // snapchat
@@ -164,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
               query: instance<AppCollections>()
                   .links
                   .where("type", isEqualTo: "snapchat"),
-              title: "حسابات سنابشات",
+              title: "حسابات سنابشات Snapchat",
             ),
             Padding(
               padding: const EdgeInsets.all(20.0),
@@ -178,7 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
               query: instance<AppCollections>()
                   .links
                   .where("type", isEqualTo: "tiktok"),
-              title: "حسابات تيك توك",
+              title: "حسابات تيك توك TikTok",
             ),
             // youtube
             HomeLinksWidget(
@@ -186,7 +186,15 @@ class _HomeScreenState extends State<HomeScreen> {
               query: instance<AppCollections>()
                   .links
                   .where("type", isEqualTo: "youtube"),
-              title: "قنوات يوتيوب",
+              title: "قنوات يوتيوب Youtube",
+            ),
+            // linkedin
+            HomeLinksWidget(
+              adsManager: _adsManager,
+              query: instance<AppCollections>()
+                  .links
+                  .where("type", isEqualTo: "linkedin"),
+              title: "حسابات لينكدان LinkedIn",
             ),
             // other
             HomeLinksWidget(

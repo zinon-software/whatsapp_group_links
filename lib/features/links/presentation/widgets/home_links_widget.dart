@@ -33,6 +33,8 @@ class HomeLinksWidget extends StatelessWidget {
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
               InkWell(
                 onTap: () {
@@ -59,6 +61,7 @@ class HomeLinksWidget extends StatelessWidget {
             ],
           ),
         ),
+        SizedBox(height: 8),
         StreamBuilder<QuerySnapshot>(
           stream: query.limit(20).snapshots(),
           builder: (context, snapshot) {
@@ -75,7 +78,7 @@ class HomeLinksWidget extends StatelessWidget {
             }
 
             return SizedBox(
-              height: 100,
+              height: 90,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: snapshot.data!.docs.length,
