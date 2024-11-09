@@ -7,6 +7,7 @@ import 'package:linkati/core/widgets/custom_button_widget.dart';
 import 'package:linkati/features/links/presentation/cubit/links_cubit.dart';
 
 import '../../../../core/ads/ads_manager.dart';
+import '../../../../core/routes/app_routes.dart';
 import '../../../../core/widgets/custom_text_field.dart';
 import '../../data/models/link_model.dart';
 
@@ -116,6 +117,11 @@ class _LinkFormScreenState extends State<LinkFormScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        // Title
+                        Text(
+                          "اضافة رابط جديد",
+                          style: Theme.of(context).textTheme.headlineLarge,
+                        ),
                         CustomTextField(
                           keyboardType: TextInputType.name,
                           controller: _titleController,
@@ -141,7 +147,29 @@ class _LinkFormScreenState extends State<LinkFormScreen> {
                             return null;
                           },
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 16),
+                        Text(
+                          "بالنقر على ${widget.link == null ? "اضافة" : "تعديل"} ، فأنت توافق على",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pushNamed(
+                              context,
+                              AppRoutes.privacyPolicyRoute,
+                            );
+                          },
+                          child: const Text(
+                            'سياسة الخصوصية',
+                            style: TextStyle(
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10),
                         CustomButtonWidget(
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {

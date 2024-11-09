@@ -20,9 +20,9 @@ class SectionModel {
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson( {String? id}) {
     return {
-      'id': id,
+      'id': id ?? this.id,
       'title': title,
       'image_url': imageUrl,
       'question_count': questionCount,

@@ -64,6 +64,7 @@ void stupChallenges() {
       () => ChallengesDatasourcesImpl(
         questions: instance<AppCollections>().questions,
         sessions: instance<AppCollections>().sessions,
+        sections: instance<AppCollections>().sections,
       ),
     );
   }

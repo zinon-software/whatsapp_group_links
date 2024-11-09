@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:linkati/core/widgets/alert_widget.dart';
 
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/widgets/custom_button_widget.dart';
@@ -20,7 +21,11 @@ class AccountScreen extends StatelessWidget {
         bloc: usersCubit,
         listener: (context, state) {
           if (state is LogoutRouteToLoginState) {
-            Navigator.pushReplacementNamed(context, AppRoutes.loginRoute);
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              AppRoutes.loginRoute,
+              (_) => false,
+            );
           }
         },
         builder: (context, state) {
@@ -149,7 +154,15 @@ class AccountScreen extends StatelessWidget {
                       label: "تسجيل الخروج",
                       icon: Icons.logout,
                       onPressed: () async {
-                        usersCubit.signOut();
+                        AppAlert.customDialog(
+                          context,
+                          title: "تسجيل الخروج",
+                          subTitle: "هل تريد تسجيل الخروج؟",
+                          confirmText: "تسجيل الخروج",
+                          onConfirm: () {
+                            usersCubit.signOut();
+                          },
+                        );
                       },
                     ),
                     const SizedBox(height: 10),

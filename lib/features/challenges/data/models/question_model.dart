@@ -23,9 +23,9 @@ class QuestionModel {
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson({String? id}) {
     return {
-      'id': id,
+      'id': id ?? this.id,
       'section': section,
       'question': question,
       'options': options,

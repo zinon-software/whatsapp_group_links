@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:linkati/core/routes/app_routes.dart';
+import 'package:linkati/core/utils/color_manager.dart';
+import 'package:linkati/core/widgets/alert_widget.dart';
 import 'package:linkati/core/widgets/custom_button_widget.dart';
 import 'package:linkati/features/users/presentation/cubit/users_cubit.dart';
 
@@ -79,6 +82,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: CustomButtonWidget(
                       width: double.infinity,
+                      backgroundColor: ColorManager.aed5e5,
+                      textColor: ColorManager.primaryLight,
                       onPressed: () {
                         Navigator.of(context)
                             .pushNamed(AppRoutes.linksDashboardRoute);
@@ -89,6 +94,114 @@ class _HomeScreenState extends State<HomeScreen> {
                 }
                 return const SizedBox.shrink();
               },
+            ),
+            // challenges card banner
+            InkWell(
+              onTap: () {
+                if (_usersCubit.auth.currentUser == null) {
+                  AppAlert.customDialog(
+                    context,
+                    subTitle: "يرجى تسجيل الدخول",
+                    confirmText: "تسجيل الدخول",
+                    onConfirm: () {
+                      AppAlert.dismissDialog(context);
+                      Navigator.of(context).pushNamed(AppRoutes.loginRoute);
+                    },
+                  );
+                } else {
+                  Navigator.of(context).pushNamed(
+                    AppRoutes.challengesSectionsRoute,
+                  );
+                }
+              },
+              child: Container(
+                height: 120,
+                width: double.infinity,
+                margin: const EdgeInsets.all(8),
+                padding: EdgeInsets.all(0),
+                decoration: BoxDecoration(
+                    color: ColorManager.aed5e5,
+                    borderRadius: BorderRadius.circular(8),
+                    shape: BoxShape.rectangle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: ColorManager.aed5e5.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: const Offset(0, 3),
+                      ),
+                    ]),
+                child: Stack(
+                  alignment: Alignment.centerRight,
+                  children: [
+                    SvgPicture.asset(
+                      'assets/svg/challenges.svg',
+                      height: 120,
+                      width: 120,
+                      semanticsLabel: 'A red up arrow',
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.lightbulb,
+                              color: ColorManager.f255176,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              "المسابقات",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge!
+                                  .copyWith(color: ColorManager.f255176),
+                            ),
+                            const SizedBox(width: 20),
+                            Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: const Icon(
+                                Icons.chevron_right,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          height: 40,
+                          width: 80,
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            "جديد",
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge!
+                                .copyWith(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
             HomeLinksWidget(
               query: instance<AppCollections>()

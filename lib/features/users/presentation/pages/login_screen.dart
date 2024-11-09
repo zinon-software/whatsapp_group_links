@@ -22,7 +22,11 @@ class LoginScreen extends StatelessWidget {
           if (state is LoginRouteToHomeState) {
             usersCubit.fetchMyUserAccount();
             AppAlert.dismissDialog(context);
-            Navigator.pushReplacementNamed(context, AppRoutes.homeRoute);
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              AppRoutes.homeRoute,
+              (_) => false,
+            );
           }
           if (state is SignInWithGoogleErrorState) {
             AppAlert.customDialog(
@@ -49,6 +53,10 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(
                     height: screenHeight * 0.05,
                   ),
+                  const Text(
+                    'تسجيل الدخول',
+                    style: TextStyle(fontSize: 28, color: Colors.black),
+                  ),
                   Image.asset(
                     'assets/images/registration.png',
                     height: screenHeight * 0.3,
@@ -57,10 +65,7 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(
                     height: screenHeight * 0.02,
                   ),
-                  const Text(
-                    'تسجيل الدخول',
-                    style: TextStyle(fontSize: 28, color: Colors.black),
-                  ),
+
                   SizedBox(
                     height: screenHeight * 0.02,
                   ),
@@ -73,7 +78,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    height: screenHeight * 0.04,
+                    height: screenHeight * 0.06,
                   ),
                   // سياسة الخصوصية
                   Text(
@@ -85,6 +90,8 @@ class LoginScreen extends StatelessWidget {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
                         "فأنت توافق على ",
@@ -109,7 +116,7 @@ class LoginScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 16),
                   // تسجيل الدخول بواسطة Google
                   CustomButtonWidget(
                     label: "تسجيل الدخول بواسطة Google",

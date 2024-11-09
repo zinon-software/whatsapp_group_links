@@ -40,4 +40,9 @@ class ColorManager {
 
   static const Color black = Color(0xFF464042);
 
+  // aed5e5
+  static const Color aed5e5 = Color(0xFFaed5e5);
+  // 255176
+  static const Color f255176 = Color(0xFF255176);
+
 }

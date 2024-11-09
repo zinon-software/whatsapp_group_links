@@ -72,59 +72,64 @@ class AppAlert {
       animType: AnimType.scale,
       dialogType: DialogType.noHeader,
       headerAnimationLoop: false,
-      body: child ?? Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-        child: Column(
-          children: [
-            if (icon != null)
-              Container(
-                decoration: const BoxDecoration(shape: BoxShape.circle),
-                child: Icon(
-                  size: 45,
-                  icon,
-                  color: iconColor,
-                ),
-              ),
-            SizedBox(height: 5),
-            Text(
-              title ?? "",
-              style: TextStyle(
-                color: ColorManager.black,
-                fontSize: 15,
-              ),
-            ),
-            SizedBox(height: 5),
-            Text(
-              subTitle ?? "",
-              style: TextStyle(
-                color: ColorManager.black,
-                fontSize: 13,
-              ),
-            ),
-            subTitle == null ? const SizedBox() : SizedBox(height: 20),
-            Row(
+      body: child ??
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            child: Column(
               children: [
-                if (onConfirm != null)
-                  Expanded(
-                    child: CustomButtonWidget(
-                      onPressed: onConfirm,
-                      label: confirmText,
+                if (icon != null)
+                  Container(
+                    decoration: const BoxDecoration(shape: BoxShape.circle),
+                    child: Icon(
+                      size: 45,
+                      icon,
+                      color: iconColor,
                     ),
                   ),
-                if (onConfirm != null) const SizedBox(width: 10),
-                Expanded(
-                  child: CustomButtonWidget(
-                    backgroundColor: ColorManager.fillColor,
-                    onPressed: onCancel ?? () => dismissDialog(context),
-                    label: cancelText,
-                    textColor: Colors.black,
+                if (title != null) ...[
+                  SizedBox(height: 5),
+                  Text(
+                    title,
+                    style: TextStyle(
+                      color: ColorManager.black,
+                      fontSize: 15,
+                    ),
+                  ),
+                ],
+                SizedBox(height: 5),
+                Text(
+                  subTitle ?? "",
+                  style: TextStyle(
+                    color: ColorManager.black,
+                    fontSize: 13,
                   ),
                 ),
+                subTitle == null
+                    ? const SizedBox.shrink()
+                    : SizedBox(height: 20),
+                Row(
+                  children: [
+                    if (onConfirm != null)
+                      Expanded(
+                        child: CustomButtonWidget(
+                          onPressed: onConfirm,
+                          label: confirmText,
+                        ),
+                      ),
+                    if (onConfirm != null) const SizedBox(width: 10),
+                    Expanded(
+                      child: CustomButtonWidget(
+                        backgroundColor: ColorManager.fillColor,
+                        onPressed: onCancel ?? () => dismissDialog(context),
+                        label: cancelText,
+                        textColor: Colors.black,
+                      ),
+                    ),
+                  ],
+                )
               ],
-            )
-          ],
-        ),
-      ),
+            ),
+          ),
       isDense: true,
       padding: const EdgeInsets.all(8),
       dialogBorderRadius: BorderRadius.circular(15),

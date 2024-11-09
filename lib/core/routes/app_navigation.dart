@@ -78,6 +78,14 @@ class AppNavigation {
 
       // end links
 
+      // start challenges
+      case AppRoutes.challengesSectionsRoute:
+        return _moveRoute(
+          settings: settings,
+          view: const ChallengesSectionsScreen(),
+        );
+      // end challenges
+
       default:
         return _moveRoute(
           settings: settings,

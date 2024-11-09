@@ -42,9 +42,9 @@ class SessionModel {
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson({String? id}) {
     return {
-      'id': id,
+      'id': id ?? this.id,
       'player1': player1.toJson(),
       'player2': player2.toJson(),
       'section': section,
