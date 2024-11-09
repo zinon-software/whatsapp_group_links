@@ -31,12 +31,18 @@ class LinkItemWidget extends StatelessWidget {
           child: ListTile(
             leading: CircleAvatar(
               backgroundColor: Colors.grey[300],
+              radius: 20,
               child: Image.asset(
                 'assets/images/${link.type.toLowerCase()}.png',
+                width: 35,
+                height: 35,
               ),
             ),
-            title:
-                Text(link.title, maxLines: 1, overflow: TextOverflow.ellipsis),
+            title: Text(
+              link.title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
             subtitle: Text(link.createDt.formatTimeAgoString()),
             trailing: Text('${link.views} مشاهدة'),
           ),
