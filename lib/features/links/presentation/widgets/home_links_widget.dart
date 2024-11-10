@@ -63,7 +63,7 @@ class HomeLinksWidget extends StatelessWidget {
         ),
         SizedBox(height: 8),
         StreamBuilder<QuerySnapshot>(
-          stream: query.limit(20).snapshots(),
+          stream: query.limit(10).snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());

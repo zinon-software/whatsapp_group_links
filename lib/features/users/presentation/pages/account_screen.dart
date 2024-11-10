@@ -4,6 +4,7 @@ import 'package:linkati/core/widgets/alert_widget.dart';
 
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/widgets/custom_button_widget.dart';
+import '../../../../core/widgets/custom_cached_network_image_widget.dart';
 import '../cubit/users_cubit.dart';
 import '../widgets/selected_country_widget.dart';
 
@@ -50,8 +51,9 @@ class AccountScreen extends StatelessWidget {
                             if (usersCubit.currentUser?.photoUrl != null)
                               CircleAvatar(
                                 radius: 50,
-                                backgroundImage: NetworkImage(
-                                    usersCubit.currentUser?.photoUrl ?? ''),
+                                backgroundImage: CustomCachedNetworkImage(
+                                  usersCubit.currentUser?.photoUrl ?? '',
+                                ).imageProvider,
                               ),
                             const SizedBox(height: 10),
                             // User Score
@@ -154,7 +156,7 @@ class AccountScreen extends StatelessWidget {
                       label: "تسجيل الخروج",
                       icon: Icons.logout,
                       onPressed: () async {
-                        AppAlert.customDialog(
+                        AppAlert.showAlert(
                           context,
                           title: "تسجيل الخروج",
                           subTitle: "هل تريد تسجيل الخروج؟",

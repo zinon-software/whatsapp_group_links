@@ -42,6 +42,7 @@ dependencies:
 
   flutter_svg: ^2.0.14
   cached_network_image: ^3.4.1
+  skeletonizer: ^1.4.2
 
 
 dev_dependencies:

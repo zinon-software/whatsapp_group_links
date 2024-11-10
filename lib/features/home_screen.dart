@@ -99,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
             InkWell(
               onTap: () {
                 if (_usersCubit.auth.currentUser == null) {
-                  AppAlert.customDialog(
+                  AppAlert.showAlert(
                     context,
                     subTitle: "يرجى تسجيل الدخول",
                     confirmText: "تسجيل الدخول",

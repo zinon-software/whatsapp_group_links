@@ -18,13 +18,13 @@ class BannedWordsScreen extends StatelessWidget {
         bloc: linksCubit,
         listener: (context, state) {
           if (state is CreateBannedWordErrorState) {
-            AppAlert.customDialog(context, subTitle: state.message);
+            AppAlert.showAlert(context, subTitle: state.message);
           }
           if (state is CreateBannedWordLoadingState) {
             AppAlert.loading(context);
           }
           if (state is CreateBannedWordSuccessState) {
-            AppAlert.customDialog(
+            AppAlert.showAlert(
               context,
               subTitle: "تمت أضافة الكلمة بنجاح",
               icon: Icons.check,

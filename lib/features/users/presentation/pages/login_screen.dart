@@ -29,7 +29,7 @@ class LoginScreen extends StatelessWidget {
             );
           }
           if (state is SignInWithGoogleErrorState) {
-            AppAlert.customDialog(
+            AppAlert.showAlert(
               context,
               icon: Icons.error,
               title: 'خطأ',

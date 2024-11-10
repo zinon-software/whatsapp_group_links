@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:linkati/core/utils/color_manager.dart';
 
+import '../../../../core/widgets/custom_cached_network_image_widget.dart';
 import '../../../users/data/models/user_model.dart';
 
 class UsersRankScreen extends StatelessWidget {
@@ -164,7 +165,7 @@ class UserRankCard extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 30,
-                backgroundImage: NetworkImage(user.photoUrl),
+                backgroundImage: CustomCachedNetworkImage(user.photoUrl).imageProvider,
               ),
               Positioned(
                 top: -9,

@@ -58,10 +58,10 @@ class _SectionFormScreenState extends State<SectionFormScreen> {
         bloc: _challengesCubit,
         listener: (context, state) {
           if (state is ManageSectionErrorState) {
-            AppAlert.customDialog(context, subTitle: state.failure);
+            AppAlert.showAlert(context, subTitle: state.failure);
           }
           if (state is ManageSectionSuccessState) {
-            AppAlert.customDialog(context, subTitle: 'تمت العملية بنجاح').then(
+            AppAlert.showAlert(context, subTitle: 'تمت العملية بنجاح').then(
               (value) {
                 // ignore: use_build_context_synchronously
                 Navigator.pop(context);

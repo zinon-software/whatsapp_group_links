@@ -52,7 +52,7 @@ class AppAlert {
     );
   }
 
-  static Future<void> customDialog(
+  static Future<void> showAlert(
     BuildContext context, {
     Widget? child,
     IconData? icon,

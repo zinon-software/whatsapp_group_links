@@ -49,7 +49,7 @@ class _LinkDetailsScreenState extends State<LinkDetailsScreen> {
             padding: const EdgeInsets.all(8.0),
             child: IconButton(
               onPressed: () {
-                AppAlert.customDialog(
+                AppAlert.showAlert(
                   context,
                   title: "تبليغ عن محتوى غير لائق",
                   subTitle:

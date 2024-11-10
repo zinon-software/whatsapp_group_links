@@ -61,7 +61,7 @@ class _LinkFormScreenState extends State<LinkFormScreen> {
       body: BlocListener<LinksCubit, LinksState>(
         listener: (context, state) {
           if (state is CreateLinkErrorState) {
-            AppAlert.customDialog(
+            AppAlert.showAlert(
               context,
               title: "خطاء في اضافة الرابط",
               subTitle: state.message,
@@ -76,7 +76,7 @@ class _LinkFormScreenState extends State<LinkFormScreen> {
           }
 
           if (state is CreateLinkSuccessState) {
-            AppAlert.customDialog(
+            AppAlert.showAlert(
               context,
               title: "تمت إضافة الرابط بنجاح",
               subTitle: "تمت أضافة الرابط بنجاح ألى قاعدة البيانات.",

@@ -27,13 +27,13 @@ class LinksDashboardScreen extends StatelessWidget {
         bloc: linksCubit,
         listener: (context, state) {
           if (state is ManageLinkErrorState) {
-            AppAlert.customDialog(context, subTitle: state.message);
+            AppAlert.showAlert(context, subTitle: state.message);
           }
           if (state is ManageLinkLoadingState) {
             AppAlert.loading(context);
           }
           if (state is ManageLinkSuccessState) {
-            AppAlert.customDialog(
+            AppAlert.showAlert(
               context,
               subTitle: state.message,
               icon: Icons.check,
@@ -176,7 +176,7 @@ class LinksDashboardScreen extends StatelessWidget {
                               ),
                               trailing: IconButton(
                                 onPressed: () {
-                                  AppAlert.customDialog(
+                                  AppAlert.showAlert(
                                     context,
                                     child: Column(
                                       children: [

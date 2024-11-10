@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "623939344647-ob8dimp0efk93a8mmknmlcil6r66qmup.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zainon.whatsapp_group_links",
+            "certificate_hash": "57f986953b68979544029efcf21af8524457ae4a"
+          }
+        },
+        {
           "client_id": "623939344647-7uqhmq135jvtcuh2ef6quh2sco1hv99o.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -54,10 +54,10 @@ class _QuestionFormScreenState extends State<QuestionFormScreen> {
         bloc: _challengesCubit,
         listener: (context, state) {
           if (state is ManageQuestionErrorState) {
-            AppAlert.customDialog(context, subTitle: state.failure);
+            AppAlert.showAlert(context, subTitle: state.failure);
           }
           if (state is ManageQuestionSuccessState) {
-            AppAlert.customDialog(context, subTitle: 'تمت العملية بنجاح').then(
+            AppAlert.showAlert(context, subTitle: 'تمت العملية بنجاح').then(
               (value) {
                 // ignore: use_build_context_synchronously
                 Navigator.pop(context);
@@ -138,7 +138,8 @@ class _QuestionFormScreenState extends State<QuestionFormScreen> {
                   width: double.infinity,
                   backgroundColor: ColorManager.aed5e5,
                   textColor: ColorManager.primaryLight,
-                  label: widget.question != null ? 'تحديث السؤال' : 'اضافة سؤال',
+                  label:
+                      widget.question != null ? 'تحديث السؤال' : 'اضافة سؤال',
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       QuestionModel question = QuestionModel(
@@ -148,7 +149,7 @@ class _QuestionFormScreenState extends State<QuestionFormScreen> {
                         id: widget.question?.id ?? '',
                         section: section!,
                       );
-                      if( widget.question != null) {
+                      if (widget.question != null) {
                         _challengesCubit.updateQuestion(question);
                       } else {
                         _challengesCubit.createQuestion(question);

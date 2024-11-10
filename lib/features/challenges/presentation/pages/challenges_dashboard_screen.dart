@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:linkati/core/widgets/custom_button_widget.dart';
 
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/utils/color_manager.dart';
-import '../cubit/challenges_cubit.dart';
 
 class ChallengesDashboardScreen extends StatefulWidget {
   const ChallengesDashboardScreen({super.key});
@@ -15,11 +13,11 @@ class ChallengesDashboardScreen extends StatefulWidget {
 }
 
 class _ChallengesDashboardScreenState extends State<ChallengesDashboardScreen> {
-  late final ChallengesCubit _challengesCubit;
+  // late final ChallengesCubit _challengesCubit;
 
   @override
   void initState() {
-    _challengesCubit = context.read<ChallengesCubit>();
+    // _challengesCubit = context.read<ChallengesCubit>();
     super.initState();
   }
 

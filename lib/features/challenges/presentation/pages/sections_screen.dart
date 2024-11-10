@@ -8,6 +8,7 @@ import '../../../../core/routes/app_routes.dart';
 import '../../../../core/utils/color_manager.dart';
 import '../../../../core/widgets/custom_button_widget.dart';
 import '../../../users/presentation/cubit/users_cubit.dart';
+import '../../../../core/widgets/alert_widget.dart';
 
 class SectionsScreen extends StatefulWidget {
   const SectionsScreen({super.key});
@@ -75,8 +76,9 @@ class _SectionsScreenState extends State<SectionsScreen> {
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       final section = SectionModel.fromJson(
-                          snapshot.data!.docs[index].data()
-                              as Map<String, dynamic>);
+                        snapshot.data!.docs[index].data()
+                            as Map<String, dynamic>,
+                      );
 
                       return Container(
                         decoration: BoxDecoration(
@@ -90,7 +92,10 @@ class _SectionsScreenState extends State<SectionsScreen> {
                           title: Text(section.title),
                           subtitle: Text(section.description),
                           trailing: TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              AppAlert.showAlert(context,
+                                  subTitle: section.description,);
+                            },
                             child: Text("المشاركة في التحدي"),
                           ),
                         ),
