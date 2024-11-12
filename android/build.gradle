@@ -1,12 +1,14 @@
 buildscript {
+    ext.kotlin_version = '1.9.10'
+
+
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:8.0.0'  // إصدار أدوات البناء الخاصة بـ Android
-        classpath 'com.google.gms:google-services:4.3.15'  // إضافة هذه السطر
-        // يمكن إضافة تبعيات أخرى هنا
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
