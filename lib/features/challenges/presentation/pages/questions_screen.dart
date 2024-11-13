@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:linkati/features/challenges/presentation/cubit/challenges_cubit.dart';
 
 import '../../../../core/routes/app_routes.dart';
+import '../../data/models/question_model.dart';
 
 class QuestionsScreen extends StatefulWidget {
   const QuestionsScreen({super.key, required this.topic});
@@ -45,9 +46,33 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
             return ListView.builder(
               itemCount: state.questions.length,
               itemBuilder: (context, index) {
+                final QuestionModel question = state.questions[index];
                 return ListTile(
-                  title: Text(state.questions[index].question),
-                  subtitle: Text(state.questions[index].correctAnswer),
+                  title: Text(question.question),
+                  subtitle: Wrap(
+                    spacing: 8,
+                    children: question.options
+                        .map(
+                          (e) => Container(
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: question.correctAnswer == e
+                                  ? Colors.green
+                                  : Colors.grey[200],
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              e,
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: question.correctAnswer == e
+                                      ? Colors.white
+                                      : Colors.black),
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ),
                 );
               },
             );
@@ -60,6 +85,8 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
           Navigator.of(context).pushNamed(
             AppRoutes.questionFormRoute,
             arguments: {'topic': widget.topic},
+          ).then(
+            (value) => _challengesCubit.fetchQuestionsEvent(widget.topic),
           );
         },
         child: const Icon(Icons.add),

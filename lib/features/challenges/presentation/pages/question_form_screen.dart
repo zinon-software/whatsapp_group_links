@@ -21,10 +21,11 @@ class _QuestionFormScreenState extends State<QuestionFormScreen> {
   late final GlobalKey<FormState> _formKey;
   late final ChallengesCubit _challengesCubit;
   late final TextEditingController _questionController;
-  late final TextEditingController _correctAnswerController;
+  late final TextEditingController _answersController;
 
   List<String> options = [];
   String? topic;
+  String? correctAnswer;
 
   @override
   void initState() {
@@ -33,13 +34,13 @@ class _QuestionFormScreenState extends State<QuestionFormScreen> {
     super.initState();
 
     _questionController = TextEditingController();
-    _correctAnswerController = TextEditingController();
+    _answersController = TextEditingController();
 
     topic = widget.topic;
 
     if (widget.question != null) {
       _questionController.text = widget.question!.question;
-      _correctAnswerController.text = widget.question!.correctAnswer;
+      correctAnswer = widget.question!.correctAnswer;
       options = widget.question!.options;
     }
   }
@@ -71,50 +72,84 @@ class _QuestionFormScreenState extends State<QuestionFormScreen> {
                   },
                 ),
                 const SizedBox(height: 16.0),
-                CustomTextField(
-                  controller: _correctAnswerController,
-                  labelText: 'الاجابة الصحيحة',
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'يرجى ادخال الاجابة الصحيحة';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16.0),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'الاجابات',
-                  ),
-                  onFieldSubmitted: (value) {
-                    setState(() {
-                      options.add(value);
-                    });
-                  },
+                Row(
+                  children: [
+                    Expanded(
+                      child: CustomTextField(
+                        controller: _answersController,
+                        labelText: 'الاجابات',
+                        readOnly: options.length >= 4,
+                        onFieldSubmitted: (value) {
+                          if (value.isEmpty) return;
+                          setState(() {
+                            _answersController.clear();
+                            options.add(value);
+                            if (options.length == 1) {
+                              correctAnswer = value;
+                            }
+                          });
+                        },
+                        validator: (value) {
+                          if (options.length < 4) {
+                            return "يجب اضافة 4 اجابات على الاقل";
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    IconButton(
+                      onPressed: () {
+                        if (_answersController.text.isEmpty) return;
+                        setState(() {
+                          options.add(_answersController.text);
+                          if (options.length == 1) {
+                            correctAnswer = _answersController.text;
+                          }
+                          _answersController.clear();
+                        });
+                      },
+                      icon: const Icon(Icons.add),
+                    )
+                  ],
                 ),
                 const SizedBox(height: 16.0),
                 ListView.builder(
                   shrinkWrap: true,
                   itemCount: options.length,
                   itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Text(options[index]),
-                          IconButton(
-                            icon: const Icon(
-                              Icons.delete,
-                              color: Colors.red,
-                            ),
-                            onPressed: () {
+                    return Row(
+                      children: [
+                        Expanded(
+                          child: RadioListTile(
+                            title: Text(options[index]),
+                            value: options[index],
+                            groupValue: correctAnswer,
+                            onChanged: (value) {
                               setState(() {
-                                options.removeAt(index);
+                                correctAnswer = value;
                               });
                             },
-                          )
-                        ],
-                      ),
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              if (correctAnswer == options[index]) {
+                                correctAnswer = options.first;
+                                options.removeAt(index);
+                              } else {
+                                correctAnswer = null;
+                                options.removeAt(index);
+                              }
+                            });
+                          },
+                        )
+                      ],
                     );
                   },
                 ),
@@ -129,7 +164,7 @@ class _QuestionFormScreenState extends State<QuestionFormScreen> {
                     if (_formKey.currentState!.validate()) {
                       QuestionModel question = QuestionModel(
                         question: _questionController.text,
-                        correctAnswer: _correctAnswerController.text,
+                        correctAnswer: correctAnswer!,
                         options: options,
                         id: widget.question?.id ?? '',
                         topic: topic!,

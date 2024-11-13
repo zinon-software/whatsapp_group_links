@@ -51,6 +51,7 @@ class TopicCardWidget extends StatelessWidget {
                       children: [
                         TextButton(
                           onPressed: () {
+                            AppAlert.dismissDialog(context);
                             Navigator.of(context).pushNamed(
                               AppRoutes.topicFormRoute,
                               arguments: {'topic': topic},
@@ -61,6 +62,7 @@ class TopicCardWidget extends StatelessWidget {
                         // questionsRoute
                         TextButton(
                           onPressed: () {
+                            AppAlert.dismissDialog(context);
                             Navigator.of(context).pushNamed(
                               AppRoutes.questionsRoute,
                               arguments: {'topic': topic.id},
@@ -70,6 +72,7 @@ class TopicCardWidget extends StatelessWidget {
                         ),
                         TextButton(
                           onPressed: () {
+                            AppAlert.dismissDialog(context);
                             Navigator.of(context).pushNamed(
                               AppRoutes.gamesRoute,
                               arguments: {'topic': topic.id},

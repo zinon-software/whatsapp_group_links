@@ -7,6 +7,7 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
   final TextInputType keyboardType;
   final void Function(String)? onChanged;
+  final void Function(String)? onFieldSubmitted;
   final List<TextInputFormatter>? inputFormatters;
   final bool readOnly;
   final Function()? onTap;
@@ -26,6 +27,7 @@ class CustomTextField extends StatelessWidget {
     this.controller,
     this.keyboardType = TextInputType.text,
     this.onChanged,
+    this.onFieldSubmitted,
     this.inputFormatters,
     this.readOnly = false,
     this.onTap,
@@ -49,6 +51,7 @@ class CustomTextField extends StatelessWidget {
       readOnly: readOnly,
       onTap: onTap,
       onSaved: onSaved,
+      onFieldSubmitted: onFieldSubmitted,
       textAlign: TextAlign.right,
       maxLines: maxLines,
       maxLength: maxLength,
