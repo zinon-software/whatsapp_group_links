@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:linkati/core/widgets/custom_button_widget.dart';
@@ -36,7 +35,9 @@ class _TopicFormScreenState extends State<TopicFormScreen> {
     if (widget.topic != null) {
       _titleController.text = widget.topic!.title;
       _descriptionController.text = widget.topic!.description;
-      _imageUrlController.text = widget.topic!.imageUrl;
+      // _imageUrlController.text = widget.topic!.imageUrl;
+      _imageUrlController.text =
+          "https://img.freepik.com/premium-photo/design-international-internet-day_790062-2475.jpg";
     }
   }
 
@@ -119,8 +120,8 @@ class _TopicFormScreenState extends State<TopicFormScreen> {
                         title: _titleController.text,
                         description: _descriptionController.text,
                         imageUrl: _imageUrlController.text,
-                        id: '',
-                        questionCount: 0,
+                        id: widget.topic?.id ?? '',
+                        questionCount: widget.topic?.questionCount ?? 0,
                       );
                       if (widget.topic != null) {
                         _challengesCubit.updateTopicEvent(topic);

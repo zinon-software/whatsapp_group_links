@@ -57,3 +57,15 @@ class FetchQuestionsErrorState extends ChallengesState {
   final String failure;
   const FetchQuestionsErrorState(this.failure);
 }
+
+class ManageGameLoadingState extends ChallengesState {}
+
+class ManageGameSuccessState extends ChallengesState {
+  final String message;
+  const ManageGameSuccessState(this.message);
+}
+
+class ManageGameErrorState extends ChallengesState {
+  final String failure;
+  const ManageGameErrorState(this.failure);
+}

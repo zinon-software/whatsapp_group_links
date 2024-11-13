@@ -36,8 +36,8 @@ class TopicModel {
   static TopicModel empty() {
     return TopicModel(
       id: '',
-      title: '',
-      description: '',
+      title: '====== ====  ===',
+      description: '== ===================== ======== =',
       imageUrl: 'https://via.placeholder.com/150',
       questionCount: 0,
     );

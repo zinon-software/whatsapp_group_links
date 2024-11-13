@@ -58,10 +58,24 @@ class ChallengesDatasourcesImpl implements ChallengesDatasources {
   @override
   Future<String> createGame(GameModel session) async {
     try {
+      // التحقق من وجود لعبة مفتوحة للمستخدم player1
+      final existingGameQuery = await games
+          .where('player1.user_id', isEqualTo: session.player1.userId)
+          .where('ended_at', isNull: true)
+          .limit(1)
+          .get();
+
+      // إذا كانت هناك لعبة مفتوحة، رفض إنشاء لعبة جديدة
+      if (existingGameQuery.docs.isNotEmpty) {
+        return throw Exception('You already have an open game.');
+      }
+
+      // إنشاء اللعبة الجديدة
       final DocumentReference docRef = games.doc();
       await games.doc(docRef.id).set(
             session.toJson(id: docRef.id),
           );
+
       return 'success';
     } catch (e) {
       rethrow;

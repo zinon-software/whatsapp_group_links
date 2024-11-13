@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:linkati/features/challenges/data/models/game_model.dart';
 import 'package:linkati/features/challenges/data/models/question_model.dart';
 import 'package:linkati/features/challenges/data/models/topic_model.dart';
 import 'package:linkati/features/challenges/data/repositories/challenges_repositories.dart';
@@ -83,6 +84,19 @@ class ChallengesCubit extends Cubit<ChallengesState> {
       (response) {
         topics = response;
         emit(FetchTopicsSuccessState(response));
+      },
+    );
+  }
+
+  FutureOr<void> createGameEvent(GameModel game) async {
+    emit(ManageGameLoadingState());
+
+    (await repository.createGame(game)).fold(
+      (failure) {
+        emit(ManageGameErrorState(failure));
+      },
+      (response) {
+        emit(ManageGameSuccessState(response));
       },
     );
   }

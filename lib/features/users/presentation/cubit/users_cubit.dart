@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
@@ -103,5 +105,13 @@ class UsersCubit extends Cubit<UsersState> {
     auth.currentUser?.reload();
 
     emit(LogoutRouteToLoginState());
+  }
+
+  FutureOr<void> fetchPlayerUser(String id) async {
+    emit(FetchPlayerUserLoadingState());
+    (await repository.fetchUser(id)).fold(
+      (error) => emit(FetchPlayerUserErrorState(error)),
+      (data) => emit(FetchPlayerUserSuccessState(data)),
+    );
   }
 }

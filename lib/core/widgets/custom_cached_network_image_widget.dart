@@ -12,7 +12,6 @@ class CustomCachedNetworkImage extends StatelessWidget {
     this.height,
     this.fit,
     this.borderRadius,
-    this.loadingSize = 25.0,
   });
 
   final String imageUrl;
@@ -20,7 +19,6 @@ class CustomCachedNetworkImage extends StatelessWidget {
   final double? height;
   final BoxFit? fit;
   final double? borderRadius;
-  final double loadingSize;
 
   @override
   Widget build(BuildContext context) {

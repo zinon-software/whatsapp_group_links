@@ -28,3 +28,17 @@ class LoginRouteToHomeState extends UsersState {
 class LogoutRouteToLoginState extends UsersState {
   const LogoutRouteToLoginState();
 }
+
+class FetchPlayerUserLoadingState extends UsersState {
+  const FetchPlayerUserLoadingState();
+}
+
+class FetchPlayerUserSuccessState extends UsersState {
+  final UserModel user;
+  const FetchPlayerUserSuccessState(this.user);
+}
+
+class FetchPlayerUserErrorState extends UsersState {
+  final String error;
+  const FetchPlayerUserErrorState(this.error);
+}

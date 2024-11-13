@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:linkati/core/api/error_handling.dart';
+import 'package:linkati/features/challenges/data/models/game_model.dart';
 import 'package:linkati/features/challenges/data/models/topic_model.dart';
 
 import '../../../../core/network/connection_status.dart';
@@ -17,6 +18,8 @@ abstract class ChallengesRepository {
   Future<Either<String, String>> updateQuestion(QuestionModel question);
 
   Future<Either<String, List<TopicModel>>> fetchTopics();
+
+  Future<Either<String, String>> createGame(GameModel gameModel);
 }
 
 class ChallengesRepositoryImpl implements ChallengesRepository {
@@ -104,6 +107,20 @@ class ChallengesRepositoryImpl implements ChallengesRepository {
 
     try {
       final response = await datasources.fetchTopics();
+      return Right(response);
+    } catch (e) {
+      return Left(handleException(e));
+    }
+  }
+
+  @override
+  Future<Either<String, String>> createGame(GameModel gameModel) async {
+    if (await connectionStatus.isNotConnected) {
+      return const Left("تحقق من جودة اتصالك بالانترنت");
+    }
+
+    try {
+      final response = await datasources.createGame(gameModel);
       return Right(response);
     } catch (e) {
       return Left(handleException(e));

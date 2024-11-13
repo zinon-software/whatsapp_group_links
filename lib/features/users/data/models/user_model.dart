@@ -84,6 +84,19 @@ class UserModel {
       country: country ?? this.country,
     );
   }
+
+  static UserModel isEmpty() {
+    return UserModel(
+      id: '',
+      name: '====== ===',
+      email: '==================',
+      photoUrl: '',
+      createdAt: DateTime.now(),
+      lastLoginAt: DateTime.now(),
+      phoneNumber: '',
+      permissions: PermissionModel(),
+    );
+  }
 }
 
 class PermissionModel {

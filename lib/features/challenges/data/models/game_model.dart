@@ -3,7 +3,7 @@ import 'package:linkati/features/challenges/data/models/question_model.dart';
 class GameModel {
   final String id;
   final PlayerModel player1;
-  final PlayerModel player2;
+  final PlayerModel? player2;
   final String topic;
   final List<QuestionModel> questions;
   final String? currentTurnPlayerId;
@@ -16,7 +16,7 @@ class GameModel {
   GameModel({
     required this.id,
     required this.player1,
-    required this.player2,
+    this.player2,
     required this.topic,
     required this.currentTurnPlayerId,
     required this.currntQuestionId,
@@ -33,7 +33,9 @@ class GameModel {
     return GameModel(
       id: json['id'],
       player1: PlayerModel.fromJson(json['player1']),
-      player2: PlayerModel.fromJson(json['player2']),
+      player2: json['player2'] != null
+          ? PlayerModel.fromJson(json['player2'])
+          : null,
       topic: json['topic'],
       currentTurnPlayerId: json['current_turn_player_id'],
       currntQuestionId: json['currnt_question_id'],
@@ -50,11 +52,10 @@ class GameModel {
     return {
       'id': id ?? this.id,
       'player1': player1.toJson(),
-      'player2': player2.toJson(),
+      'player2': player2?.toJson(),
       'topic': topic,
       'current_turn_player_id': currentTurnPlayerId,
       'currnt_question_id': currntQuestionId,
-      // 'questions': questions.map((question) => question.toJson()).toList(),
       'current_question_number': currentQuestionNumber,
       'started_at': startedAt.toIso8601String(),
       'ended_at': endedAt?.toIso8601String(),

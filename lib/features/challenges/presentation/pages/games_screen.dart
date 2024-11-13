@@ -45,8 +45,20 @@ class _GamesScreenState extends State<GamesScreen> {
         listenWhen: (previous, current) =>
             current is FetchQuestionsSuccessState ||
             current is FetchQuestionsErrorState ||
-            current is FetchQuestionsLoadingState,
+            current is FetchQuestionsLoadingState ||
+            current is ManageGameLoadingState ||
+            current is ManageGameErrorState ||
+            current is ManageGameSuccessState,
         listener: (context, state) {
+          if (state is ManageGameLoadingState) {
+            AppAlert.loading(context);
+          }
+          if (state is ManageGameErrorState) {
+            AppAlert.showAlert(context, subTitle: state.failure);
+          }
+          if (state is ManageGameSuccessState) {
+            AppAlert.dismissDialog(context);
+          }
           if (state is FetchQuestionsSuccessState) {
             AppAlert.dismissDialog(context);
             questions = state.questions;
@@ -68,6 +80,14 @@ class _GamesScreenState extends State<GamesScreen> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             }
+            if (snapshot.hasError) {
+              return Center(child: Text('خطأ: ${snapshot.error}'));
+            }
+            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              return const Center(
+                child: Text('لا يوجد روابط'),
+              );
+            }
             if (snapshot.hasData) {
               return ListView.builder(
                 itemCount: snapshot.data!.docs.length,
@@ -77,7 +97,7 @@ class _GamesScreenState extends State<GamesScreen> {
                   );
                   session = session.copyWith(questions: questions);
                   return GameCardWidget(
-                    session: session,
+                    game: session,
                     usersCubit: _usersCubit,
                   );
                 },
@@ -91,7 +111,22 @@ class _GamesScreenState extends State<GamesScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // إضافة جلسة جديدة
+          _challengesCubit.createGameEvent(
+            GameModel(
+              id: '',
+              player1: PlayerModel(
+                userId: _usersCubit.currentUser!.id,
+                score: _usersCubit.currentUser!.score,
+              ),
+              topic: widget.topic,
+              currentTurnPlayerId: _usersCubit.currentUser!.id,
+              currntQuestionId: '',
+              questions: questions,
+              currentQuestionNumber: 0,
+              startedAt: DateTime.now(),
+              duration: const Duration(minutes: 30),
+            ),
+          );
         },
         child: const Icon(Icons.add),
       ),
