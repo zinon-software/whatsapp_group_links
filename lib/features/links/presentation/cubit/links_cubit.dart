@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -11,7 +13,7 @@ class LinksCubit extends Cubit<LinksState> {
 
   LinksCubit({required this.repository}) : super(LinksInitialState());
 
-  void createLink(LinkModel newLink) async {
+  void createLinkEvent(LinkModel newLink) async {
     emit(CreateLinkLoadingState());
 
     (await repository.createLink(newLink)).fold((failure) {
@@ -21,7 +23,7 @@ class LinksCubit extends Cubit<LinksState> {
     });
   }
 
-  void updateLink(LinkModel newLink) async {
+  void updateLinkEvent(LinkModel newLink) async {
     emit(CreateLinkLoadingState());
 
     (await repository.updateLink(newLink)).fold((failure) {
@@ -31,7 +33,7 @@ class LinksCubit extends Cubit<LinksState> {
     });
   }
 
-  void createBannedWord(String word) async {
+  void createBannedWordEvent(String word) async {
     emit(CreateBannedWordLoadingState());
 
     (await repository.createBannedWord(word)).fold(
@@ -44,7 +46,7 @@ class LinksCubit extends Cubit<LinksState> {
     );
   }
 
-  void deleteBannedWord(String word) async {
+  void deleteBannedWordEvent(String word) async {
     emit(ManageLinkLoadingState());
 
     (await repository.deleteBannedWord(word)).fold(
@@ -57,7 +59,7 @@ class LinksCubit extends Cubit<LinksState> {
     );
   }
 
-  void changeLinkActive(String id, bool isActive) async {
+  void changeLinkActiveEvent(String id, bool isActive) async {
     emit(ManageLinkLoadingState());
 
     (await repository.changeLinkActive(id, isActive)).fold(
@@ -70,7 +72,7 @@ class LinksCubit extends Cubit<LinksState> {
     );
   }
 
-  void deleteLink(String id) async {
+  void deleteLinkEvent(String id) async {
     emit(ManageLinkLoadingState());
 
     (await repository.deleteLink(id)).fold(
@@ -79,6 +81,26 @@ class LinksCubit extends Cubit<LinksState> {
       },
       (response) {
         emit(ManageLinkSuccessState(response));
+      },
+    );
+  }
+
+  Future<void> checkBannedWordEvent(String word) async {
+    emit(CheckBannedWordLoadingState());
+    (await repository.checkBannedWord(word)).fold(
+      (failure) {
+        emit(CheckBannedWordErrorState(failure));
+      },
+      (response) {
+        if (response) {
+          emit(
+            CheckBannedWordErrorState("هذا الرابط يحتوي على محتوى غير لائق"),
+          );
+        } else {
+          emit(CheckBannedWordSuccessState(
+            "هذا الرابط لا يحتوي على محتوى غير لائق",
+          ));
+        }
       },
     );
   }

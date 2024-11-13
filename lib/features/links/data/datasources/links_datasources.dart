@@ -16,6 +16,7 @@ abstract class LinksDatasources {
   Future<String> addBannedWord(String word);
   Future<List<String>> fetchBannedWords();
   Future<String> deleteBannedWord(String word);
+  Future<bool> checkBannedWord(String word);
 }
 
 class LinksDatasourcesImpl implements LinksDatasources {
@@ -140,6 +141,16 @@ class LinksDatasourcesImpl implements LinksDatasources {
           .map((doc) => doc['word'] as String)
           .toList();
       return bannedWordsData;
+    } catch (e) {
+      rethrow;
+    }
+  }
+  
+  @override
+  Future<bool> checkBannedWord(String word) async {
+    try {
+      final DocumentSnapshot querySnapshot = await bannedWords.doc(word).get();
+      return querySnapshot.exists;
     } catch (e) {
       rethrow;
     }

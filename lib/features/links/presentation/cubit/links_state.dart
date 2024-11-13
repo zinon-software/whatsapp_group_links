@@ -92,3 +92,26 @@ class CreateBannedWordSuccessState extends LinksState {
 }
 
 
+
+
+class CheckBannedWordLoadingState extends LinksState {}
+
+class CheckBannedWordErrorState extends LinksState {
+  final String message; // error message
+
+  const CheckBannedWordErrorState(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
+class CheckBannedWordSuccessState extends LinksState {
+  final String message; // success message
+
+  const CheckBannedWordSuccessState(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
+

@@ -107,24 +107,45 @@ class _LinkDetailsScreenState extends State<LinkDetailsScreen> {
             ),
             Text('${widget.link.views} مشاهدة'),
             Spacer(),
-            CustomButtonWidget(
-              onPressed: () async {
-                if (widget.link.isActive) {
+            BlocListener<LinksCubit, LinksState>(
+              bloc: _linksCubit,
+              listenWhen: (previous, current) =>
+                  current is CheckBannedWordLoadingState ||
+                  current is CheckBannedWordSuccessState ||
+                  current is CheckBannedWordErrorState,
+              listener: (context, state) {
+                if (state is CheckBannedWordErrorState) {
+                  AppAlert.showAlert(context, subTitle: state.message);
+                }
+                if (state is CheckBannedWordLoadingState) {
+                  AppAlert.loading(context);
+                }
+                if (state is CheckBannedWordSuccessState) {
+                  AppAlert.dismissDialog(context);
                   launchUrl(Uri.parse(widget.link.url));
-                } else {
-                  AwesomeDialog(
-                    context: context,
-                    dialogType: DialogType.warning,
-                    animType: AnimType.bottomSlide,
-                    title: 'الرابط قيد المعالجة',
-                    desc:
-                        'يجري التاكد من صحة الرابط من قبل الادارة والموافقة علية.',
-                    btnCancelOnPress: () {},
-                    btnCancelText: "إغلاق",
-                  ).show();
                 }
               },
-              label: 'الانتقال الى ${widget.link.type}',
+              child: CustomButtonWidget(
+                onPressed: () async {
+                  if (widget.link.isActive) {
+                    _linksCubit.checkBannedWordEvent(
+                      widget.link.url.trim().replaceAll('/', ''),
+                    );
+                  } else {
+                    AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.warning,
+                      animType: AnimType.bottomSlide,
+                      title: 'الرابط قيد المعالجة',
+                      desc:
+                          'يجري التاكد من صحة الرابط من قبل الادارة والموافقة علية.',
+                      btnCancelOnPress: () {},
+                      btnCancelText: "إغلاق",
+                    ).show();
+                  }
+                },
+                label: 'الانتقال الى ${widget.link.type}',
+              ),
             ),
             Spacer(),
           ],

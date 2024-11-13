@@ -10,10 +10,12 @@ class LinkItemWidget extends StatelessWidget {
     super.key,
     required AdsManager adsManager,
     required this.link,
+    this.width = double.infinity,
   }) : _adsManager = adsManager;
 
   final AdsManager _adsManager;
   final LinkModel link;
+  final double width;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class LinkItemWidget extends StatelessWidget {
       },
       child: Card(
         child: SizedBox(
-          width: MediaQuery.sizeOf(context).width - 60,
+          width: width,
           child: ListTile(
             leading: CircleAvatar(
               backgroundColor: Colors.grey[300],

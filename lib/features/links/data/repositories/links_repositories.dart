@@ -18,6 +18,7 @@ abstract class LinksRepository {
   Future<Either<String, String>> createBannedWord(String word);
   Future<Either<String, List<String>>> fetchBannedWords();
   Future<Either<String, String>> deleteBannedWord(String word);
+  Future<Either<String, bool>> checkBannedWord(String word);
 }
 
 class LinksRepositoryImpl implements LinksRepository {
@@ -27,7 +28,8 @@ class LinksRepositoryImpl implements LinksRepository {
   LinksRepositoryImpl(this.datasources, this.connectionStatus);
 
   @override
-  Future<Either<String, String>> changeLinkActive(String id, bool isActive) async {
+  Future<Either<String, String>> changeLinkActive(
+      String id, bool isActive) async {
     if (await connectionStatus.isNotConnected) {
       return const Left("تحقق من جودة اتصالك بالانترنت");
     }
@@ -146,6 +148,20 @@ class LinksRepositoryImpl implements LinksRepository {
 
     try {
       final response = await datasources.fetchBannedWords();
+      return Right(response);
+    } catch (e) {
+      return Left(handleException(e));
+    }
+  }
+  
+  @override
+  Future<Either<String, bool>> checkBannedWord(String word) async {
+    if (await connectionStatus.isNotConnected) {
+      return const Left("تحقق من جودة اتصالك بالانترنت");
+    }
+
+    try {
+      final response = await datasources.checkBannedWord(word);
       return Right(response);
     } catch (e) {
       return Left(handleException(e));

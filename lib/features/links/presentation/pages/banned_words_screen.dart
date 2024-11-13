@@ -16,6 +16,10 @@ class BannedWordsScreen extends StatelessWidget {
       appBar: AppBar(title: const Text("الابلاغ عن الكلمات المحظورة")),
       body: BlocListener<LinksCubit, LinksState>(
         bloc: linksCubit,
+        listenWhen: (previous, current) =>
+            current is CreateBannedWordLoadingState ||
+            current is CreateBannedWordErrorState ||
+            current is CreateBannedWordSuccessState,
         listener: (context, state) {
           if (state is CreateBannedWordErrorState) {
             AppAlert.showAlert(context, subTitle: state.message);
@@ -46,7 +50,9 @@ class BannedWordsScreen extends StatelessWidget {
                   if (index == words.length - 1) Text("الابلاغ عن الرابط"),
                   InkWell(
                     onTap: () async {
-                      linksCubit.createBannedWord(words[index].trim());
+                      linksCubit.createBannedWordEvent(
+                        words[index].trim().replaceAll('/', ''),
+                      );
                     },
                     child: Card(
                       child: Padding(

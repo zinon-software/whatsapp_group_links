@@ -70,7 +70,7 @@ class LinksDashboardScreen extends StatelessWidget {
                           .map(
                             (doc) => InkWell(
                               onTap: () {
-                                linksCubit.deleteBannedWord(doc['word']);
+                                linksCubit.deleteBannedWordEvent(doc['word']);
                               },
                               child: Card(
                                 child: Padding(
@@ -176,7 +176,7 @@ class LinksDashboardScreen extends StatelessWidget {
                               ),
                               trailing: IconButton(
                                 onPressed: () {
-                                  AppAlert.showAlert(
+                                  AppAlert.showAlertWidget(
                                     context,
                                     child: Column(
                                       children: [
@@ -184,7 +184,7 @@ class LinksDashboardScreen extends StatelessWidget {
                                           width: double.infinity,
                                           height: 50,
                                           onPressed: () {
-                                            linksCubit.changeLinkActive(
+                                            linksCubit.changeLinkActiveEvent(
                                               link.id,
                                               !link.isActive,
                                             );
@@ -215,7 +215,7 @@ class LinksDashboardScreen extends StatelessWidget {
                                           height: 50,
                                           backgroundColor: Colors.red,
                                           onPressed: () {
-                                            linksCubit.deleteLink(link.id);
+                                            linksCubit.deleteLinkEvent(link.id);
                                           },
                                           label: 'Delete Link',
                                         ),

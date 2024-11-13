@@ -22,7 +22,6 @@ kotlin {
 android {
     namespace = "com.zainon.whatsapp_group_links"
     compileSdk = 34
-    // ndkVersion = "25.1.8937393"
     ndkVersion = "27.0.12077973"
 
 

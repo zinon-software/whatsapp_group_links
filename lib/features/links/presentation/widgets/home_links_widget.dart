@@ -97,7 +97,11 @@ class HomeLinksWidget extends StatelessWidget {
                             child: adsManager.getNativeAdWidget(),
                           ),
                         ),
-                      LinkItemWidget(adsManager: adsManager, link: link),
+                      LinkItemWidget(
+                        adsManager: adsManager,
+                        link: link,
+                        width: MediaQuery.sizeOf(context).width - 60,
+                      ),
                     ],
                   );
                 },

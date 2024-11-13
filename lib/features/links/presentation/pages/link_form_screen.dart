@@ -188,9 +188,9 @@ class _LinkFormScreenState extends State<LinkFormScreen> {
                               );
 
                               if (widget.link != null) {
-                                _linksCubit.updateLink(newLink);
+                                _linksCubit.updateLinkEvent(newLink);
                               } else {
-                                _linksCubit.createLink(newLink.copyWith(
+                                _linksCubit.createLinkEvent(newLink.copyWith(
                                   user: FirebaseAuth.instance.currentUser?.uid,
                                 ));
                               }
