@@ -9,9 +9,9 @@ import '../../../../core/widgets/alert_widget.dart';
 import '../../../../core/widgets/custom_button_widget.dart';
 
 class QuestionFormScreen extends StatefulWidget {
-  const QuestionFormScreen({super.key, this.question, this.section});
+  const QuestionFormScreen({super.key, this.question, this.topic});
   final QuestionModel? question;
-  final String? section;
+  final String? topic;
 
   @override
   State<QuestionFormScreen> createState() => _QuestionFormScreenState();
@@ -24,7 +24,7 @@ class _QuestionFormScreenState extends State<QuestionFormScreen> {
   late final TextEditingController _correctAnswerController;
 
   List<String> options = [];
-  String? section;
+  String? topic;
 
   @override
   void initState() {
@@ -35,7 +35,7 @@ class _QuestionFormScreenState extends State<QuestionFormScreen> {
     _questionController = TextEditingController();
     _correctAnswerController = TextEditingController();
 
-    section = widget.section;
+    topic = widget.topic;
 
     if (widget.question != null) {
       _questionController.text = widget.question!.question;
@@ -52,22 +52,7 @@ class _QuestionFormScreenState extends State<QuestionFormScreen> {
       ),
       body: BlocListener<ChallengesCubit, ChallengesState>(
         bloc: _challengesCubit,
-        listener: (context, state) {
-          if (state is ManageQuestionErrorState) {
-            AppAlert.showAlert(context, subTitle: state.failure);
-          }
-          if (state is ManageQuestionSuccessState) {
-            AppAlert.showAlert(context, subTitle: 'تمت العملية بنجاح').then(
-              (value) {
-                // ignore: use_build_context_synchronously
-                Navigator.pop(context);
-              },
-            );
-          }
-          if (state is ManageQuestionLoadingState) {
-            AppAlert.loading(context);
-          }
-        },
+        listener: _onlistener,
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Form(
@@ -147,12 +132,12 @@ class _QuestionFormScreenState extends State<QuestionFormScreen> {
                         correctAnswer: _correctAnswerController.text,
                         options: options,
                         id: widget.question?.id ?? '',
-                        section: section!,
+                        topic: topic!,
                       );
                       if (widget.question != null) {
-                        _challengesCubit.updateQuestion(question);
+                        _challengesCubit.updateQuestionEvent(question);
                       } else {
-                        _challengesCubit.createQuestion(question);
+                        _challengesCubit.createQuestionEvent(question);
                       }
                     }
                   },
@@ -163,5 +148,22 @@ class _QuestionFormScreenState extends State<QuestionFormScreen> {
         ),
       ),
     );
+  }
+
+  void _onlistener(context, state) {
+    if (state is ManageQuestionErrorState) {
+      AppAlert.showAlert(context, subTitle: state.failure);
+    }
+    if (state is ManageQuestionSuccessState) {
+      AppAlert.showAlert(context, subTitle: 'تمت العملية بنجاح').then(
+        (value) {
+          // ignore: use_build_context_synchronously
+          Navigator.pop(context);
+        },
+      );
+    }
+    if (state is ManageQuestionLoadingState) {
+      AppAlert.loading(context);
+    }
   }
 }

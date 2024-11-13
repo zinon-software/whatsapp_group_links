@@ -3,20 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:linkati/core/widgets/custom_button_widget.dart';
 import 'package:linkati/core/widgets/custom_text_field.dart';
-import 'package:linkati/features/challenges/data/models/section_model.dart';
+import 'package:linkati/features/challenges/data/models/topic_model.dart';
 
 import '../../../../core/widgets/alert_widget.dart';
 import '../cubit/challenges_cubit.dart';
 
-class SectionFormScreen extends StatefulWidget {
-  const SectionFormScreen({super.key, required this.section});
-  final SectionModel? section;
+class TopicFormScreen extends StatefulWidget {
+  const TopicFormScreen({super.key, required this.topic});
+  final TopicModel? topic;
 
   @override
-  State<SectionFormScreen> createState() => _SectionFormScreenState();
+  State<TopicFormScreen> createState() => _TopicFormScreenState();
 }
 
-class _SectionFormScreenState extends State<SectionFormScreen> {
+class _TopicFormScreenState extends State<TopicFormScreen> {
   late final GlobalKey<FormState> _formKey;
   late final ChallengesCubit _challengesCubit;
   late final TextEditingController _titleController;
@@ -33,10 +33,10 @@ class _SectionFormScreenState extends State<SectionFormScreen> {
     _descriptionController = TextEditingController();
     _imageUrlController = TextEditingController();
 
-    if (widget.section != null) {
-      _titleController.text = widget.section!.title;
-      _descriptionController.text = widget.section!.description;
-      _imageUrlController.text = widget.section!.imageUrl;
+    if (widget.topic != null) {
+      _titleController.text = widget.topic!.title;
+      _descriptionController.text = widget.topic!.description;
+      _imageUrlController.text = widget.topic!.imageUrl;
     }
   }
 
@@ -57,10 +57,10 @@ class _SectionFormScreenState extends State<SectionFormScreen> {
       body: BlocListener<ChallengesCubit, ChallengesState>(
         bloc: _challengesCubit,
         listener: (context, state) {
-          if (state is ManageSectionErrorState) {
+          if (state is ManageTopicErrorState) {
             AppAlert.showAlert(context, subTitle: state.failure);
           }
-          if (state is ManageSectionSuccessState) {
+          if (state is ManageTopicSuccessState) {
             AppAlert.showAlert(context, subTitle: 'تمت العملية بنجاح').then(
               (value) {
                 // ignore: use_build_context_synchronously
@@ -68,7 +68,7 @@ class _SectionFormScreenState extends State<SectionFormScreen> {
               },
             );
           }
-          if (state is ManageSectionLoadingState) {
+          if (state is ManageTopicLoadingState) {
             AppAlert.loading(context);
           }
         },
@@ -115,22 +115,22 @@ class _SectionFormScreenState extends State<SectionFormScreen> {
                 CustomButtonWidget(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      final section = SectionModel(
+                      final topic = TopicModel(
                         title: _titleController.text,
                         description: _descriptionController.text,
                         imageUrl: _imageUrlController.text,
                         id: '',
                         questionCount: 0,
                       );
-                      if (widget.section != null) {
-                        _challengesCubit.updateSection(section);
+                      if (widget.topic != null) {
+                        _challengesCubit.updateTopicEvent(topic);
                       } else {
-                        _challengesCubit.createSection(section);
+                        _challengesCubit.createTopicEvent(topic);
                       }
                     }
                   },
                   label:
-                      widget.section != null ? 'تحديث القسم' : 'اضافة قسم جديد',
+                      widget.topic != null ? 'تحديث القسم' : 'اضافة قسم جديد',
                 ),
               ],
             ),

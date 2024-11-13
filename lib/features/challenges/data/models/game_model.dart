@@ -1,39 +1,43 @@
-class SessionModel {
+import 'package:linkati/features/challenges/data/models/question_model.dart';
+
+class GameModel {
   final String id;
   final PlayerModel player1;
   final PlayerModel player2;
-  final String section;
+  final String topic;
+  final List<QuestionModel> questions;
   final String? currentTurnPlayerId;
   final String currntQuestionId;
-  final int questionCount;
   final int currentQuestionNumber;
   final DateTime startedAt;
   final DateTime? endedAt;
   final Duration duration;
 
-  SessionModel({
+  GameModel({
     required this.id,
     required this.player1,
     required this.player2,
-    required this.section,
+    required this.topic,
     required this.currentTurnPlayerId,
     required this.currntQuestionId,
-    required this.questionCount,
+    required this.questions,
     required this.currentQuestionNumber,
     required this.startedAt,
     this.endedAt,
     required this.duration,
   });
 
-  factory SessionModel.fromJson(Map<String, dynamic> json) {
-    return SessionModel(
+  int get questionCount => questions.length;
+
+  factory GameModel.fromJson(Map<String, dynamic> json) {
+    return GameModel(
       id: json['id'],
       player1: PlayerModel.fromJson(json['player1']),
       player2: PlayerModel.fromJson(json['player2']),
-      section: json['section'],
+      topic: json['topic'],
       currentTurnPlayerId: json['current_turn_player_id'],
       currntQuestionId: json['currnt_question_id'],
-      questionCount: json['question_count'],
+      questions: [],
       currentQuestionNumber: json['current_question_number'],
       startedAt: DateTime.parse(json['started_at']),
       endedAt:
@@ -47,10 +51,10 @@ class SessionModel {
       'id': id ?? this.id,
       'player1': player1.toJson(),
       'player2': player2.toJson(),
-      'section': section,
+      'topic': topic,
       'current_turn_player_id': currentTurnPlayerId,
       'currnt_question_id': currntQuestionId,
-      'question_count': questionCount,
+      // 'questions': questions.map((question) => question.toJson()).toList(),
       'current_question_number': currentQuestionNumber,
       'started_at': startedAt.toIso8601String(),
       'ended_at': endedAt?.toIso8601String(),
@@ -59,27 +63,27 @@ class SessionModel {
   }
 
   // copy with
-  SessionModel copyWith({
+  GameModel copyWith({
     String? id,
     PlayerModel? player1,
     PlayerModel? player2,
-    String? section,
+    String? topic,
+    List<QuestionModel>? questions,
     String? currentTurnPlayerId,
     String? currntQuestionId,
-    int? questionCount,
     int? currentQuestionNumber,
     DateTime? startedAt,
     DateTime? endedAt,
     Duration? duration,
   }) {
-    return SessionModel(
+    return GameModel(
       id: id ?? this.id,
       player1: player1 ?? this.player1,
       player2: player2 ?? this.player2,
-      section: section ?? this.section,
+      topic: topic ?? this.topic,
       currentTurnPlayerId: currentTurnPlayerId ?? this.currentTurnPlayerId,
       currntQuestionId: currntQuestionId ?? this.currntQuestionId,
-      questionCount: questionCount ?? this.questionCount,
+      questions: questions ?? this.questions,
       currentQuestionNumber:
           currentQuestionNumber ?? this.currentQuestionNumber,
       startedAt: startedAt ?? this.startedAt,

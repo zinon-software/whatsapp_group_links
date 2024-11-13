@@ -7,15 +7,31 @@ import 'package:linkati/features/users/presentation/cubit/users_cubit.dart';
 import '../../../../core/widgets/custom_button_widget.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({super.key, this.nextRoute, this.returnRoute});
+  final String? nextRoute;
+  final String? returnRoute;
 
-  //دالة البناء لتمثيل واجهة المستخدم
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final UsersCubit usersCubit = context.read<UsersCubit>();
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        actions: [
+          TextButton(
+            child: Text("تخطي", style: TextStyle(color: Colors.black)),
+            onPressed: () {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                AppRoutes.homeRoute,
+                (_) => false,
+              );
+            },
+          ),
+        ],
+      ),
       body: BlocListener<UsersCubit, UsersState>(
         bloc: usersCubit,
         listener: (context, state) {
@@ -24,9 +40,10 @@ class LoginScreen extends StatelessWidget {
             AppAlert.dismissDialog(context);
             Navigator.pushNamedAndRemoveUntil(
               context,
-              AppRoutes.homeRoute,
+              returnRoute ?? AppRoutes.homeRoute,
               (_) => false,
             );
+            if (nextRoute != null) Navigator.pushNamed(context, nextRoute!);
           }
           if (state is SignInWithGoogleErrorState) {
             AppAlert.showAlert(

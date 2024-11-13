@@ -1,11 +1,11 @@
-class SectionModel {
+class TopicModel {
   final String id;
   final String title;
   final String description;
   final String imageUrl;
   final int questionCount;
 
-  SectionModel({
+  TopicModel({
     required this.id,
     required this.title,
     required this.description,
@@ -13,8 +13,8 @@ class SectionModel {
     required this.questionCount,
   });
 
-  factory SectionModel.fromJson(Map<String, dynamic> json) {
-    return SectionModel(  
+  factory TopicModel.fromJson(Map<String, dynamic> json) {
+    return TopicModel(
       id: json['id'],
       title: json['title'],
       description: json['description'],
@@ -23,7 +23,7 @@ class SectionModel {
     );
   }
 
-  Map<String, dynamic> toJson( {String? id}) {
+  Map<String, dynamic> toJson({String? id}) {
     return {
       'id': id ?? this.id,
       'title': title,
@@ -31,5 +31,15 @@ class SectionModel {
       'image_url': imageUrl,
       'question_count': questionCount,
     };
+  }
+
+  static TopicModel empty() {
+    return TopicModel(
+      id: '',
+      title: '',
+      description: '',
+      imageUrl: 'https://via.placeholder.com/150',
+      questionCount: 0,
+    );
   }
 }

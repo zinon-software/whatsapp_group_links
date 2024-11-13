@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:linkati/features/links/presentation/pages/link_details_screen.dart';
 import 'package:linkati/features/users/presentation/pages/account_screen.dart';
 
-import '../../features/challenges/data/models/section_model.dart';
-import '../../features/challenges/presentation/pages/challenges_dashboard_screen.dart';
-import '../../features/challenges/presentation/pages/section_form_screen.dart';
-import '../../features/challenges/presentation/pages/sections_screen.dart';
-import '../../features/home_screen.dart';
+import '../../features/challenges/data/models/topic_model.dart';
+import '../../features/challenges/presentation/pages/question_form_screen.dart';
+import '../../features/challenges/presentation/pages/questions_screen.dart';
+import '../../features/challenges/presentation/pages/topic_form_screen.dart';
+import '../../features/challenges/presentation/pages/topics_screen.dart';
+import '../../features/challenges/presentation/pages/games_screen.dart';
+import '../../features/main/presentation/pages/home_screen.dart';
 import '../../features/links/data/models/link_model.dart';
 import '../../features/links/presentation/pages/banned_words_screen.dart';
 import '../../features/links/presentation/pages/links_dashboard_screen.dart';
@@ -40,7 +42,9 @@ class AppRoutes {
   static const String linksRoute = '/links_route';
 
   // challenges
-  static const String sectionsRoute = '/sections_route';
-  static const String challengesDashboardRoute = '/challenges_dashboard_route';
-  static const String sectionFormRoute = '/section_form_route';
+  static const String topicsRoute = '/topics_route';
+  static const String topicFormRoute = '/topic_form_route';
+  static const String gamesRoute = '/games_route';
+  static const String questionsRoute = '/questions_route';
+  static const String questionFormRoute = '/question_form_route';
 }

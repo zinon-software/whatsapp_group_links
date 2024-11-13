@@ -9,26 +9,29 @@ abstract class ChallengesState extends Equatable {
 
 class ChallengesInitialState extends ChallengesState {}
 
-class ChallengesLoadingState extends ChallengesState {}
+class ManageTopicLoadingState extends ChallengesState {}
 
-class ChallengesLoadedState extends ChallengesState {
-  final List<SectionModel> sections;
-  const ChallengesLoadedState(this.sections);
-}
-
-class ChallengesErrorState extends ChallengesState {}
-
-class ManageSectionLoadingState extends ChallengesState {}
-
-class ManageSectionSuccessState extends ChallengesState {
+class ManageTopicSuccessState extends ChallengesState {
   final String message;
 
-  const ManageSectionSuccessState(this.message);
+  const ManageTopicSuccessState(this.message);
 }
 
-class ManageSectionErrorState extends ChallengesState {
+class ManageTopicErrorState extends ChallengesState {
   final String failure;
-  const ManageSectionErrorState(this.failure);
+  const ManageTopicErrorState(this.failure);
+}
+
+class FetchTopicsLoadingState extends ChallengesState {}
+
+class FetchTopicsSuccessState extends ChallengesState {
+  final List<TopicModel> topics;
+  const FetchTopicsSuccessState(this.topics);
+}
+
+class FetchTopicsErrorState extends ChallengesState {
+  final String failure;
+  const FetchTopicsErrorState(this.failure);
 }
 
 class ManageQuestionErrorState extends ChallengesState {
@@ -42,3 +45,15 @@ class ManageQuestionSuccessState extends ChallengesState {
 }
 
 class ManageQuestionLoadingState extends ChallengesState {}
+
+class FetchQuestionsLoadingState extends ChallengesState {}
+
+class FetchQuestionsSuccessState extends ChallengesState {
+  final List<QuestionModel> questions;
+  const FetchQuestionsSuccessState(this.questions);
+}
+
+class FetchQuestionsErrorState extends ChallengesState {
+  final String failure;
+  const FetchQuestionsErrorState(this.failure);
+}

@@ -63,8 +63,8 @@ void stupChallenges() {
     instance.registerLazySingleton<ChallengesDatasources>(
       () => ChallengesDatasourcesImpl(
         questions: instance<AppCollections>().questions,
-        sessions: instance<AppCollections>().sessions,
-        sections: instance<AppCollections>().sections,
+        games: instance<AppCollections>().games,
+        topics: instance<AppCollections>().topics,
       ),
     );
   }

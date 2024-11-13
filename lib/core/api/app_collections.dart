@@ -18,12 +18,10 @@ class AppCollections {
   CollectionReference get bannedWords =>
       _db.collection('links').doc("banned_words").collection("banned_words");
 
-
   CollectionReference get questions =>
       _db.collection('challenges').doc("questions").collection("questions");
-  CollectionReference get sections =>
-      _db.collection('challenges').doc("sections").collection("sections");
-  CollectionReference get sessions =>
-      _db.collection('challenges').doc("sessions").collection("sessions");
-
+  CollectionReference get topics =>
+      _db.collection('challenges').doc("topics").collection("topics");
+  CollectionReference get games =>
+      _db.collection('challenges').doc("games").collection("games");
 }

@@ -140,7 +140,7 @@ class AppAlert {
 
   static Future<void> showAlertWidget(
     BuildContext context, {
-    Widget? child,
+    required Widget child,
     bool dismissOn = true,
   }) async {
     dismissDialog(context);
@@ -149,7 +149,23 @@ class AppAlert {
       animType: AnimType.scale,
       dialogType: DialogType.noHeader,
       headerAnimationLoop: false,
-      body: child,
+      body: Column(
+        children: [
+          child,
+          Row(
+            children: [
+              Expanded(
+                child: CustomButtonWidget(
+                  backgroundColor: ColorManager.fillColor,
+                  onPressed: () => dismissDialog(context),
+                  label: "اغلاق",
+                  textColor: Colors.black,
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
       isDense: true,
       padding: const EdgeInsets.all(16),
       dialogBorderRadius: BorderRadius.circular(8),

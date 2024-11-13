@@ -1,27 +1,31 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:linkati/features/challenges/data/models/question_model.dart';
-import 'package:linkati/features/challenges/data/models/section_model.dart';
-import 'package:linkati/features/challenges/data/models/session_model.dart';
+import 'package:linkati/features/challenges/data/models/topic_model.dart';
+
+import '../models/game_model.dart';
 
 abstract class ChallengesDatasources {
   // questions
   Future<String> createQuestion(QuestionModel question);
-  // sessions
-  Future<String> createSession(SessionModel session);
-  // sections
-  Future<String> createSection(SectionModel section);
-  Future<String> updateSection(SectionModel section);
+  Future<List<QuestionModel>> fetchQuestions(String topic);
+  Future<String> updateQuestion(QuestionModel question);
+  // games
+  Future<String> createGame(GameModel session);
+  // topics
+  Future<String> createTopic(TopicModel topic);
+  Future<String> updateTopic(TopicModel topic);
+  Future<List<TopicModel>> fetchTopics();
 }
 
 class ChallengesDatasourcesImpl implements ChallengesDatasources {
   final CollectionReference questions;
-  final CollectionReference sessions;
-  final CollectionReference sections;
+  final CollectionReference games;
+  final CollectionReference topics;
 
   ChallengesDatasourcesImpl({
     required this.questions,
-    required this.sessions,
-    required this.sections,
+    required this.games,
+    required this.topics,
   });
 
   @override
@@ -39,11 +43,11 @@ class ChallengesDatasourcesImpl implements ChallengesDatasources {
   }
 
   @override
-  Future<String> createSection(SectionModel section) async {
+  Future<String> createTopic(TopicModel topic) async {
     try {
-      final DocumentReference docRef = sections.doc();
-      await sections.doc(docRef.id).set(
-            section.toJson(id: docRef.id),
+      final DocumentReference docRef = topics.doc();
+      await topics.doc(docRef.id).set(
+            topic.toJson(id: docRef.id),
           );
       return 'success';
     } catch (e) {
@@ -52,10 +56,10 @@ class ChallengesDatasourcesImpl implements ChallengesDatasources {
   }
 
   @override
-  Future<String> createSession(SessionModel session) async {
+  Future<String> createGame(GameModel session) async {
     try {
-      final DocumentReference docRef = sessions.doc();
-      await sessions.doc(docRef.id).set(
+      final DocumentReference docRef = games.doc();
+      await games.doc(docRef.id).set(
             session.toJson(id: docRef.id),
           );
       return 'success';
@@ -63,12 +67,50 @@ class ChallengesDatasourcesImpl implements ChallengesDatasources {
       rethrow;
     }
   }
-  
+
   @override
-  Future<String> updateSection(SectionModel section) async{
+  Future<String> updateTopic(TopicModel topic) async {
     try {
-      await sections.doc(section.id).update(section.toJson());
+      await topics.doc(topic.id).update(topic.toJson());
       return 'success';
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<QuestionModel>> fetchQuestions(String topic) async {
+    try {
+      final QuerySnapshot querySnapshot =
+          await questions.where('topic', isEqualTo: topic).get();
+      final List<QuestionModel> questionsData = querySnapshot.docs
+          .map((doc) =>
+              QuestionModel.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+      return questionsData;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<String> updateQuestion(QuestionModel question) async {
+    try {
+      await questions.doc(question.id).update(question.toJson());
+      return 'success';
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<TopicModel>> fetchTopics() async {
+    try {
+      final QuerySnapshot querySnapshot = await topics.get();
+      final List<TopicModel> topicsData = querySnapshot.docs
+          .map((doc) => TopicModel.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+      return topicsData;
     } catch (e) {
       rethrow;
     }

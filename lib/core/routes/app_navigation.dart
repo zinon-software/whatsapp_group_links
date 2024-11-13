@@ -21,7 +21,10 @@ class AppNavigation {
       case AppRoutes.loginRoute:
         return _moveRoute(
           settings: settings,
-          view: const LoginScreen(),
+          view: LoginScreen(
+            nextRoute: query['next_route'] as String?,
+            returnRoute: query['return_route'] as String?,
+          ),
         );
 
       case AppRoutes.accountRoute:
@@ -85,25 +88,42 @@ class AppNavigation {
       // end links
 
       // start challenges
-      case AppRoutes.sectionsRoute:
+      case AppRoutes.topicsRoute:
         return _moveRoute(
           settings: settings,
-          view: const SectionsScreen(),
+          view: const TopicsScreen(),
         );
 
-      case AppRoutes.challengesDashboardRoute:
+      case AppRoutes.topicFormRoute:
         return _moveRoute(
           settings: settings,
-          view: const ChallengesDashboardScreen(),
-        );
-
-      case AppRoutes.sectionFormRoute:
-        return _moveRoute(
-          settings: settings,
-          view: SectionFormScreen(
-            section: query['section'] as SectionModel?,
+          view: TopicFormScreen(
+            topic: query['topic'] as TopicModel?,
           ),
         );
+
+      case AppRoutes.gamesRoute:
+        return _moveRoute(
+          settings: settings,
+          view: GamesScreen(
+            topic: query['topic'] as String,
+          ),
+        );
+
+      case AppRoutes.questionsRoute:
+        return _moveRoute(
+          settings: settings,
+          view: QuestionsScreen(
+            topic: query['topic'] as String,
+          ),
+        );
+
+      case AppRoutes.questionFormRoute:
+        return _moveRoute(
+            settings: settings,
+            view: QuestionFormScreen(
+              topic: query['topic'] as String,
+            ),);
       // end challenges
 
       default:
