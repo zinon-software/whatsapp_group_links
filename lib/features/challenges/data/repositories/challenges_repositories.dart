@@ -19,7 +19,13 @@ abstract class ChallengesRepository {
 
   Future<Either<String, List<TopicModel>>> fetchTopics();
 
-  Future<Either<String, String>> createGame(GameModel gameModel);
+  Future<Either<String, GameModel>> createGame(GameModel game);
+
+  Future<Either<String, GameModel>> joinGameEvent(GameModel game);
+
+  Future<Either<String, GameModel>> endGameEvent(GameModel game);
+
+  Future<Either<String, GameModel>> startGameWithAi(GameModel game);
 }
 
 class ChallengesRepositoryImpl implements ChallengesRepository {
@@ -114,13 +120,55 @@ class ChallengesRepositoryImpl implements ChallengesRepository {
   }
 
   @override
-  Future<Either<String, String>> createGame(GameModel gameModel) async {
+  Future<Either<String, GameModel>> createGame(GameModel game) async {
     if (await connectionStatus.isNotConnected) {
       return const Left("تحقق من جودة اتصالك بالانترنت");
     }
 
     try {
-      final response = await datasources.createGame(gameModel);
+      final response = await datasources.createGame(game);
+      return Right(response);
+    } catch (e) {
+      return Left(handleException(e));
+    }
+  }
+
+  @override
+  Future<Either<String, GameModel>> joinGameEvent(GameModel game) async {
+    if (await connectionStatus.isNotConnected) {
+      return const Left("تحقق من جودة اتصالك بالانترنت");
+    }
+
+    try {
+      final response = await datasources.joinGameEvent(game);
+      return Right(response);
+    } catch (e) {
+      return Left(handleException(e));
+    }
+  }
+  
+  @override
+  Future<Either<String, GameModel>> endGameEvent(GameModel game) async {
+    if (await connectionStatus.isNotConnected) {
+      return const Left("تحقق من جودة اتصالك بالانترنت");
+    }
+
+    try {
+      final response = await datasources.endGameEvent(game);
+      return Right(response);
+    } catch (e) { 
+      return Left(handleException(e));
+    }
+  }
+  
+  @override
+  Future<Either<String, GameModel>> startGameWithAi(GameModel game) async {
+    if (await connectionStatus.isNotConnected) {
+      return const Left("تحقق من جودة اتصالك بالانترنت");
+  }
+
+    try {
+      final response = await datasources.startGameWithAi(game);
       return Right(response);
     } catch (e) {
       return Left(handleException(e));

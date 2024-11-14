@@ -10,11 +10,15 @@ abstract class ChallengesDatasources {
   Future<List<QuestionModel>> fetchQuestions(String topic);
   Future<String> updateQuestion(QuestionModel question);
   // games
-  Future<String> createGame(GameModel session);
+  Future<GameModel> createGame(GameModel game);
+  Future<GameModel> joinGameEvent(GameModel game);
+  Future<GameModel> startGameWithAi(GameModel game);
+  Future<GameModel> endGameEvent(GameModel game);
   // topics
   Future<String> createTopic(TopicModel topic);
   Future<String> updateTopic(TopicModel topic);
   Future<List<TopicModel>> fetchTopics();
+
 }
 
 class ChallengesDatasourcesImpl implements ChallengesDatasources {
@@ -56,11 +60,11 @@ class ChallengesDatasourcesImpl implements ChallengesDatasources {
   }
 
   @override
-  Future<String> createGame(GameModel session) async {
+  Future<GameModel> createGame(GameModel game) async {
     try {
       // التحقق من وجود لعبة مفتوحة للمستخدم player1
       final existingGameQuery = await games
-          .where('player1.user_id', isEqualTo: session.player1.userId)
+          .where('player1.user_id', isEqualTo: game.player1.userId)
           .where('ended_at', isNull: true)
           .limit(1)
           .get();
@@ -72,11 +76,10 @@ class ChallengesDatasourcesImpl implements ChallengesDatasources {
 
       // إنشاء اللعبة الجديدة
       final DocumentReference docRef = games.doc();
-      await games.doc(docRef.id).set(
-            session.toJson(id: docRef.id),
-          );
+      game = game.copyWith(id: docRef.id);
+      await games.doc(docRef.id).set(game.toJson());
 
-      return 'success';
+      return game;
     } catch (e) {
       rethrow;
     }
@@ -125,6 +128,36 @@ class ChallengesDatasourcesImpl implements ChallengesDatasources {
           .map((doc) => TopicModel.fromJson(doc.data() as Map<String, dynamic>))
           .toList();
       return topicsData;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<GameModel> joinGameEvent(GameModel game) async {
+    try {
+      await games.doc(game.id).update(game.toJson());
+      return game;
+    } catch (e) {
+      rethrow;
+    }
+  }
+  
+  @override
+  Future<GameModel> endGameEvent(GameModel game) async {
+    try {
+      await games.doc(game.id).update(game.toJson());
+      return game;
+    } catch (e) {
+      rethrow;
+    }
+  }
+  
+  @override
+  Future<GameModel> startGameWithAi(GameModel game) async {
+    try {
+      await games.doc(game.id).update(game.toJson());
+      return game;
     } catch (e) {
       rethrow;
     }

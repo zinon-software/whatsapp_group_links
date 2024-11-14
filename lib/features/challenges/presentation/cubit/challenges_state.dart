@@ -61,8 +61,9 @@ class FetchQuestionsErrorState extends ChallengesState {
 class ManageGameLoadingState extends ChallengesState {}
 
 class ManageGameSuccessState extends ChallengesState {
-  final String message;
-  const ManageGameSuccessState(this.message);
+  final GameModel game;
+  final bool isJoined;
+  const ManageGameSuccessState({required this.game, this.isJoined = false});
 }
 
 class ManageGameErrorState extends ChallengesState {

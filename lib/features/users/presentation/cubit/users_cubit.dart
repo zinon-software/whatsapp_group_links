@@ -19,7 +19,7 @@ class UsersCubit extends Cubit<UsersState> {
   UsersCubit({required this.repository, required this.auth})
       : super(UsersInitialState());
 
-  Future<void> fetchMyUserAccount() async {
+  FutureOr<void> fetchMyUserAccount({bool isEdit = false}) async {
     try {
       if (auth.currentUser == null) {
         return;
@@ -30,6 +30,9 @@ class UsersCubit extends Cubit<UsersState> {
         (response) {
           currentUser = response;
           emit(UserSuccessState());
+          if (isEdit) {
+            onUpdateUser(currentUser!);
+          }
         },
       );
     } catch (e) {
@@ -63,8 +66,7 @@ class UsersCubit extends Cubit<UsersState> {
         onCreateUser(auth.currentUser!.uid);
       } else {
         auth.currentUser?.reload();
-        await fetchMyUserAccount();
-        if (currentUser != null) onUpdateUser(currentUser!);
+        await fetchMyUserAccount(isEdit: true);
       }
 
       emit(LoginRouteToHomeState());
@@ -104,14 +106,24 @@ class UsersCubit extends Cubit<UsersState> {
     currentUser = null;
     auth.currentUser?.reload();
 
+    GoogleSignIn().signOut();
+
     emit(LogoutRouteToLoginState());
   }
 
-  FutureOr<void> fetchPlayerUser(String id) async {
-    emit(FetchPlayerUserLoadingState());
-    (await repository.fetchUser(id)).fold(
-      (error) => emit(FetchPlayerUserErrorState(error)),
-      (data) => emit(FetchPlayerUserSuccessState(data)),
+  FutureOr<void> fetchPlayerUserEvent(
+      {required String userId, required String gameId}) async {
+    emit(FetchPlayerUserLoadingState(userId: userId, gameId: gameId));
+    (await repository.fetchUser(userId)).fold(
+      (error) => emit(FetchPlayerUserErrorState(
+        error: error,
+        userId: userId,
+        gameId: gameId,
+      )),
+      (data) => emit(FetchPlayerUserSuccessState(
+        user: data,
+        gameId: gameId,
+      )),
     );
   }
 }

@@ -90,7 +90,7 @@ class UserModel {
       id: '',
       name: '====== ===',
       email: '==================',
-      photoUrl: '',
+      photoUrl: 'https://via.placeholder.com/150',
       createdAt: DateTime.now(),
       lastLoginAt: DateTime.now(),
       phoneNumber: '',

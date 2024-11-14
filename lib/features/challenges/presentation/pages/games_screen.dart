@@ -49,31 +49,12 @@ class _GamesScreenState extends State<GamesScreen> {
             current is ManageGameLoadingState ||
             current is ManageGameErrorState ||
             current is ManageGameSuccessState,
-        listener: (context, state) {
-          if (state is ManageGameLoadingState) {
-            AppAlert.loading(context);
-          }
-          if (state is ManageGameErrorState) {
-            AppAlert.showAlert(context, subTitle: state.failure);
-          }
-          if (state is ManageGameSuccessState) {
-            AppAlert.dismissDialog(context);
-          }
-          if (state is FetchQuestionsSuccessState) {
-            AppAlert.dismissDialog(context);
-            questions = state.questions;
-          }
-          if (state is FetchQuestionsErrorState) {
-            AppAlert.showAlert(context, subTitle: state.failure);
-          }
-          if (state is FetchQuestionsLoadingState) {
-            AppAlert.loading(context);
-          }
-        },
+        listener: _onListener,
         child: StreamBuilder(
           stream: instance<AppCollections>()
               .games
               .where('topic', isEqualTo: widget.topic)
+              .where('ended_at', isNull: true)
               .orderBy('started_at', descending: true)
               .snapshots(),
           builder: (context, snapshot) {
@@ -99,6 +80,7 @@ class _GamesScreenState extends State<GamesScreen> {
                   return GameCardWidget(
                     game: session,
                     usersCubit: _usersCubit,
+                    challengesCubit: _challengesCubit,
                   );
                 },
               );
@@ -131,5 +113,32 @@ class _GamesScreenState extends State<GamesScreen> {
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  void _onListener(context, state) {
+    if (state is ManageGameLoadingState) {
+      AppAlert.loading(context);
+    }
+    if (state is ManageGameErrorState) {
+      AppAlert.showAlert(context, subTitle: state.failure);
+    }
+    if (state is ManageGameSuccessState) {
+      AppAlert.dismissDialog(context);
+      if (state.isJoined) {
+        AppAlert.showAlert(context, subTitle: 'تم الانضمام للمباراة بنجاح');
+      } else {
+        AppAlert.showAlert(context, subTitle: 'تم الانضمام للمباراة بنجاح');
+      }
+    }
+    if (state is FetchQuestionsSuccessState) {
+      AppAlert.dismissDialog(context);
+      questions = state.questions;
+    }
+    if (state is FetchQuestionsErrorState) {
+      AppAlert.showAlert(context, subTitle: state.failure);
+    }
+    if (state is FetchQuestionsLoadingState) {
+      AppAlert.loading(context);
+    }
   }
 }

@@ -76,6 +76,7 @@ class GameModel {
     DateTime? startedAt,
     DateTime? endedAt,
     Duration? duration,
+    bool? isWithAi,
   }) {
     return GameModel(
       id: id ?? this.id,

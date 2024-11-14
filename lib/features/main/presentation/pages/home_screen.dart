@@ -289,12 +289,12 @@ class HomeButtonWidget extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        height: 100,
+        height: 90,
         width: double.infinity,
         margin: const EdgeInsets.all(8),
         padding: EdgeInsets.all(0),
         decoration: BoxDecoration(
-          color: ColorManager.aed5e5,
+          color: ColorManager.primaryLight,
           borderRadius: BorderRadius.circular(8),
           shape: BoxShape.rectangle,
           boxShadow: [
@@ -306,71 +306,38 @@ class HomeButtonWidget extends StatelessWidget {
             ),
           ],
         ),
-        child: Stack(
-          alignment: Alignment.centerRight,
+        child: Row(
           children: [
             SvgPicture.asset(
               logo,
-              height: 100,
-              width: 110,
+              height: 90,
+              width: 90,
             ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Icon(
-                      icon,
-                      color: ColorManager.f255176,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      title,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge!
-                          .copyWith(color: ColorManager.f255176),
-                    ),
-                    const SizedBox(width: 20),
-                    Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Icon(
-                        Icons.chevron_right,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
-                ),
+            const SizedBox(width: 8),
+            Icon(
+              icon,
+              color: Colors.white,
+            ),
+            const SizedBox(width: 4),
+            Text(
+              title,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(color: Colors.white),
+            ),
+            Spacer(),
+            Container(
+              height: 70,
+              width: 40,
+              margin: const EdgeInsets.symmetric(horizontal: 8),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
               ),
-            ),
-            Positioned(
-              top: 0,
-              left: 0,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 30,
-                  width: 80,
-                  decoration: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    "جديد",
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelLarge!
-                        .copyWith(color: Colors.white),
-                  ),
-                ),
+              child: const Icon(
+                Icons.chevron_right,
+                color: Colors.black,
               ),
             ),
           ],

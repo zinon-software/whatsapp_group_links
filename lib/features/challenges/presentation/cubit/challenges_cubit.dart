@@ -88,7 +88,7 @@ class ChallengesCubit extends Cubit<ChallengesState> {
     );
   }
 
-  FutureOr<void> createGameEvent(GameModel game) async {
+  Future<void> createGameEvent(GameModel game) async {
     emit(ManageGameLoadingState());
 
     (await repository.createGame(game)).fold(
@@ -96,7 +96,47 @@ class ChallengesCubit extends Cubit<ChallengesState> {
         emit(ManageGameErrorState(failure));
       },
       (response) {
-        emit(ManageGameSuccessState(response));
+        emit(ManageGameSuccessState(game: response));
+      },
+    );
+  }
+
+  Future<void> joinGameEvent(GameModel game) async {
+    emit(ManageGameLoadingState());
+
+    (await repository.joinGameEvent(game)).fold(
+      (failure) {
+        emit(ManageGameErrorState(failure));
+      },
+      (response) {
+        emit(ManageGameSuccessState(game: response, isJoined: true));
+      },
+    );
+  }
+
+  Future<void> startGameWithAiEvent(GameModel game) async {
+    emit(ManageGameLoadingState());
+
+    (await repository.startGameWithAi(game.copyWith(isWithAi: true))).fold(
+      (failure) {
+        emit(ManageGameErrorState(failure));
+      },
+      (response) {
+        emit(ManageGameSuccessState(game: response));
+      },
+    );
+  }
+
+  Future<void> endGameEvent(GameModel game) async {
+    emit(ManageGameLoadingState());
+
+    (await repository.endGameEvent(game.copyWith(endedAt: DateTime.now())))
+        .fold(
+      (failure) {
+        emit(ManageGameErrorState(failure));
+      },
+      (response) {
+        emit(ManageGameSuccessState(game: response));
       },
     );
   }

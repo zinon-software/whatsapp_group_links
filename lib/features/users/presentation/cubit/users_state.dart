@@ -30,15 +30,18 @@ class LogoutRouteToLoginState extends UsersState {
 }
 
 class FetchPlayerUserLoadingState extends UsersState {
-  const FetchPlayerUserLoadingState();
+  final String userId, gameId;
+  const FetchPlayerUserLoadingState({required this.userId, required this.gameId});
 }
 
 class FetchPlayerUserSuccessState extends UsersState {
+  final String gameId;
   final UserModel user;
-  const FetchPlayerUserSuccessState(this.user);
+  const FetchPlayerUserSuccessState({required this.user, required this.gameId,});
 }
 
 class FetchPlayerUserErrorState extends UsersState {
+  final String userId, gameId;
   final String error;
-  const FetchPlayerUserErrorState(this.error);
+  const FetchPlayerUserErrorState({required this.error, required this.userId, required this.gameId,});
 }
