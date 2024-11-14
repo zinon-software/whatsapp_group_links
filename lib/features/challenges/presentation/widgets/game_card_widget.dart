@@ -165,6 +165,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
             state.user.id == widget.player.userId &&
             state.gameId == widget.gameId) {
           user = state.user;
+          widget.player.user = state.user;
           return PlayerDataWidget(user: state.user);
         }
 

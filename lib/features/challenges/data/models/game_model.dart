@@ -1,4 +1,5 @@
 import 'package:linkati/features/challenges/data/models/question_model.dart';
+import 'package:linkati/features/users/data/models/user_model.dart';
 
 class GameModel {
   final String id;
@@ -98,8 +99,13 @@ class GameModel {
 class PlayerModel {
   final String userId;
   final int score;
+  UserModel? user;
 
-  PlayerModel({required this.userId, required this.score});
+  PlayerModel({
+    required this.userId,
+    required this.score,
+    this.user,
+  });
 
   factory PlayerModel.fromJson(Map<String, dynamic> json) {
     return PlayerModel(
@@ -116,10 +122,11 @@ class PlayerModel {
   }
 
   // copy with
-  PlayerModel copyWith({String? userId, int? score}) {
+  PlayerModel copyWith({String? userId, int? score, UserModel? user}) {
     return PlayerModel(
       userId: userId ?? this.userId,
       score: score ?? this.score,
+      user: user ?? this.user,
     );
   }
 }
