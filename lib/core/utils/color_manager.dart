@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ColorManager {
-  const ColorManager._();
+class ColorsManager {
+  const ColorsManager._();
 
   // الألوان لوضع النهار (السمة الفاتحة)
   // static const Color primaryLight = Color(0xff354276);
@@ -27,7 +27,9 @@ class ColorManager {
   static const Color iconPrimary = Color(0xFF9E9E9E);
   static const Color iconSecondary = Color(0xFFBDBDBD);
   static const Color container = Color(0xFFFFFFFF);
-  static const Color card = Color(0xFFE8EAF0);
+  // static const Color card = Color(0xFFE8EAF0);
+  static const Color card = Color.fromRGBO(157, 214, 159, 1);
+
   static const Color accent = Color(0xFF4CAF50);
   static const Color error = Color(0xFFB00020);
   static const Color cancel = Color(0xFF757575);
@@ -44,5 +46,4 @@ class ColorManager {
   static const Color aed5e5 = Color(0xFFaed5e5);
   // 255176
   static const Color f255176 = Color(0xFF255176);
-
 }

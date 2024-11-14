@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:linkati/core/routes/app_routes.dart';
 import 'package:linkati/core/utils/color_manager.dart';
@@ -12,6 +11,7 @@ import '../../../../../core/ads/ads_manager.dart';
 import '../../../../config/app_injector.dart';
 import '../../../../core/api/app_collections.dart';
 import '../../../links/presentation/widgets/home_links_widget.dart';
+import '../widgets/home_button_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -89,8 +89,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: CustomButtonWidget(
                           width: double.infinity,
-                          backgroundColor: ColorManager.aed5e5,
-                          textColor: ColorManager.primaryLight,
+                          backgroundColor: ColorsManager.aed5e5,
+                          textColor: ColorsManager.primaryLight,
                           onPressed: () {
                             Navigator.of(context).pushNamed(
                               AppRoutes.linksDashboardRoute,
@@ -170,18 +170,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   adsManager: _adsManager,
                 ),
                 // telegram
-                HomeLinksWidget(
-                  adsManager: _adsManager,
-                  query: instance<AppCollections>()
-                      .links
-                      .where("type", isEqualTo: "telegram"),
-                  title: "مجموعات وقنوات تيليجرام Telegram",
-                ),
                 Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Center(
                     child: _adsManager.getNativeAdWidget(),
                   ),
+                ),
+                HomeLinksWidget(
+                  adsManager: _adsManager,
+                  query: instance<AppCollections>()
+                      .links
+                      .where("type", isEqualTo: "telegram"),
+                  title: "قنوات تيليجرام Telegram",
                 ),
                 // ficebook
                 HomeLinksWidget(
@@ -209,18 +209,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
 
                 // snapchat
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Center(
+                    child: _adsManager.getNativeAdWidget(),
+                  ),
+                ),
                 HomeLinksWidget(
                   adsManager: _adsManager,
                   query: instance<AppCollections>()
                       .links
                       .where("type", isEqualTo: "snapchat"),
                   title: "حسابات سنابشات Snapchat",
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Center(
-                    child: _adsManager.getNativeAdWidget(),
-                  ),
                 ),
                 // tiktok
                 HomeLinksWidget(
@@ -254,6 +254,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   title: "روابط اخرى",
                   adsManager: _adsManager,
                 ),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Center(
+                    child: _adsManager.getNativeAdWidget(),
+                  ),
+                ),
                 const SizedBox(height: 100),
               ],
             ),
@@ -271,78 +277,3 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class HomeButtonWidget extends StatelessWidget {
-  const HomeButtonWidget({
-    super.key,
-    required this.onTap,
-    required this.logo,
-    required this.icon,
-    required this.title,
-  });
-  final VoidCallback onTap;
-  final String logo;
-  final IconData icon;
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        height: 90,
-        width: double.infinity,
-        margin: const EdgeInsets.all(8),
-        padding: EdgeInsets.all(0),
-        decoration: BoxDecoration(
-          color: ColorManager.primaryLight,
-          borderRadius: BorderRadius.circular(8),
-          shape: BoxShape.rectangle,
-          boxShadow: [
-            BoxShadow(
-              color: ColorManager.aed5e5.withOpacity(0.5),
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            SvgPicture.asset(
-              logo,
-              height: 90,
-              width: 90,
-            ),
-            const SizedBox(width: 8),
-            Icon(
-              icon,
-              color: Colors.white,
-            ),
-            const SizedBox(width: 4),
-            Text(
-              title,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge!
-                  .copyWith(color: Colors.white),
-            ),
-            Spacer(),
-            Container(
-              height: 70,
-              width: 40,
-              margin: const EdgeInsets.symmetric(horizontal: 8),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Icon(
-                Icons.chevron_right,
-                color: Colors.black,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}

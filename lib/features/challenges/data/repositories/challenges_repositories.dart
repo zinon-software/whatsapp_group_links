@@ -26,6 +26,8 @@ abstract class ChallengesRepository {
   Future<Either<String, GameModel>> endGameEvent(GameModel game);
 
   Future<Either<String, GameModel>> startGameWithAi(GameModel game);
+
+  Future<Either<String, GameModel>> updateGame(GameModel game);
 }
 
 class ChallengesRepositoryImpl implements ChallengesRepository {
@@ -146,7 +148,7 @@ class ChallengesRepositoryImpl implements ChallengesRepository {
       return Left(handleException(e));
     }
   }
-  
+
   @override
   Future<Either<String, GameModel>> endGameEvent(GameModel game) async {
     if (await connectionStatus.isNotConnected) {
@@ -156,19 +158,33 @@ class ChallengesRepositoryImpl implements ChallengesRepository {
     try {
       final response = await datasources.endGameEvent(game);
       return Right(response);
-    } catch (e) { 
+    } catch (e) {
+      return Left(handleException(e));
+    }
+  }
+
+  @override
+  Future<Either<String, GameModel>> startGameWithAi(GameModel game) async {
+    if (await connectionStatus.isNotConnected) {
+      return const Left("تحقق من جودة اتصالك بالانترنت");
+    }
+
+    try {
+      final response = await datasources.startGameWithAi(game);
+      return Right(response);
+    } catch (e) {
       return Left(handleException(e));
     }
   }
   
   @override
-  Future<Either<String, GameModel>> startGameWithAi(GameModel game) async {
+  Future<Either<String, GameModel>> updateGame(GameModel game) async {
     if (await connectionStatus.isNotConnected) {
       return const Left("تحقق من جودة اتصالك بالانترنت");
-  }
+    }
 
-    try {
-      final response = await datasources.startGameWithAi(game);
+    try { 
+      final response = await datasources.updateGame(game);
       return Right(response);
     } catch (e) {
       return Left(handleException(e));

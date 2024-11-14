@@ -42,6 +42,7 @@ class _QuestionFormScreenState extends State<QuestionFormScreen> {
       _questionController.text = widget.question!.question;
       correctAnswer = widget.question!.correctAnswer;
       options = widget.question!.options;
+      topic = widget.question!.topic;
     }
   }
 
@@ -156,8 +157,8 @@ class _QuestionFormScreenState extends State<QuestionFormScreen> {
                 const SizedBox(height: 16.0),
                 CustomButtonWidget(
                   width: double.infinity,
-                  backgroundColor: ColorManager.aed5e5,
-                  textColor: ColorManager.primaryLight,
+                  backgroundColor: ColorsManager.aed5e5,
+                  textColor: ColorsManager.primaryLight,
                   label:
                       widget.question != null ? 'تحديث السؤال' : 'اضافة سؤال',
                   onPressed: () {

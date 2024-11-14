@@ -21,9 +21,10 @@ class CustomSkeletonizerWidget extends StatelessWidget {
       justifyMultiLineText: true,
       ignoreContainers: ignoreContainers,
       ignorePointers: true,
-      containersColor: ignoreContainers ? Theme.of(context).colorScheme.surface : null,
+      containersColor:
+          ignoreContainers ? Theme.of(context).colorScheme.surface : null,
       effect: ShimmerEffect(
-        baseColor: ColorManager.fillColor.withOpacity(1),
+        baseColor: ColorsManager.fillColor.withOpacity(1),
         duration: const Duration(milliseconds: 900),
       ),
       child: child,

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:linkati/core/widgets/custom_skeletonizer_widget.dart';
 
 import '../../../../core/ads/ads_manager.dart';
 import '../../data/models/link_model.dart';
@@ -51,7 +52,21 @@ class _LinksScreenState extends State<LinksScreen> {
               stream: widget.query.snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
+                  return CustomSkeletonizerWidget(
+                    enabled: true,
+                    child: ListView.builder(
+                      itemBuilder: (context, index) => Column(
+                        children: [
+                          LinkItemWidget(
+                            adsManager: _adsManager,
+                            link: LinkModel.isEmpty(),
+                          ),
+                          const SizedBox(height: 10),
+                        ],
+                      ),
+                      itemCount: 10,
+                    ),
+                  );
                 }
                 if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
@@ -80,6 +95,7 @@ class _LinksScreenState extends State<LinksScreen> {
                             ),
                           ),
                         LinkItemWidget(adsManager: _adsManager, link: link),
+                        SizedBox(height: 10),
                       ],
                     );
                   },

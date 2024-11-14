@@ -45,3 +45,17 @@ class FetchPlayerUserErrorState extends UsersState {
   final String error;
   const FetchPlayerUserErrorState({required this.error, required this.userId, required this.gameId,});
 }
+
+class UpdateUserLoadingState extends UsersState {
+  const UpdateUserLoadingState();
+}
+
+class UpdateUserSuccessState extends UsersState {
+  final String message;
+  const UpdateUserSuccessState(this.message);
+}
+
+class UpdateUserErrorState extends UsersState {
+  final String error;
+  const UpdateUserErrorState(this.error);
+}

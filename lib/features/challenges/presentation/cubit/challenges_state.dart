@@ -70,3 +70,9 @@ class ManageGameErrorState extends ChallengesState {
   final String failure;
   const ManageGameErrorState(this.failure);
 }
+
+
+class GoToGameState extends ChallengesState {
+  final GameModel game;
+  const GoToGameState({required this.game});
+}

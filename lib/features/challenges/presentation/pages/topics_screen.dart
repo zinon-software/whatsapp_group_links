@@ -98,7 +98,7 @@ class _TopicsScreenState extends State<TopicsScreen> {
       floatingActionButton:
           _usersCubit.currentUser?.permissions.isAdmin ?? false
               ? FloatingActionButton(
-                  backgroundColor: ColorManager.primaryLight,
+                  backgroundColor: ColorsManager.primaryLight,
                   onPressed: () {
                     Navigator.of(context)
                         .pushNamed(

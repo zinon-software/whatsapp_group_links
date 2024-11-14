@@ -4,6 +4,7 @@ import 'package:linkati/core/routes/app_routes.dart';
 import 'package:linkati/core/widgets/custom_button_widget.dart';
 import 'package:linkati/core/widgets/custom_cached_network_image_widget.dart';
 import 'package:linkati/core/widgets/custom_skeletonizer_widget.dart';
+import 'package:linkati/features/challenges/data/models/question_model.dart';
 import 'package:linkati/features/challenges/presentation/cubit/challenges_cubit.dart';
 import 'package:linkati/features/users/data/models/user_model.dart';
 
@@ -16,10 +17,12 @@ class GameCardWidget extends StatelessWidget {
     required this.game,
     required this.usersCubit,
     required this.challengesCubit,
+    required this.questions,
   });
   final GameModel game;
   final UsersCubit usersCubit;
   final ChallengesCubit challengesCubit;
+  final List<QuestionModel> questions;
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +34,20 @@ class GameCardWidget extends StatelessWidget {
                 AppRoutes.waitingForPlayerRoute,
                 arguments: {
                   'game': game,
+                  'questions': questions,
                 },
               );
             }
           : usersCubit.currentUser?.id == game.player2?.userId
-              ? () {}
+              ? () {
+                  Navigator.of(context).pushNamed(
+                    AppRoutes.gameRoute,
+                    arguments: {
+                      'game': game,
+                      "questions": questions,
+                    },
+                  );
+                }
               : null,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:linkati/core/utils/color_manager.dart';
+import 'package:linkati/core/widgets/custom_skeletonizer_widget.dart';
 
 import '../../../../core/ads/ads_manager.dart';
 import '../../../../core/routes/app_routes.dart';
@@ -66,7 +68,24 @@ class HomeLinksWidget extends StatelessWidget {
           stream: query.limit(10).snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+              return CustomSkeletonizerWidget(
+                enabled: true,
+                child: SizedBox(
+                  height: 100,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 2,
+                    itemBuilder: (context, index) {
+                      return LinkItemWidget(
+                        adsManager: adsManager,
+                        link: LinkModel.isEmpty(),
+                        width: MediaQuery.sizeOf(context).width - 70,
+                        height: 85,
+                      );
+                    },
+                  ),
+                ),
+              );
             }
             if (snapshot.hasError) {
               return Center(child: Text('خطأ: ${snapshot.error}'));
@@ -77,31 +96,41 @@ class HomeLinksWidget extends StatelessWidget {
               );
             }
 
+            List<LinkModel> linksData = snapshot.data!.docs.map((doc) {
+              var linkData = doc.data() as Map<String, dynamic>;
+              return LinkModel.fromJson(linkData);
+            }).toList();
+
             return SizedBox(
-              height: 90,
+              height: 100,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: snapshot.data!.docs.length,
+                itemCount: linksData.length,
                 itemBuilder: (context, index) {
-                  var linkData =
-                      snapshot.data!.docs[index].data() as Map<String, dynamic>;
+                  final LinkModel link = linksData[index];
 
-                  var link = LinkModel.fromJson(linkData);
-
-                  return Column(
+                  return Row(
                     children: [
-                      if ((index + 1) % 10 == 0)
-                        Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Center(
-                            child: adsManager.getNativeAdWidget(),
-                          ),
-                        ),
                       LinkItemWidget(
                         adsManager: adsManager,
                         link: link,
-                        width: MediaQuery.sizeOf(context).width - 60,
+                        width: MediaQuery.sizeOf(context).width - 70,
+                        height: 85,
                       ),
+                      if (index == linksData.length - 1)
+                        Container(
+                          height: 85,
+                          width: 40,
+                          margin: const EdgeInsets.symmetric(horizontal: 8),
+                          decoration: BoxDecoration(
+                            color: ColorsManager.card,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Icon(
+                            Icons.chevron_right,
+                            color: Colors.black,
+                          ),
+                        ),
                     ],
                   );
                 },

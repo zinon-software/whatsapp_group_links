@@ -66,50 +66,69 @@ class TopicCardWidget extends StatelessWidget {
                       builder: (context, state) {
                         if (usersCubit.currentUser?.permissions.isAdmin ??
                             false) {
-                          return IconButton(
-                            icon: const Icon(
-                              Icons.more_vert,
+                          return Expanded(
+                            child: CustomButtonWidget(
+                              width: double.infinity,
+                              icon: Icons.more_vert,
+                              label: "أدوات",
+                              onPressed: () {
+                                AppAlert.showAlertWidget(
+                                  context,
+                                  child: Column(
+                                    children: [
+                                      CustomButtonWidget(
+                                        width: double.infinity,
+                                        onPressed: () {
+                                          AppAlert.dismissDialog(context);
+                                          Navigator.of(context).pushNamed(
+                                            AppRoutes.topicFormRoute,
+                                            arguments: {'topic': topic},
+                                          );
+                                        },
+                                        label: "تعديل",
+                                      ),
+                                      SizedBox(height: 10),
+                                      // questionsRoute
+                                      CustomButtonWidget(
+                                        width: double.infinity,
+                                        onPressed: () {
+                                          AppAlert.dismissDialog(context);
+                                          Navigator.of(context).pushNamed(
+                                            AppRoutes.questionsRoute,
+                                            arguments: {'topic': topic.id},
+                                          );
+                                        },
+                                        label: "الاسئلة",
+                                      ),
+                                      SizedBox(height: 10),
+                                      CustomButtonWidget(
+                                        width: double.infinity,
+                                        onPressed: () {
+                                          AppAlert.dismissDialog(context);
+                                          Navigator.of(context).pushNamed(
+                                            AppRoutes.gamesRoute,
+                                            arguments: {'topic': topic.id},
+                                          );
+                                        },
+                                        label: "المشاركة في التحدي",
+                                      ),
+
+                                      SizedBox(height: 10),
+                                      CustomButtonWidget(
+                                        width: double.infinity,
+                                        onPressed: () {
+                                          AppAlert.dismissDialog(context);
+                                          // usersCubit.deleteTopicEvent(topic.id);
+                                        },
+                                        label: "حذف",
+                                        backgroundColor: Colors.red,
+                                      ),
+                                      SizedBox(height: 10),
+                                    ],
+                                  ),
+                                );
+                              },
                             ),
-                            onPressed: () {
-                              AppAlert.showAlertWidget(
-                                context,
-                                child: Column(
-                                  children: [
-                                    TextButton(
-                                      onPressed: () {
-                                        AppAlert.dismissDialog(context);
-                                        Navigator.of(context).pushNamed(
-                                          AppRoutes.topicFormRoute,
-                                          arguments: {'topic': topic},
-                                        );
-                                      },
-                                      child: const Text("تعديل"),
-                                    ),
-                                    // questionsRoute
-                                    TextButton(
-                                      onPressed: () {
-                                        AppAlert.dismissDialog(context);
-                                        Navigator.of(context).pushNamed(
-                                          AppRoutes.questionsRoute,
-                                          arguments: {'topic': topic.id},
-                                        );
-                                      },
-                                      child: const Text("الاسئلة"),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        AppAlert.dismissDialog(context);
-                                        Navigator.of(context).pushNamed(
-                                          AppRoutes.gamesRoute,
-                                          arguments: {'topic': topic.id},
-                                        );
-                                      },
-                                      child: const Text("المشاركة في التحدي"),
-                                    )
-                                  ],
-                                ),
-                              );
-                            },
                           );
                         } else {
                           return Expanded(

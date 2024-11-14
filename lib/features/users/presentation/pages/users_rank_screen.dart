@@ -126,8 +126,8 @@ class UserRankCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      ColorManager.primaryLight,
-                      ColorManager.primaryDark
+                      ColorsManager.primaryLight,
+                      ColorsManager.primaryDark
                     ],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
@@ -165,7 +165,8 @@ class UserRankCard extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 30,
-                backgroundImage: CustomCachedNetworkImage(user.photoUrl).imageProvider,
+                backgroundImage:
+                    CustomCachedNetworkImage(user.photoUrl).imageProvider,
               ),
               Positioned(
                 top: -9,

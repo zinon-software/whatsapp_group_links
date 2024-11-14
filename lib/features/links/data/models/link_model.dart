@@ -68,4 +68,17 @@ class LinkModel {
       isActive: isActive ?? this.isActive,
     );
   }
+
+  static LinkModel isEmpty() {
+    return LinkModel(
+      id: '',
+      user: '=====================',
+      title: '--------------  ---',
+      createDt: DateTime.now(),
+      url: '',
+      views: 100,
+      type: 'whatsapp',
+      isActive: true,
+    );
+  }
 }

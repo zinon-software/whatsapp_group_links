@@ -5,33 +5,77 @@ class SelectedCountryWidget extends StatelessWidget {
     super.key,
     required this.onChanged,
     required this.lang,
+    this.selectedCountryName,
   });
+
   final Function(String) onChanged;
   final String lang;
+  final String? selectedCountryName;
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<String>(
+    // تأكد من أن selectedCountry هو قيمة صالحة
+    final Country selectedValue = countries.firstWhere(
+        (c) => c.getName(lang) == selectedCountryName,
+        orElse: () => countries.first);
+
+    return DropdownButtonFormField<String>(
       hint: const Text('اختر دولة'),
       isExpanded: true,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        filled: true,
+        fillColor: Colors.grey[200],
+        contentPadding: const EdgeInsets.all(16),
+      ),
+      value: selectedValue.code,
       onChanged: (String? selectedCountryCode) {
         if (selectedCountryCode != null) {
-          onChanged(countries[selectedCountryCode]![lang]!);
+          final country =
+              countries.firstWhere((c) => c.code == selectedCountryCode);
+          onChanged(country.getName(lang));
         }
       },
-      items: countries.entries.map((entry) {
-        final countryCode = entry.key;
-        final countryName = entry.value[lang];
-        return DropdownMenuItem<String>(
-          value: countryCode,
-          child: Text('$countryName'),
-        );
-      }).toList(),
+      items: countries.map(
+        (country) {
+          return DropdownMenuItem<String>(
+            value: country.code,
+            child: Text(country.getName(lang)),
+          );
+        },
+      ).toList(),
     );
   }
 }
 
-Map<String, Map<String, String>> countries = {
+class Country {
+  final String code;
+  final String nameAr;
+  final String nameEn;
+
+  Country({
+    required this.code,
+    required this.nameAr,
+    required this.nameEn,
+  });
+
+  String getName(String lang) {
+    return lang == 'ar' ? nameAr : nameEn;
+  }
+}
+
+// تعريف قائمة الدول باستخدام كائنات Country
+List<Country> countries = countriesJson.entries.map((entry) {
+  final code = entry.key;
+  final nameAr = entry.value['ar']!;
+  final nameEn = entry.value['en']!;
+
+  return Country(code: code, nameAr: nameAr, nameEn: nameEn);
+}).toList();
+
+Map<String, Map<String, String>> countriesJson = {
   'AF': {'ar': 'أفغانستان', 'en': 'Afghanistan'},
   'AL': {'ar': 'ألبانيا', 'en': 'Albania'},
   'DZ': {'ar': 'الجزائر', 'en': 'Algeria'},

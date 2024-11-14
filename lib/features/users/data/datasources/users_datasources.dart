@@ -24,6 +24,10 @@ class UsersDatasourcesImpl implements UsersDatasources {
     try {
       DocumentSnapshot snapshot = await users.doc(id).get();
 
+      if (!snapshot.exists) {
+        return throw Exception('User not found');
+      }
+
       final user = UserModel.fromJson(
         snapshot.data() as Map<String, dynamic>,
       );

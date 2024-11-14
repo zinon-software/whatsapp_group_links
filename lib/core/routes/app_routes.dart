@@ -6,7 +6,9 @@ import 'package:linkati/features/links/presentation/pages/link_details_screen.da
 import 'package:linkati/features/users/presentation/pages/account_screen.dart';
 
 import '../../features/challenges/data/models/game_model.dart';
+import '../../features/challenges/data/models/question_model.dart';
 import '../../features/challenges/data/models/topic_model.dart';
+import '../../features/challenges/presentation/pages/game_screen.dart';
 import '../../features/challenges/presentation/pages/question_form_screen.dart';
 import '../../features/challenges/presentation/pages/questions_screen.dart';
 import '../../features/challenges/presentation/pages/topic_form_screen.dart';
@@ -19,6 +21,8 @@ import '../../features/links/presentation/pages/banned_words_screen.dart';
 import '../../features/links/presentation/pages/links_dashboard_screen.dart';
 import '../../features/links/presentation/pages/link_form_screen.dart';
 import '../../features/links/presentation/pages/links_screen.dart';
+import '../../features/users/data/models/user_model.dart';
+import '../../features/users/presentation/pages/edit_account_screen.dart';
 import '../../features/users/presentation/pages/login_screen.dart';
 import '../../features/users/presentation/pages/privacy_policy_screen.dart';
 import '../../features/users/presentation/pages/users_rank_screen.dart';
@@ -35,6 +39,7 @@ class AppRoutes {
   static const String accountRoute = '/account_route';
   static const String privacyPolicyRoute = '/privacy_policy_route';
   static const String usersRankRoute = '/users_rank_route';
+  static const String editAccountRoute = '/edit_account_route';
 
   // links
   static const String linkDetailsRoute = '/link_details_route';
@@ -50,4 +55,5 @@ class AppRoutes {
   static const String questionsRoute = '/questions_route';
   static const String questionFormRoute = '/question_form_route';
   static const String waitingForPlayerRoute = '/waiting_for_player_route';
+  static const String gameRoute = '/game_route';
 }

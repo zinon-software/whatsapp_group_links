@@ -6,7 +6,6 @@ import '../../../../core/routes/app_routes.dart';
 import '../../../../core/widgets/custom_button_widget.dart';
 import '../../../../core/widgets/custom_cached_network_image_widget.dart';
 import '../cubit/users_cubit.dart';
-import '../widgets/selected_country_widget.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
@@ -17,6 +16,21 @@ class AccountScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("الحساب"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: () {
+              Navigator.pushNamed(
+                context,
+                AppRoutes.editAccountRoute,
+                arguments: {
+                  'user': usersCubit.currentUser,
+                  'is_edit': usersCubit.currentUser != null,
+                },
+              );
+            },
+          ),
+        ],
       ),
       body: BlocConsumer<UsersCubit, UsersState>(
         bloc: usersCubit,
@@ -125,27 +139,14 @@ class AccountScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 20),
                             // contry
-                            if (usersCubit.currentUser?.country != null)
-                              Text(
-                                usersCubit.currentUser?.country ??
-                                    'الدولة غير متاحة',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.grey[700],
-                                ),
-                              )
-                            else
-                              // add country
-                              SelectedCountryWidget(
-                                lang: 'ar',
-                                onChanged: (countryName) {
-                                  usersCubit.onUpdateUser(
-                                    usersCubit.currentUser!.copyWith(
-                                      country: countryName,
-                                    ),
-                                  );
-                                },
+                            Text(
+                              usersCubit.currentUser?.country ??
+                                  'الدولة غير متاحة',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey[700],
                               ),
+                            )
                           ],
                         ),
                       ),

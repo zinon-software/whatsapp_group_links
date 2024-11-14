@@ -19,6 +19,7 @@ abstract class ChallengesDatasources {
   Future<String> updateTopic(TopicModel topic);
   Future<List<TopicModel>> fetchTopics();
 
+  Future<GameModel> updateGame(GameModel game);
 }
 
 class ChallengesDatasourcesImpl implements ChallengesDatasources {
@@ -142,7 +143,7 @@ class ChallengesDatasourcesImpl implements ChallengesDatasources {
       rethrow;
     }
   }
-  
+
   @override
   Future<GameModel> endGameEvent(GameModel game) async {
     try {
@@ -152,9 +153,19 @@ class ChallengesDatasourcesImpl implements ChallengesDatasources {
       rethrow;
     }
   }
-  
+
   @override
   Future<GameModel> startGameWithAi(GameModel game) async {
+    try {
+      await games.doc(game.id).update(game.toJson());
+      return game;
+    } catch (e) {
+      rethrow;
+    }
+  }
+  
+  @override
+  Future<GameModel> updateGame(GameModel game) async {
     try {
       await games.doc(game.id).update(game.toJson());
       return game;

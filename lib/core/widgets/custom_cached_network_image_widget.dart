@@ -41,7 +41,7 @@ class CustomCachedNetworkImage extends StatelessWidget {
       placeholder: (context, url) => Center(
         child: Skeleton.leaf(
           enabled: true,
-          child: Card(color: ColorManager.fillColor.withOpacity(1)),
+          child: Card(color: ColorsManager.fillColor.withOpacity(1)),
         ),
       ),
       errorWidget: (context, url, error) => Center(

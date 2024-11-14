@@ -1,4 +1,3 @@
-import 'package:linkati/features/challenges/data/models/question_model.dart';
 import 'package:linkati/features/users/data/models/user_model.dart';
 
 class GameModel {
@@ -6,13 +5,15 @@ class GameModel {
   final PlayerModel player1;
   final PlayerModel? player2;
   final String topic;
-  final List<QuestionModel> questions;
+  final String? correctAnswerPlayer1;
+  final String? correctAnswerPlayer2;
   final String? currentTurnPlayerId;
   final String currntQuestionId;
   final int currentQuestionNumber;
   final DateTime startedAt;
   final DateTime? endedAt;
   final Duration duration;
+  final bool isWithAi;
 
   GameModel({
     required this.id,
@@ -21,14 +22,15 @@ class GameModel {
     required this.topic,
     required this.currentTurnPlayerId,
     required this.currntQuestionId,
-    required this.questions,
+    this.correctAnswerPlayer1,
+    this.correctAnswerPlayer2,
     required this.currentQuestionNumber,
     required this.startedAt,
     this.endedAt,
     required this.duration,
+    this.isWithAi = false,
   });
 
-  int get questionCount => questions.length;
 
   factory GameModel.fromJson(Map<String, dynamic> json) {
     return GameModel(
@@ -40,12 +42,15 @@ class GameModel {
       topic: json['topic'],
       currentTurnPlayerId: json['current_turn_player_id'],
       currntQuestionId: json['currnt_question_id'],
-      questions: [],
+      correctAnswerPlayer1: json['correct_answer_player1'],
+      correctAnswerPlayer2: json['correct_answer_player2'],
       currentQuestionNumber: json['current_question_number'],
       startedAt: DateTime.parse(json['started_at']),
       endedAt:
           json['ended_at'] != null ? DateTime.parse(json['ended_at']) : null,
       duration: Duration(seconds: json['duration']),
+      isWithAi: json['is_with_ai'] ?? false,
+
     );
   }
 
@@ -55,12 +60,15 @@ class GameModel {
       'player1': player1.toJson(),
       'player2': player2?.toJson(),
       'topic': topic,
+      'correct_answer_player1': correctAnswerPlayer1,
+      'correct_answer_player2': correctAnswerPlayer2,
       'current_turn_player_id': currentTurnPlayerId,
       'currnt_question_id': currntQuestionId,
       'current_question_number': currentQuestionNumber,
       'started_at': startedAt.toIso8601String(),
       'ended_at': endedAt?.toIso8601String(),
       'duration': duration.inSeconds,
+      'is_with_ai': isWithAi,
     };
   }
 
@@ -70,7 +78,8 @@ class GameModel {
     PlayerModel? player1,
     PlayerModel? player2,
     String? topic,
-    List<QuestionModel>? questions,
+    String? correctAnswerPlayer1,
+    String? correctAnswerPlayer2,
     String? currentTurnPlayerId,
     String? currntQuestionId,
     int? currentQuestionNumber,
@@ -86,12 +95,14 @@ class GameModel {
       topic: topic ?? this.topic,
       currentTurnPlayerId: currentTurnPlayerId ?? this.currentTurnPlayerId,
       currntQuestionId: currntQuestionId ?? this.currntQuestionId,
-      questions: questions ?? this.questions,
+      correctAnswerPlayer1: correctAnswerPlayer1 ?? this.correctAnswerPlayer1,
+      correctAnswerPlayer2: correctAnswerPlayer2 ?? this.correctAnswerPlayer2,
       currentQuestionNumber:
           currentQuestionNumber ?? this.currentQuestionNumber,
       startedAt: startedAt ?? this.startedAt,
       endedAt: endedAt ?? this.endedAt,
       duration: duration ?? this.duration,
+      isWithAi: isWithAi ?? this.isWithAi,
     );
   }
 }

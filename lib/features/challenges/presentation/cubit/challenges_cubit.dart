@@ -128,16 +128,34 @@ class ChallengesCubit extends Cubit<ChallengesState> {
   }
 
   Future<void> endGameEvent(GameModel game) async {
-    emit(ManageGameLoadingState());
+    // emit(ManageGameLoadingState());
 
     (await repository.endGameEvent(game.copyWith(endedAt: DateTime.now())))
         .fold(
       (failure) {
-        emit(ManageGameErrorState(failure));
+        // emit(ManageGameErrorState(failure));
       },
       (response) {
-        emit(ManageGameSuccessState(game: response));
+        // emit(ManageGameSuccessState(game: response));
       },
     );
+  }
+
+
+  void updateGameEvent(GameModel game) async {
+    // emit(ManageGameLoadingState());
+
+    (await repository.updateGame(game)).fold(
+      (failure) {
+        // emit(ManageGameErrorState(failure));
+      },
+      (response) {
+        // emit(ManageGameSuccessState(game: response));
+      },
+    );
+  }
+
+  void goToGameEvent(GameModel copyWith) {
+    emit(GoToGameState(game: copyWith));
   }
 }

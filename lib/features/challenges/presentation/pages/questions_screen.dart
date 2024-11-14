@@ -51,6 +51,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                   title: Text(question.question),
                   subtitle: Wrap(
                     spacing: 8,
+                    runSpacing: 8,
                     children: question.options
                         .map(
                           (e) => Container(
@@ -72,6 +73,19 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                           ),
                         )
                         .toList(),
+                  ),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(
+                        AppRoutes.questionFormRoute,
+                        arguments: {
+                          'question': question,
+                          'topic': widget.topic
+                        },
+                      ).then((value) =>
+                          _challengesCubit.fetchQuestionsEvent(widget.topic));
+                    },
                   ),
                 );
               },

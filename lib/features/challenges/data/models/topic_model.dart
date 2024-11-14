@@ -37,7 +37,7 @@ class TopicModel {
     return TopicModel(
       id: '',
       title: '====== ====  ===',
-      description: '== ===================== ======== =',
+      description: '==  ======== =',
       imageUrl: 'https://via.placeholder.com/150',
       questionCount: 0,
     );

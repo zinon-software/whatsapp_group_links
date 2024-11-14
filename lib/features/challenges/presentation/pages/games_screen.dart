@@ -6,6 +6,7 @@ import 'package:linkati/features/challenges/presentation/cubit/challenges_cubit.
 
 import '../../../../config/app_injector.dart';
 import '../../../../core/api/app_collections.dart';
+import '../../../../core/routes/app_routes.dart';
 import '../../../users/presentation/cubit/users_cubit.dart';
 import '../../data/models/game_model.dart';
 import '../widgets/game_card_widget.dart';
@@ -73,12 +74,12 @@ class _GamesScreenState extends State<GamesScreen> {
               return ListView.builder(
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (context, index) {
-                  GameModel session = GameModel.fromJson(
+                  GameModel game = GameModel.fromJson(
                     snapshot.data!.docs[index].data() as Map<String, dynamic>,
                   );
-                  session = session.copyWith(questions: questions);
                   return GameCardWidget(
-                    game: session,
+                    game: game,
+                    questions: questions,
                     usersCubit: _usersCubit,
                     challengesCubit: _challengesCubit,
                   );
@@ -91,27 +92,29 @@ class _GamesScreenState extends State<GamesScreen> {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _challengesCubit.createGameEvent(
-            GameModel(
-              id: '',
-              player1: PlayerModel(
-                userId: _usersCubit.currentUser!.id,
-                score: _usersCubit.currentUser!.score,
-              ),
-              topic: widget.topic,
-              currentTurnPlayerId: _usersCubit.currentUser!.id,
-              currntQuestionId: '',
-              questions: questions,
-              currentQuestionNumber: 0,
-              startedAt: DateTime.now(),
-              duration: const Duration(minutes: 30),
+      floatingActionButton: _usersCubit.currentUser == null
+          ? null
+          : FloatingActionButton(
+              onPressed: () {
+                _challengesCubit.createGameEvent(
+                  GameModel(
+                    id: '',
+                    player1: PlayerModel(
+                      userId: _usersCubit.currentUser!.id,
+                      user: _usersCubit.currentUser!,
+                      score: 0,
+                    ),
+                    topic: widget.topic,
+                    currentTurnPlayerId: _usersCubit.currentUser!.id,
+                    currntQuestionId: questions.first.id,
+                    currentQuestionNumber: 0,
+                    startedAt: DateTime.now(),
+                    duration: const Duration(minutes: 30),
+                  ),
+                );
+              },
+              child: const Icon(Icons.add),
             ),
-          );
-        },
-        child: const Icon(Icons.add),
-      ),
     );
   }
 
@@ -125,9 +128,15 @@ class _GamesScreenState extends State<GamesScreen> {
     if (state is ManageGameSuccessState) {
       AppAlert.dismissDialog(context);
       if (state.isJoined) {
-        AppAlert.showAlert(context, subTitle: 'تم الانضمام للمباراة بنجاح');
+        Navigator.of(context).pushNamed(
+          AppRoutes.gameRoute,
+          arguments: {'game': state.game, "questions": questions},
+        );
       } else {
-        AppAlert.showAlert(context, subTitle: 'تم الانضمام للمباراة بنجاح');
+        Navigator.of(context).pushNamed(
+          AppRoutes.waitingForPlayerRoute,
+          arguments: {'game': state.game, "questions": questions},
+        );
       }
     }
     if (state is FetchQuestionsSuccessState) {

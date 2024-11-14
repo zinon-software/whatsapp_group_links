@@ -88,7 +88,7 @@ class AppAlert {
             Text(
               title,
               style: TextStyle(
-                color: ColorManager.black,
+                color: ColorsManager.black,
                 fontSize: 15,
               ),
             ),
@@ -101,7 +101,7 @@ class AppAlert {
             child: Text(
               subTitle,
               style: TextStyle(
-                color: ColorManager.black,
+                color: ColorsManager.black,
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
               ),
@@ -120,7 +120,7 @@ class AppAlert {
               if (onConfirm != null) const SizedBox(width: 10),
               Expanded(
                 child: CustomButtonWidget(
-                  backgroundColor: ColorManager.fillColor,
+                  backgroundColor: ColorsManager.fillColor,
                   onPressed: onCancel ?? () => dismissDialog(context),
                   label: cancelText,
                   textColor: Colors.black,
@@ -142,6 +142,7 @@ class AppAlert {
     BuildContext context, {
     required Widget child,
     bool dismissOn = true,
+    EdgeInsetsGeometry? padding,
   }) async {
     dismissDialog(context);
     await AwesomeDialog(
@@ -152,11 +153,12 @@ class AppAlert {
       body: Column(
         children: [
           child,
+          const SizedBox(height: 20),
           Row(
             children: [
               Expanded(
                 child: CustomButtonWidget(
-                  backgroundColor: ColorManager.fillColor,
+                  backgroundColor: ColorsManager.fillColor,
                   onPressed: () => dismissDialog(context),
                   label: "اغلاق",
                   textColor: Colors.black,
@@ -167,7 +169,7 @@ class AppAlert {
         ],
       ),
       isDense: true,
-      padding: const EdgeInsets.all(16),
+      padding: padding ?? const EdgeInsets.all(16),
       dialogBorderRadius: BorderRadius.circular(8),
       dismissOnTouchOutside: dismissOn,
       dismissOnBackKeyPress: dismissOn,

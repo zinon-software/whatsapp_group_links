@@ -45,6 +45,14 @@ class AppNavigation {
           view: const UsersRankScreen(),
         );
 
+      case AppRoutes.editAccountRoute:
+        return _moveRoute(
+          settings: settings,
+          view: EditAccountScreen(
+            user: query['user'] as UserModel,
+          ),
+        );
+
       // end users
 
       // start links
@@ -122,6 +130,7 @@ class AppNavigation {
         return _moveRoute(
           settings: settings,
           view: QuestionFormScreen(
+            question: query['question'] as QuestionModel?,
             topic: query['topic'] as String,
           ),
         );
@@ -131,6 +140,16 @@ class AppNavigation {
           settings: settings,
           view: WaitingForPlayerScreen(
             game: query['game'] as GameModel,
+            questions: query['questions'] as List<QuestionModel>,
+          ),
+        );
+
+      case AppRoutes.gameRoute:
+        return _moveRoute(
+          settings: settings,
+          view: GameScreen(
+            game: query['game'] as GameModel,
+            questions: query['questions'] as List<QuestionModel>,
           ),
         );
       // end challenges

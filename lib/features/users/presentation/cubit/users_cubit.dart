@@ -31,7 +31,7 @@ class UsersCubit extends Cubit<UsersState> {
           currentUser = response;
           emit(UserSuccessState());
           if (isEdit) {
-            onUpdateUser(currentUser!);
+            repository.updateUser(response);
           }
         },
       );
@@ -93,11 +93,18 @@ class UsersCubit extends Cubit<UsersState> {
   }
 
   Future<void> onUpdateUser(UserModel user) async {
-    repository.updateUser(user);
+    emit(UpdateUserLoadingState());
 
-    currentUser = user;
-
-    emit(UserSuccessState());
+    (await repository.updateUser(user)).fold(
+      (failure) {
+        emit(UpdateUserErrorState(failure));
+      },
+      (response) {
+        currentUser = user;
+        emit(UpdateUserSuccessState(response));
+      },
+    );
+   
   }
 
   void signOut() {

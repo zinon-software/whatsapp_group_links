@@ -50,7 +50,7 @@ class CustomButtonWidget extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       padding: const EdgeInsets.all(.5),
       decoration: BoxDecoration(
-        color: backgroundColor ?? ColorManager.primaryLight,
+        color: backgroundColor ?? ColorsManager.primaryLight,
         border: Border.all(
           color: borderColor ?? backgroundColor ?? theme.primaryColor,
           width: enableBorder ? 1.0 : 0.0,
