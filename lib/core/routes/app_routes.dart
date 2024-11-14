@@ -5,12 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:linkati/features/links/presentation/pages/link_details_screen.dart';
 import 'package:linkati/features/users/presentation/pages/account_screen.dart';
 
+import '../../features/challenges/data/models/game_model.dart';
 import '../../features/challenges/data/models/topic_model.dart';
 import '../../features/challenges/presentation/pages/question_form_screen.dart';
 import '../../features/challenges/presentation/pages/questions_screen.dart';
 import '../../features/challenges/presentation/pages/topic_form_screen.dart';
 import '../../features/challenges/presentation/pages/topics_screen.dart';
 import '../../features/challenges/presentation/pages/games_screen.dart';
+import '../../features/challenges/presentation/pages/waiting_for_player_screen.dart';
 import '../../features/main/presentation/pages/home_screen.dart';
 import '../../features/links/data/models/link_model.dart';
 import '../../features/links/presentation/pages/banned_words_screen.dart';
@@ -47,4 +49,5 @@ class AppRoutes {
   static const String gamesRoute = '/games_route';
   static const String questionsRoute = '/questions_route';
   static const String questionFormRoute = '/question_form_route';
+  static const String waitingForPlayerRoute = '/waiting_for_player_route';
 }

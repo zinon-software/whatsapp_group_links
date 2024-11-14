@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:linkati/core/routes/app_routes.dart';
 import 'package:linkati/core/widgets/custom_button_widget.dart';
 import 'package:linkati/core/widgets/custom_cached_network_image_widget.dart';
 import 'package:linkati/core/widgets/custom_skeletonizer_widget.dart';
@@ -25,7 +26,13 @@ class GameCardWidget extends StatelessWidget {
     return InkWell(
       onTap: usersCubit.currentUser?.id == game.player1.userId
           ? () {
-              challengesCubit.endGameEvent(game);
+              Navigator.pushNamed(
+                context,
+                AppRoutes.waitingForPlayerRoute,
+                arguments: {
+                  'game': game,
+                },
+              );
             }
           : usersCubit.currentUser?.id == game.player2?.userId
               ? () {}

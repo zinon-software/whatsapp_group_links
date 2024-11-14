@@ -120,10 +120,19 @@ class AppNavigation {
 
       case AppRoutes.questionFormRoute:
         return _moveRoute(
-            settings: settings,
-            view: QuestionFormScreen(
-              topic: query['topic'] as String,
-            ),);
+          settings: settings,
+          view: QuestionFormScreen(
+            topic: query['topic'] as String,
+          ),
+        );
+
+      case AppRoutes.waitingForPlayerRoute:
+        return _moveRoute(
+          settings: settings,
+          view: WaitingForPlayerScreen(
+            game: query['game'] as GameModel,
+          ),
+        );
       // end challenges
 
       default:
