@@ -65,13 +65,13 @@ class _GameScreenState extends State<GameScreen> {
       child: StreamBuilder<DocumentSnapshot>(
         stream: instance<AppCollections>().games.doc(game.id).snapshots(),
         builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Scaffold(body: Center(child: Text('خطأ في تحميل البيانات')));
-          }
-          if (snapshot.connectionState == ConnectionState.waiting &&
-              _currentQuestion == null) {
-            return Scaffold(body: Center(child: CircularProgressIndicator()));
-          }
+          // if (snapshot.hasError) {
+          //   return Scaffold(body: Center(child: Text('خطأ في تحميل البيانات')));
+          // }
+          // if (snapshot.connectionState == ConnectionState.waiting &&
+          //     _currentQuestion == null) {
+          //   return Scaffold(body: Center(child: CircularProgressIndicator()));
+          // }
 
           if (snapshot.hasData && snapshot.data!.data() != null) {
             game = GameModel.fromJson(
@@ -85,7 +85,7 @@ class _GameScreenState extends State<GameScreen> {
 
           // التحقق من انتهاء الأسئلة
           if (game.currentQuestionNumber >= widget.questions.length) {
-            return WinnerView(game: game);
+            return WinnerView(game: game, challengesCubit: _challengesCubit);
           }
 
           return Scaffold(
@@ -163,20 +163,25 @@ class _GameScreenState extends State<GameScreen> {
                             ),
                             child: Row(
                               children: [
+                                const SizedBox(width: 8.0),
+                                Text(_currentQuestion.options[index]),
+                                const Spacer(),
                                 if (game.correctAnswerPlayer1 ==
                                     _currentQuestion.options[index])
-                                  const Icon(
+                                  Icon(
                                     Icons.check,
-                                    color: Colors.green,
+                                    color: isPlayerTurn
+                                        ? Colors.green
+                                        : Colors.grey,
                                   ),
                                 if (game.correctAnswerPlayer2 ==
                                     _currentQuestion.options[index])
-                                  const Icon(
+                                  Icon(
                                     Icons.check,
-                                    color: Colors.orange,
+                                    color: isPlayerTurn
+                                        ? Colors.green
+                                        : Colors.grey,
                                   ),
-                                const SizedBox(width: 8.0),
-                                Text(_currentQuestion.options[index]),
                               ],
                             ),
                           ),
@@ -239,11 +244,11 @@ class _GameScreenState extends State<GameScreen> {
           isCorrect && game.currentTurnPlayerId == game.player2?.userId
               ? answer
               : game.correctAnswerPlayer2,
-      currentTurnPlayerId: !isCorrect
-          ? isMePlayer1
+      currentTurnPlayerId: isCorrect
+          ? null
+          : isMePlayer1
               ? game.player2?.userId
-              : game.player1.userId
-          : null,
+              : game.player1.userId,
       currntQuestionId: isCorrect ? _currentQuestion.id : game.currntQuestionId,
       currentQuestionNumber: isCorrect
           ? game.currentQuestionNumber + 1
@@ -273,9 +278,11 @@ class WinnerView extends StatelessWidget {
   const WinnerView({
     super.key,
     required this.game,
+    required this.challengesCubit,
   });
 
   final GameModel game;
+  final ChallengesCubit challengesCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -320,6 +327,7 @@ class WinnerView extends StatelessWidget {
               height: 50,
               width: 200,
               onPressed: () {
+                challengesCubit.endGameEvent(game);
                 Navigator.pop(context);
               },
             ),

@@ -95,11 +95,12 @@ class _WaitingForPlayerScreenState extends State<WaitingForPlayerScreen> {
 
   void _onListener(context, state) {
     if (state is GoToGameState) {
-      Navigator.pop(context);
       Navigator.of(context).pushNamed(
         AppRoutes.gameRoute,
         arguments: {'game': state.game, "questions": widget.questions},
-      );
+      ).then((value) {
+        Navigator.of(context).pop();
+      });
     }
   }
 
@@ -117,7 +118,7 @@ class _WaitingForPlayerScreenState extends State<WaitingForPlayerScreen> {
       cancelText: 'اغلاق',
       onCancel: () => Navigator.of(context).pop(false),
     );
- }
+  }
 }
 
 class WaitingContentWidget extends StatelessWidget {
