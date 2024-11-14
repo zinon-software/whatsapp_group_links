@@ -15,7 +15,7 @@ class CustomButtonWidget extends StatelessWidget {
     this.radius = 12,
     this.textColor,
     this.isLoading = false,
-    this.enableClick = false,
+    this.enableClick = true,
     this.enableBorder = false,
     this.borderColor,
     this.assetIcon,
@@ -59,11 +59,11 @@ class CustomButtonWidget extends StatelessWidget {
       ),
       child: MaterialButton(
         onPressed: enableClick
-            ? null
-            : isLoading
+            ? isLoading
                 ? null
-                : onPressed,
-        color: backgroundColor,
+                : onPressed
+            : null,
+        color: enableClick ? backgroundColor : backgroundColor?.withOpacity(.5),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radius),
         ),

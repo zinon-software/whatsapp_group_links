@@ -105,7 +105,7 @@ class _GamesScreenState extends State<GamesScreen> {
                       score: 0,
                     ),
                     topic: widget.topic,
-                    currentTurnPlayerId: _usersCubit.currentUser!.id,
+                    currentTurnPlayerId: null,
                     currntQuestionId: questions.first.id,
                     currentQuestionNumber: 0,
                     startedAt: DateTime.now(),

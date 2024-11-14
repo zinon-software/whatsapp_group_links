@@ -53,7 +53,7 @@ class AppAlert {
     );
   }
 
-  static Future<void> showAlert(
+  static Future<bool> showAlert(
     BuildContext context, {
     IconData? icon,
     Color? btnCancelColor,
@@ -67,7 +67,7 @@ class AppAlert {
     bool dismissOn = true,
   }) async {
     dismissDialog(context);
-    await AwesomeDialog(
+    return await AwesomeDialog(
       context: context,
       animType: AnimType.scale,
       dialogType: DialogType.noHeader,

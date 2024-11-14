@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:linkati/config/app_injector.dart';
+import 'package:linkati/core/widgets/alert_widget.dart';
 import 'package:linkati/core/widgets/custom_button_widget.dart';
 import 'package:linkati/features/challenges/data/models/game_model.dart';
 import 'package:linkati/features/challenges/presentation/cubit/challenges_cubit.dart';
@@ -11,8 +12,7 @@ import '../../data/models/question_model.dart';
 
 class WaitingForPlayerScreen extends StatefulWidget {
   final GameModel game;
-    final List<QuestionModel> questions;
-
+  final List<QuestionModel> questions;
 
   const WaitingForPlayerScreen({
     super.key,
@@ -95,6 +95,7 @@ class _WaitingForPlayerScreenState extends State<WaitingForPlayerScreen> {
 
   void _onListener(context, state) {
     if (state is GoToGameState) {
+      Navigator.pop(context);
       Navigator.of(context).pushNamed(
         AppRoutes.gameRoute,
         arguments: {'game': state.game, "questions": widget.questions},
@@ -103,29 +104,20 @@ class _WaitingForPlayerScreenState extends State<WaitingForPlayerScreen> {
   }
 
   Future<bool> _showExitConfirmationDialog(BuildContext context) async {
-    return await showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text('تأكيد الخروج'),
-            content:
-                const Text('هل أنت متأكد أنك تريد الخروج؟ سيتم إلغاء اللعبة.'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: const Text('إلغاء'),
-              ),
-              TextButton(
-                onPressed: () {
-                  _challengesCubit.endGameEvent(widget.game);
-                  Navigator.of(context).pop(true);
-                },
-                child: const Text('نعم، خروج'),
-              ),
-            ],
-          ),
-        ) ??
-        false;
-  }
+    return await AppAlert.showAlert(
+      context,
+      title: 'تأكيد الخروج',
+      subTitle: 'هل تريد الخروج من اللعبة؟',
+      confirmText: 'نعم، خروج',
+      dismissOn: false,
+      onConfirm: () {
+        _challengesCubit.endGameEvent(widget.game);
+        Navigator.of(context).pop(true);
+      },
+      cancelText: 'اغلاق',
+      onCancel: () => Navigator.of(context).pop(false),
+    );
+ }
 }
 
 class WaitingContentWidget extends StatelessWidget {

@@ -75,6 +75,7 @@ class LinkItemWidget extends StatelessWidget {
               child: Row(
                 children: [
                   Text('${link.views}'),
+                  const SizedBox(width: 4),
                   const Icon(
                     Icons.visibility,
                     size: 16,

@@ -31,7 +31,6 @@ class GameModel {
     this.isWithAi = false,
   });
 
-
   factory GameModel.fromJson(Map<String, dynamic> json) {
     return GameModel(
       id: json['id'],
@@ -50,7 +49,6 @@ class GameModel {
           json['ended_at'] != null ? DateTime.parse(json['ended_at']) : null,
       duration: Duration(seconds: json['duration']),
       isWithAi: json['is_with_ai'] ?? false,
-
     );
   }
 
@@ -93,7 +91,7 @@ class GameModel {
       player1: player1 ?? this.player1,
       player2: player2 ?? this.player2,
       topic: topic ?? this.topic,
-      currentTurnPlayerId: currentTurnPlayerId ?? this.currentTurnPlayerId,
+      currentTurnPlayerId: currentTurnPlayerId,
       currntQuestionId: currntQuestionId ?? this.currntQuestionId,
       correctAnswerPlayer1: correctAnswerPlayer1 ?? this.correctAnswerPlayer1,
       correctAnswerPlayer2: correctAnswerPlayer2 ?? this.correctAnswerPlayer2,
