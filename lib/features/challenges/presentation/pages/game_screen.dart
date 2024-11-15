@@ -306,27 +306,45 @@ class WinnerView extends StatelessWidget {
     IconData winnerIcon;
     Color backgroundColor;
 
-    if (game.player1.score > (game.player2?.score ?? 0)) {
+    final currentUserId = FirebaseAuth.instance.currentUser!.uid;
+
+    if (game.player1.score > (game.player2?.score ?? 0) &&
+        game.player1.userId == currentUserId) {
+      // اللاعب الأول هو الفائز والمستخدم الحالي هو اللاعب الأول
       winnerMessage = "🎉 تهانينا! لقد فزت!";
       winnerIcon = Icons.emoji_events;
-      backgroundColor = Colors.greenAccent.shade100;
+      backgroundColor = Colors.greenAccent.shade700;
     } else if (game.player2 != null &&
-        game.player2!.score > game.player1.score) {
+        game.player2!.score > game.player1.score &&
+        game.player2!.userId == currentUserId) {
+      // اللاعب الثاني هو الفائز والمستخدم الحالي هو اللاعب الثاني
+      winnerMessage = "🎉 تهانينا! لقد فزت!";
+      winnerIcon = Icons.emoji_events;
+      backgroundColor = Colors.greenAccent.shade700;
+    } else if ((game.player1.userId == currentUserId ||
+            game.player2?.userId == currentUserId) &&
+        game.player1.score == (game.player2?.score ?? 0)) {
+      // تعادل بين اللاعبين والمستخدم الحالي أحدهم
+      winnerMessage = "🤝 إنها تعادل!";
+      winnerIcon = Icons.handshake;
+      backgroundColor = Colors.blueAccent.shade700;
+    } else {
+      // المستخدم الحالي ليس الفائز (خسارة)
       winnerMessage = "😞 لم تفز هذه المرة. حاول مجدداً!";
       winnerIcon = Icons.sentiment_dissatisfied;
       backgroundColor = Colors.redAccent.shade100;
-    } else {
-      winnerMessage = "🤝 إنها تعادل!";
-      winnerIcon = Icons.handshake;
-      backgroundColor = Colors.blueAccent.shade100;
     }
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: backgroundColor,
         title: const Text('النتيجة'),
         systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
+          statusBarColor: backgroundColor,
           statusBarIconBrightness: Brightness.light,
+          statusBarBrightness: Brightness.light,
+          systemNavigationBarIconBrightness: Brightness.light,
+          systemNavigationBarColor: backgroundColor,
         ),
       ),
       body: Container(

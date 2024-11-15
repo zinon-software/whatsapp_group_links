@@ -24,7 +24,7 @@ class TopicCardWidget extends StatelessWidget {
       onTap: () {
         Navigator.of(context).pushNamed(
           AppRoutes.gamesRoute,
-          arguments: {'topic': topic.id},
+          arguments: {'topic': topic},
         );
       },
       child: Container(
@@ -107,7 +107,7 @@ class TopicCardWidget extends StatelessWidget {
                                           AppAlert.dismissDialog(context);
                                           Navigator.of(context).pushNamed(
                                             AppRoutes.gamesRoute,
-                                            arguments: {'topic': topic.id},
+                                            arguments: {'topic': topic},
                                           );
                                         },
                                         label: "المشاركة في التحدي",
@@ -137,7 +137,7 @@ class TopicCardWidget extends StatelessWidget {
                               onPressed: () {
                                 Navigator.of(context).pushNamed(
                                   AppRoutes.gamesRoute,
-                                  arguments: {'topic': topic.id},
+                                  arguments: {'topic': topic},
                                 );
                               },
                               label: "المشاركة في التحدي",

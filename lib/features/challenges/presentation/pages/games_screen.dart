@@ -10,11 +10,12 @@ import '../../../../core/api/app_collections.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../../users/presentation/cubit/users_cubit.dart';
 import '../../data/models/game_model.dart';
+import '../../data/models/topic_model.dart';
 import '../widgets/game_card_widget.dart';
 
 class GamesScreen extends StatefulWidget {
   const GamesScreen({super.key, required this.topic});
-  final String topic;
+  final TopicModel topic;
 
   @override
   State<GamesScreen> createState() => _GamesScreenState();
@@ -33,14 +34,14 @@ class _GamesScreenState extends State<GamesScreen> {
 
     super.initState();
 
-    _challengesCubit.fetchQuestionsEvent(widget.topic);
+    _challengesCubit.fetchQuestionsEvent(widget.topic.id);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('المبارزات'),
+        title: Text(widget.topic.title),
       ),
       body: BlocListener<ChallengesCubit, ChallengesState>(
         bloc: _challengesCubit,
@@ -55,7 +56,7 @@ class _GamesScreenState extends State<GamesScreen> {
         child: StreamBuilder(
           stream: instance<AppCollections>()
               .games
-              .where('topic', isEqualTo: widget.topic)
+              .where('topic', isEqualTo: widget.topic.id)
               .where('ended_at', isNull: true)
               .orderBy('started_at', descending: true)
               .snapshots(),
@@ -87,7 +88,7 @@ class _GamesScreenState extends State<GamesScreen> {
                               user: _usersCubit.currentUser!,
                               score: 0,
                             ),
-                            topic: widget.topic,
+                            topic: widget.topic.id,
                             currentTurnPlayerId: null,
                             currntQuestionId: questions.first.id,
                             currentQuestionNumber: 0,
@@ -135,7 +136,7 @@ class _GamesScreenState extends State<GamesScreen> {
                       user: _usersCubit.currentUser!,
                       score: 0,
                     ),
-                    topic: widget.topic,
+                    topic: widget.topic.id,
                     currentTurnPlayerId: null,
                     currntQuestionId: questions.first.id,
                     currentQuestionNumber: 0,

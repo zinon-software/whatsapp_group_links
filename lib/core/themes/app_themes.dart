@@ -13,12 +13,14 @@ class AppThemes {
           primary: ColorsManager.primaryLight,
         ),
         appBarTheme: const AppBarTheme(
-          backgroundColor: ColorsManager.primaryLight,
-          foregroundColor: Colors.white,
+          foregroundColor: Colors.black,
           centerTitle: true,
           systemOverlayStyle: SystemUiOverlayStyle(
-            systemNavigationBarColor: ColorsManager.container,
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness: Brightness.dark,
+            statusBarBrightness: Brightness.dark,
             systemNavigationBarIconBrightness: Brightness.dark,
+            systemNavigationBarColor: Colors.transparent,
           ),
         ),
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
@@ -56,11 +58,9 @@ class AppThemes {
           ),
         ),
         tabBarTheme: TabBarTheme(
-          // labelPadding: EdgeInsets.symmetric(horizontal: 8),
           indicatorSize: TabBarIndicatorSize.label,
           labelColor: ColorsManager.secondaryLight,
           unselectedLabelColor: ColorsManager.disabled,
-          // dividerColor: Colors.transparent,
           labelStyle: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
@@ -88,8 +88,9 @@ class AppThemes {
           systemOverlayStyle: SystemUiOverlayStyle(
             statusBarColor: Colors.transparent,
             statusBarIconBrightness: Brightness.light,
-            systemNavigationBarColor: ColorsManager.container,
-            systemNavigationBarIconBrightness: Brightness.dark,
+            statusBarBrightness: Brightness.light,
+            systemNavigationBarIconBrightness: Brightness.light,
+            systemNavigationBarColor: Colors.transparent,
           ),
         ),
         floatingActionButtonTheme: const FloatingActionButtonThemeData(

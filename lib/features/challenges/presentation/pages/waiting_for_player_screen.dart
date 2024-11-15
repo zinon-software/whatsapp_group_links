@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:linkati/config/app_injector.dart';
 import 'package:linkati/core/widgets/alert_widget.dart';
@@ -42,9 +43,19 @@ class _WaitingForPlayerScreenState extends State<WaitingForPlayerScreen> {
         return await _showExitConfirmationDialog(context);
       },
       child: Scaffold(
+        backgroundColor: Colors.blueAccent.shade700,
         appBar: AppBar(
+          backgroundColor: Colors.blueAccent.shade700,
+          // foregroundColor: Colors.black,
           title: const Text('انتظار انضمام لاعب آخر'),
           centerTitle: true,
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: Colors.blueAccent.shade700,
+            statusBarIconBrightness: Brightness.light,
+            statusBarBrightness: Brightness.light,
+            systemNavigationBarIconBrightness: Brightness.light,
+            systemNavigationBarColor: Colors.blueAccent.shade700,
+          ),
         ),
         body: BlocListener<ChallengesCubit, ChallengesState>(
           bloc: _challengesCubit,
@@ -141,7 +152,11 @@ class WaitingContentWidget extends StatelessWidget {
         children: [
           const Text(
             'في انتظار انضمام لاعب آخر...',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
           const SizedBox(height: 40),
           CustomButtonWidget(

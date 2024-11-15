@@ -114,7 +114,7 @@ class AppNavigation {
         return _moveRoute(
           settings: settings,
           view: GamesScreen(
-            topic: query['topic'] as String,
+            topic: query['topic'] as TopicModel,
           ),
         );
 
