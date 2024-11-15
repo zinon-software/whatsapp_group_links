@@ -86,6 +86,8 @@ class AppThemes {
           foregroundColor: Colors.white,
           centerTitle: true,
           systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness: Brightness.light,
             systemNavigationBarColor: ColorsManager.container,
             systemNavigationBarIconBrightness: Brightness.dark,
           ),

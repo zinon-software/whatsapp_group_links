@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:linkati/config/app_injector.dart';
 import 'package:linkati/features/challenges/data/models/game_model.dart';
@@ -73,7 +74,8 @@ class _GameScreenState extends State<GameScreen> {
             _currentQuestion = _getCurrentQuestion(game);
 
             isPlayerTurn = game.currentTurnPlayerId ==
-                FirebaseAuth.instance.currentUser!.uid;
+                    FirebaseAuth.instance.currentUser!.uid ||
+                game.isWithAi;
           }
 
           // التحقق من انتهاء الأسئلة
@@ -100,6 +102,7 @@ class _GameScreenState extends State<GameScreen> {
                       PlayerWidget(
                         isMe: isMePlayer1,
                         isHost: game.currentTurnPlayerId == game.player1.userId,
+                        isAi: false,
                         player: game.player1,
                         usersCubit: _usersCubit,
                         gameId: game.id,
@@ -117,6 +120,7 @@ class _GameScreenState extends State<GameScreen> {
                         isMe: !isMePlayer1,
                         isHost:
                             game.currentTurnPlayerId == game.player2!.userId,
+                        isAi: game.isWithAi,
                         player: game.player2!,
                         usersCubit: _usersCubit,
                         gameId: game.id,
@@ -216,7 +220,7 @@ class _GameScreenState extends State<GameScreen> {
     bool isLastQuestion =
         game.currentQuestionNumber == widget.questions.length - 1;
 
-    if (isCorrect && !isLastQuestion) {
+    if ((isCorrect || game.isWithAi) && !isLastQuestion) {
       // next question
       _currentQuestion = widget.questions[game.currentQuestionNumber + 1];
     }
@@ -224,12 +228,19 @@ class _GameScreenState extends State<GameScreen> {
     game = game.copyWith(
       player1: isMePlayer1
           ? game.player1.copyWith(
-              score: isCorrect ? game.player1.score + 1 : game.player1.score)
+              score: isCorrect ? game.player1.score + 1 : game.player1.score,
+            )
           : game.player1,
-      player2: isMePlayer1
-          ? game.player2
-          : game.player2!.copyWith(
-              score: isCorrect ? game.player2!.score + 1 : game.player2!.score),
+      player2: game.isWithAi
+          ? game.player2!.copyWith(
+              score: !isCorrect ? game.player2!.score + 1 : game.player2!.score,
+            )
+          : isMePlayer1
+              ? game.player2
+              : game.player2!.copyWith(
+                  score:
+                      isCorrect ? game.player2!.score + 1 : game.player2!.score,
+                ),
       correctAnswerPlayer1: isCorrect
           ? null
           : isMePlayer1
@@ -245,13 +256,21 @@ class _GameScreenState extends State<GameScreen> {
           : isMePlayer1
               ? game.player2?.userId
               : game.player1.userId,
-      currntQuestionId: isCorrect ? _currentQuestion.id : game.currntQuestionId,
-      currentQuestionNumber: isCorrect
+      currntQuestionId: isCorrect || game.isWithAi
+          ? _currentQuestion.id
+          : game.currntQuestionId,
+      currentQuestionNumber: isCorrect || game.isWithAi
           ? game.currentQuestionNumber + 1
           : game.currentQuestionNumber,
     );
 
     _challengesCubit.updateGameEvent(game);
+
+    if (isCorrect) {
+      _usersCubit.incrementScoreEvent(
+        FirebaseAuth.instance.currentUser!.uid,
+      );
+    }
   }
 
   Future<bool> _showExitConfirmationDialog(BuildContext context) async {
@@ -284,51 +303,75 @@ class WinnerView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String winnerMessage;
+    IconData winnerIcon;
+    Color backgroundColor;
+
     if (game.player1.score > (game.player2?.score ?? 0)) {
-      winnerMessage = "اللاعب الأول فاز!";
+      winnerMessage = "🎉 تهانينا! لقد فزت!";
+      winnerIcon = Icons.emoji_events;
+      backgroundColor = Colors.greenAccent.shade100;
     } else if (game.player2 != null &&
         game.player2!.score > game.player1.score) {
-      winnerMessage = "اللاعب الثاني فاز!";
+      winnerMessage = "😞 لم تفز هذه المرة. حاول مجدداً!";
+      winnerIcon = Icons.sentiment_dissatisfied;
+      backgroundColor = Colors.redAccent.shade100;
     } else {
-      winnerMessage = "التعادل!";
+      winnerMessage = "🤝 إنها تعادل!";
+      winnerIcon = Icons.handshake;
+      backgroundColor = Colors.blueAccent.shade100;
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('النتيجة'),
-        centerTitle: true,
+        title: const Text('النتيجة'),
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.light,
+        ),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'نتيجة اللعبة',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+      body: Container(
+        color: backgroundColor,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                winnerIcon,
+                size: 80,
+                color: Colors.white,
               ),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              winnerMessage,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+              const SizedBox(height: 20),
+              Text(
+                'نتيجة اللعبة',
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            CustomButtonWidget(
-              label: 'اغلاق',
-              radius: 10,
-              height: 50,
-              width: 200,
-              onPressed: () {
-                challengesCubit.endGameEvent(game);
-                Navigator.pop(context);
-              },
-            ),
-          ],
+              const SizedBox(height: 20),
+              Text(
+                winnerMessage,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              CustomButtonWidget(
+                label: 'إغلاق',
+                radius: 10,
+                height: 50,
+                width: 200,
+                onPressed: () {
+                  challengesCubit.endGameEvent(game);
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

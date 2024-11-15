@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/user_model.dart';
 
 abstract class UsersDatasources {
+  Future<List<UserModel>> fetchUsers();
   Future<UserModel> fetchUser(String id);
   Future<String> createUser(UserModel request);
   Future<String> updateUser(UserModel request);
@@ -12,6 +13,9 @@ abstract class UsersDatasources {
     String feild,
     bool newStatus,
   );
+
+  Future<String> incrementScore(String uid);
+
 }
 
 class UsersDatasourcesImpl implements UsersDatasources {
@@ -31,7 +35,7 @@ class UsersDatasourcesImpl implements UsersDatasources {
       final user = UserModel.fromJson(
         snapshot.data() as Map<String, dynamic>,
       );
-      
+
       return user;
     } catch (e) {
       rethrow;
@@ -66,6 +70,33 @@ class UsersDatasourcesImpl implements UsersDatasources {
         'permissions.$feild': newStatus,
       });
       return "تم تحديث حالة التصريح بنجاح";
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<String> incrementScore(String uid) async {
+    try {
+      UserModel user = await fetchUser(uid);
+
+      await users
+          .doc(uid)
+          .update(user.copyWith(score: user.score + 1).toJson());
+
+      return "تم تحديث حالة التصريح بنجاح";
+    } catch (e) {
+      rethrow;
+    }
+  }
+  
+  @override
+  Future<List<UserModel>> fetchUsers()  async {
+    try {
+      QuerySnapshot snapshot = await users.get();
+      return snapshot.docs
+          .map((doc) => UserModel.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
     } catch (e) {
       rethrow;
     }

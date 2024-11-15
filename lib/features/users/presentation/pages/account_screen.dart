@@ -13,6 +13,7 @@ class AccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final UsersCubit usersCubit = context.read<UsersCubit>();
+    usersCubit.fetchMyUserAccount();
     return Scaffold(
       appBar: AppBar(
         title: const Text("الحساب"),

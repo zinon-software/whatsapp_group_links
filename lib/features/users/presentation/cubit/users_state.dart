@@ -59,3 +59,18 @@ class UpdateUserErrorState extends UsersState {
   final String error;
   const UpdateUserErrorState(this.error);
 }
+
+
+class FetchUsersLoadingState extends UsersState {
+  const FetchUsersLoadingState();
+}
+
+class FetchUsersSuccessState extends UsersState {
+  final List<UserModel> users;
+  const FetchUsersSuccessState(this.users);
+}
+
+class FetchUsersErrorState extends UsersState {
+  final String error;
+  const FetchUsersErrorState(this.error);
+}

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:linkati/core/widgets/alert_widget.dart';
+import 'package:linkati/core/widgets/custom_button_widget.dart';
 import 'package:linkati/features/challenges/data/models/question_model.dart';
 import 'package:linkati/features/challenges/presentation/cubit/challenges_cubit.dart';
 
@@ -66,8 +67,38 @@ class _GamesScreenState extends State<GamesScreen> {
               return Center(child: Text('خطأ: ${snapshot.error}'));
             }
             if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-              return const Center(
-                child: Text('لا يوجد روابط'),
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'لا توجد بيانات',
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                    const SizedBox(height: 40),
+                    CustomButtonWidget(
+                      label: 'انشاء تحدي جديدة',
+                      onPressed: () {
+                        _challengesCubit.createGameEvent(
+                          GameModel(
+                            id: '',
+                            player1: PlayerModel(
+                              userId: _usersCubit.currentUser!.id,
+                              user: _usersCubit.currentUser!,
+                              score: 0,
+                            ),
+                            topic: widget.topic,
+                            currentTurnPlayerId: null,
+                            currntQuestionId: questions.first.id,
+                            currentQuestionNumber: 0,
+                            startedAt: DateTime.now(),
+                            duration: const Duration(minutes: 30),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               );
             }
             if (snapshot.hasData) {

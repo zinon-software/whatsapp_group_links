@@ -68,6 +68,9 @@ class GameCardWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               PlayerWidget(
+                isMe: game.player1.userId == usersCubit.currentUser!.id,
+                isAi: false,
+                isHost: game.currentTurnPlayerId == game.player1.userId,
                 player: game.player1,
                 usersCubit: usersCubit,
                 gameId: game.id,
@@ -83,6 +86,9 @@ class GameCardWidget extends StatelessWidget {
               ),
               if (game.player2?.userId != null)
                 PlayerWidget(
+                  isMe: game.player2!.userId == usersCubit.currentUser!.id,
+                  isAi: game.isWithAi,
+                  isHost: game.currentTurnPlayerId == game.player2!.userId,
                   player: game.player2!,
                   usersCubit: usersCubit,
                   gameId: game.id,

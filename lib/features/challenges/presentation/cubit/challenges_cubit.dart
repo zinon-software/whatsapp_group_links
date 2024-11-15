@@ -115,23 +115,35 @@ class ChallengesCubit extends Cubit<ChallengesState> {
   }
 
   Future<void> startGameWithAiEvent(GameModel game) async {
-    emit(ManageGameLoadingState());
+    game = game.copyWith(
+      isWithAi: true,
+      player2: PlayerModel(
+        userId: 'none',
+        score: 0,
+      ),
+      startedAt: DateTime.now(),
+    );
+    emit(GoToGameState(game: game));
 
-    (await repository.startGameWithAi(game.copyWith(isWithAi: true))).fold(
-      (failure) {
-        emit(ManageGameErrorState(failure));
-      },
-      (response) {
-        emit(ManageGameSuccessState(game: response));
-      },
+    (await repository.startGameWithAi(game)).fold(
+      (failure) {},
+      (response) {},
     );
   }
 
   Future<void> endGameEvent(GameModel game) async {
     // emit(ManageGameLoadingState());
 
-    (await repository.endGameEvent(game.copyWith(endedAt: DateTime.now())))
-        .fold(
+    // (await repository.endGame(game.copyWith(endedAt: DateTime.now()))).fold(
+    //   (failure) {
+    //     // emit(ManageGameErrorState(failure));
+    //   },
+    //   (response) {
+    //     // emit(ManageGameSuccessState(game: response));
+    //   },
+    // );
+
+    (await repository.deleteGame(game.id)).fold(
       (failure) {
         // emit(ManageGameErrorState(failure));
       },
@@ -140,7 +152,6 @@ class ChallengesCubit extends Cubit<ChallengesState> {
       },
     );
   }
-
 
   void updateGameEvent(GameModel game) async {
     // emit(ManageGameLoadingState());

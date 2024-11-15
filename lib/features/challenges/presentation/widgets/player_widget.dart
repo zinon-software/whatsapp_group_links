@@ -16,12 +16,14 @@ class PlayerWidget extends StatefulWidget {
     required this.gameId,
     this.isHost = false,
     this.isMe = false,
+    this.isAi = false,
   });
   final PlayerModel player;
   final UsersCubit usersCubit;
   final String gameId;
   final bool isHost;
   final bool isMe;
+  final bool isAi;
 
   @override
   State<PlayerWidget> createState() => _PlayerWidgetState();
@@ -34,7 +36,16 @@ class _PlayerWidgetState extends State<PlayerWidget> {
   void initState() {
     super.initState();
 
-    if (user == null) {
+    if (widget.isAi) {
+      user = UserModel.isEmpty().copyWith(
+        id: widget.player.userId,
+        name: 'AI',
+        phoneNumber: '1234567890',
+        photoUrl:
+            'https://static.vecteezy.com/system/resources/previews/010/518/719/non_2x/artificial-intelligence-ai-processor-chip-icon-symbol-for-graphic-design-logo-website-social-media-mobile-app-ui-illustration-vector.jpg',
+        score: widget.player.score,
+      );
+    } else if (user == null) {
       if (widget.player.user == null) {
         widget.usersCubit.fetchPlayerUserEvent(
           userId: widget.player.userId,

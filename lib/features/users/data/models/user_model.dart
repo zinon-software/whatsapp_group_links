@@ -8,6 +8,7 @@ class UserModel {
   final String phoneNumber;
   final PermissionModel permissions;
   final int score;
+  final double coins;
   final String? country;
 
   UserModel({
@@ -20,6 +21,7 @@ class UserModel {
     required this.phoneNumber,
     required this.permissions,
     this.score = 0,
+    this.coins = 0,
     this.country,
   });
 
@@ -39,6 +41,7 @@ class UserModel {
         json['permissions'] as Map<String, dynamic>,
       ),
       score: json['score'] ?? 0,
+      coins: json['coins'] ?? 0,
       country: json['country'],
     );
   }
@@ -55,6 +58,7 @@ class UserModel {
       'phone_number': phoneNumber,
       "permissions": permissions.toJson(),
       'score': score,
+      'coins': coins,
       'country': country,
     };
   }
@@ -69,6 +73,7 @@ class UserModel {
     String? phoneNumber,
     PermissionModel? permissions,
     int? score,
+    double? coins,
     String? country,
   }) {
     return UserModel(
@@ -81,6 +86,7 @@ class UserModel {
       phoneNumber: phoneNumber ?? this.phoneNumber,
       permissions: permissions ?? this.permissions,
       score: score ?? this.score,
+      coins: coins ?? this.coins,
       country: country ?? this.country,
     );
   }
@@ -95,6 +101,7 @@ class UserModel {
       lastLoginAt: DateTime.now(),
       phoneNumber: '',
       permissions: PermissionModel(),
+      
     );
   }
 }

@@ -14,12 +14,12 @@ abstract class ChallengesDatasources {
   Future<GameModel> joinGameEvent(GameModel game);
   Future<GameModel> startGameWithAi(GameModel game);
   Future<GameModel> endGameEvent(GameModel game);
+  Future<GameModel> updateGame(GameModel game);
+  Future<String> deleteGame(String id);
   // topics
   Future<String> createTopic(TopicModel topic);
   Future<String> updateTopic(TopicModel topic);
   Future<List<TopicModel>> fetchTopics();
-
-  Future<GameModel> updateGame(GameModel game);
 }
 
 class ChallengesDatasourcesImpl implements ChallengesDatasources {
@@ -163,12 +163,27 @@ class ChallengesDatasourcesImpl implements ChallengesDatasources {
       rethrow;
     }
   }
-  
+
   @override
   Future<GameModel> updateGame(GameModel game) async {
     try {
       await games.doc(game.id).update(game.toJson());
       return game;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<String> deleteGame(String id) async {
+    try {
+      // check if the game exists
+      final doc = await games.doc(id).get();
+      if (!doc.exists) {
+        return 'Game not found';
+      }
+      await doc.reference.delete();
+      return 'success';
     } catch (e) {
       rethrow;
     }

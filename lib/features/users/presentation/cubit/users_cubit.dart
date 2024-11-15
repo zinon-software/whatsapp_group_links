@@ -104,7 +104,6 @@ class UsersCubit extends Cubit<UsersState> {
         emit(UpdateUserSuccessState(response));
       },
     );
-   
   }
 
   void signOut() {
@@ -131,6 +130,21 @@ class UsersCubit extends Cubit<UsersState> {
         user: data,
         gameId: gameId,
       )),
+    );
+  }
+
+  void incrementScoreEvent(String uid) async {
+    (await repository.incrementScore(uid)).fold(
+      (error) => null,
+      (data) => null,
+    );
+  }
+
+  void fetchUsers() async {
+    emit(FetchUsersLoadingState());
+    (await repository.fetchUsers()).fold(
+      (error) => emit(FetchUsersErrorState(error)),
+      (data) => emit(FetchUsersSuccessState(data)),
     );
   }
 }

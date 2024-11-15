@@ -64,9 +64,11 @@ class _WaitingForPlayerScreenState extends State<WaitingForPlayerScreen> {
                   challengesCubit: _challengesCubit,
                 );
               }
-              game = GameModel.fromJson(
-                snapshot.data!.data() as Map<String, dynamic>,
-              );
+              if (snapshot.data!.data() != null) {
+                game = GameModel.fromJson(
+                  snapshot.data!.data() as Map<String, dynamic>,
+                );
+              }
               if (game.player2 != null) {
                 _challengesCubit.goToGameEvent(
                   game.copyWith(startedAt: DateTime.now()),
@@ -141,12 +143,12 @@ class WaitingContentWidget extends StatelessWidget {
             'في انتظار انضمام لاعب آخر...',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 40),
           CustomButtonWidget(
-            label: 'العب ضد البوت',
+            label: 'العب ضد الذكاء الاصطناعي',
             radius: 10,
             height: 50,
-            width: 200,
+            width: 250,
             onPressed: () {
               challengesCubit.startGameWithAiEvent(game);
             },
@@ -156,7 +158,7 @@ class WaitingContentWidget extends StatelessWidget {
             label: 'إلغاء اللعبة',
             radius: 10,
             height: 50,
-            width: 200,
+            width: 250,
             onPressed: () {
               challengesCubit.endGameEvent(game);
               Navigator.pop(context);
