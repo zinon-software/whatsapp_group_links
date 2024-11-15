@@ -34,13 +34,15 @@ class _PlayerWidgetState extends State<PlayerWidget> {
   void initState() {
     super.initState();
 
-    if (widget.player.user == null) {
-      widget.usersCubit.fetchPlayerUserEvent(
-        userId: widget.player.userId,
-        gameId: widget.gameId,
-      );
-    } else {
-      user = widget.player.user;
+    if (user == null) {
+      if (widget.player.user == null) {
+        widget.usersCubit.fetchPlayerUserEvent(
+          userId: widget.player.userId,
+          gameId: widget.gameId,
+        );
+      } else {
+        user = widget.player.user;
+      }
     }
   }
 
@@ -49,6 +51,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     return BlocBuilder<UsersCubit, UsersState>(
       bloc: widget.usersCubit,
       buildWhen: (previous, current) {
+        if (user != null) return false;
         if (current is FetchPlayerUserSuccessState) {
           return current.gameId == widget.gameId &&
               current.user.id == widget.player.userId;
@@ -148,7 +151,7 @@ class PlayerDataWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 140,
+      width: MediaQuery.of(context).size.width / 3,
       padding: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
         color: isMe ? Colors.blue[50] : Colors.white,
@@ -172,11 +175,11 @@ class PlayerDataWidget extends StatelessWidget {
             alignment: Alignment.topRight,
             children: [
               CircleAvatar(
-                radius: 50,
+                radius: 40,
                 backgroundColor: Colors.transparent,
                 child: CustomCachedNetworkImage(
                   user.photoUrl,
-                  borderRadius: 50,
+                  borderRadius: 40,
                 ),
               ),
               if (isHost)

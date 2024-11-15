@@ -166,7 +166,6 @@ class AppNavigation {
     required Widget view,
     required RouteSettings settings,
   }) {
-    appReview();
 
     return PageRouteBuilder(
       settings: settings,
@@ -189,13 +188,6 @@ class AppNavigation {
   }
 }
 
-appReview() async {
-  final InAppReview inAppReview = InAppReview.instance;
-
-  if (await inAppReview.isAvailable()) {
-    inAppReview.requestReview();
-  }
-}
 
 class NoRouteFound extends StatelessWidget {
   const NoRouteFound({super.key, required this.routeName});

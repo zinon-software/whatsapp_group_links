@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:linkati/core/routes/app_routes.dart';
 import 'package:linkati/core/utils/color_manager.dart';
 import 'package:linkati/core/widgets/alert_widget.dart';
@@ -32,6 +33,15 @@ class _HomeScreenState extends State<HomeScreen> {
     _adsManager = AdsManager();
     _adsManager.loadRewardedAd();
     _adsManager.loadNativeAd();
+    appReview();
+  }
+
+  appReview() async {
+    final InAppReview inAppReview = InAppReview.instance;
+
+    if (await inAppReview.isAvailable()) {
+      inAppReview.requestReview();
+    }
   }
 
   @override
@@ -276,4 +286,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-

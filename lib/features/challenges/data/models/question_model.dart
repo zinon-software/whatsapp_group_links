@@ -32,4 +32,19 @@ class QuestionModel {
       'correct_answer': correctAnswer,
     };
   }
+
+  static QuestionModel isEmpty() {
+    return QuestionModel(
+      id: '',
+      topic: '',
+      question: '',
+      options: [
+        '',
+        '',
+        '',
+        '',
+      ],
+      correctAnswer: '',
+    );
+  }
 }

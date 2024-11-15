@@ -93,8 +93,8 @@ class GameModel {
       topic: topic ?? this.topic,
       currentTurnPlayerId: currentTurnPlayerId,
       currntQuestionId: currntQuestionId ?? this.currntQuestionId,
-      correctAnswerPlayer1: correctAnswerPlayer1 ?? this.correctAnswerPlayer1,
-      correctAnswerPlayer2: correctAnswerPlayer2 ?? this.correctAnswerPlayer2,
+      correctAnswerPlayer1: correctAnswerPlayer1,
+      correctAnswerPlayer2: correctAnswerPlayer2,
       currentQuestionNumber:
           currentQuestionNumber ?? this.currentQuestionNumber,
       startedAt: startedAt ?? this.startedAt,

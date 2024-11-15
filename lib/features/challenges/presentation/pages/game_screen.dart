@@ -50,6 +50,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   QuestionModel _getCurrentQuestion(GameModel game) {
+    if (widget.questions.isEmpty) return QuestionModel.isEmpty();
     return widget.questions.firstWhere(
       (question) => question.id == game.currntQuestionId,
       orElse: () => widget.questions.first,
@@ -65,14 +66,6 @@ class _GameScreenState extends State<GameScreen> {
       child: StreamBuilder<DocumentSnapshot>(
         stream: instance<AppCollections>().games.doc(game.id).snapshots(),
         builder: (context, snapshot) {
-          // if (snapshot.hasError) {
-          //   return Scaffold(body: Center(child: Text('خطأ في تحميل البيانات')));
-          // }
-          // if (snapshot.connectionState == ConnectionState.waiting &&
-          //     _currentQuestion == null) {
-          //   return Scaffold(body: Center(child: CircularProgressIndicator()));
-          // }
-
           if (snapshot.hasData && snapshot.data!.data() != null) {
             game = GameModel.fromJson(
               snapshot.data!.data() as Map<String, dynamic>,
@@ -84,7 +77,8 @@ class _GameScreenState extends State<GameScreen> {
           }
 
           // التحقق من انتهاء الأسئلة
-          if (game.currentQuestionNumber >= widget.questions.length) {
+          if (game.currentQuestionNumber >= widget.questions.length ||
+              game.endedAt != null) {
             return WinnerView(game: game, challengesCubit: _challengesCubit);
           }
 
@@ -169,18 +163,14 @@ class _GameScreenState extends State<GameScreen> {
                                 if (game.correctAnswerPlayer1 ==
                                     _currentQuestion.options[index])
                                   Icon(
-                                    Icons.check,
-                                    color: isPlayerTurn
-                                        ? Colors.green
-                                        : Colors.grey,
+                                    Icons.close,
+                                    color: Colors.red,
                                   ),
                                 if (game.correctAnswerPlayer2 ==
                                     _currentQuestion.options[index])
                                   Icon(
-                                    Icons.check,
-                                    color: isPlayerTurn
-                                        ? Colors.green
-                                        : Colors.grey,
+                                    Icons.close,
+                                    color: Colors.red,
                                   ),
                               ],
                             ),
@@ -194,7 +184,11 @@ class _GameScreenState extends State<GameScreen> {
                     radius: 100,
                     height: 60,
                     width: 60,
-                    backgroundColor: isPlayerTurn ? Colors.green : Colors.grey,
+                    backgroundColor: isPlayerTurn
+                        ? Colors.green
+                        : game.currentTurnPlayerId != null
+                            ? Colors.red
+                            : Colors.grey,
                     enableClick: game.currentTurnPlayerId == null,
                     onPressed: game.currentTurnPlayerId == null
                         ? () {
@@ -236,14 +230,16 @@ class _GameScreenState extends State<GameScreen> {
           ? game.player2
           : game.player2!.copyWith(
               score: isCorrect ? game.player2!.score + 1 : game.player2!.score),
-      correctAnswerPlayer1:
-          isCorrect && game.currentTurnPlayerId == game.player1.userId
+      correctAnswerPlayer1: isCorrect
+          ? null
+          : isMePlayer1
               ? answer
               : game.correctAnswerPlayer1,
-      correctAnswerPlayer2:
-          isCorrect && game.currentTurnPlayerId == game.player2?.userId
-              ? answer
-              : game.correctAnswerPlayer2,
+      correctAnswerPlayer2: isCorrect
+          ? null
+          : isMePlayer1
+              ? game.correctAnswerPlayer2
+              : answer,
       currentTurnPlayerId: isCorrect
           ? null
           : isMePlayer1
@@ -254,6 +250,7 @@ class _GameScreenState extends State<GameScreen> {
           ? game.currentQuestionNumber + 1
           : game.currentQuestionNumber,
     );
+
     _challengesCubit.updateGameEvent(game);
   }
 
