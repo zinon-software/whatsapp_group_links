@@ -53,9 +53,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (route, result) {},
+    // ignore: deprecated_member_use
+    return WillPopScope(
+      onWillPop: () async {
+        return await AppAlert.showExitConfirmationDialog(context,
+            subTitle: "هل تريد الخروج من التطبيق؟");
+      },
       child: Scaffold(
         appBar: AppBar(
           title: const Center(child: Text("مجموعاتي")),

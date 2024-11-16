@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:linkati/core/widgets/custom_skeletonizer_widget.dart';
 
+import '../../../../core/ads/ads_manager.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/utils/color_manager.dart';
 import '../../../users/presentation/cubit/users_cubit.dart';
@@ -19,6 +20,7 @@ class TopicsScreen extends StatefulWidget {
 class _TopicsScreenState extends State<TopicsScreen> {
   late final UsersCubit _usersCubit;
   late final ChallengesCubit _challengesCubit;
+  late final AdsManager _adsManager;
 
   @override
   void initState() {
@@ -26,6 +28,8 @@ class _TopicsScreenState extends State<TopicsScreen> {
     _challengesCubit = context.read<ChallengesCubit>();
     super.initState();
     _challengesCubit.fetchTopicsEvent();
+    _adsManager = AdsManager();
+    _adsManager.loadRewardedAd();
   }
 
   @override
@@ -62,6 +66,7 @@ class _TopicsScreenState extends State<TopicsScreen> {
                       return TopicCardWidget(
                         topic: TopicModel.empty(),
                         usersCubit: _usersCubit,
+                        adsManager: _adsManager,
                       );
                     },
                   ),
@@ -88,6 +93,7 @@ class _TopicsScreenState extends State<TopicsScreen> {
                   return TopicCardWidget(
                     topic: topic,
                     usersCubit: _usersCubit,
+                    adsManager: _adsManager,
                   );
                 },
               );

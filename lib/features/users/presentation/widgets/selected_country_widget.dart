@@ -48,6 +48,12 @@ class SelectedCountryWidget extends StatelessWidget {
           );
         },
       ).toList(),
+      validator: (value) {
+        if (value == null) {
+          return 'يرجى اختيار دولة';
+        }
+        return null;
+      },
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:linkati/core/ads/ads_manager.dart';
 import 'package:linkati/core/widgets/alert_widget.dart';
 import 'package:linkati/core/widgets/custom_button_widget.dart';
 import 'package:linkati/core/widgets/custom_cached_network_image_widget.dart';
@@ -13,10 +14,12 @@ class TopicCardWidget extends StatelessWidget {
     super.key,
     required this.topic,
     required this.usersCubit,
+    required this.adsManager,
   });
 
   final TopicModel topic;
   final UsersCubit usersCubit;
+  final AdsManager adsManager;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +28,7 @@ class TopicCardWidget extends StatelessWidget {
         if (usersCubit.currentUser?.country == null) {
           AppAlert.showAlert(
             context,
-            subTitle: 'يرجى تحديد الدولتك',
+            subTitle: 'يرجى تحديد دولتك',
             confirmText: 'تحديد الدولة',
             onConfirm: () {
               Navigator.pushNamed(
@@ -38,6 +41,9 @@ class TopicCardWidget extends StatelessWidget {
               ).then(
                 (value) {
                   if (usersCubit.currentUser?.country != null) {
+                    adsManager.showRewardedAd();
+                    // ignore: use_build_context_synchronously
+                    AppAlert.dismissDialog(context);
                     // ignore: use_build_context_synchronously
                     Navigator.of(context).pushNamed(
                       AppRoutes.gamesRoute,
@@ -49,6 +55,7 @@ class TopicCardWidget extends StatelessWidget {
             },
           );
         } else {
+          adsManager.showRewardedAd();
           Navigator.of(context).pushNamed(
             AppRoutes.gamesRoute,
             arguments: {'topic': topic},

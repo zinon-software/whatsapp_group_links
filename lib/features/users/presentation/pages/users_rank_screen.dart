@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:linkati/core/utils/color_manager.dart';
+import 'package:linkati/core/widgets/custom_button_widget.dart';
 import 'package:linkati/features/users/presentation/cubit/users_cubit.dart';
 
+import '../../../../core/routes/app_routes.dart';
 import '../../../../core/widgets/custom_cached_network_image_widget.dart';
 import '../../../users/data/models/user_model.dart';
 
@@ -67,7 +69,7 @@ class _UsersRankScreenState extends State<UsersRankScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: 230,
+                  height: 250,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -101,19 +103,26 @@ class _UsersRankScreenState extends State<UsersRankScreen> {
                     itemBuilder: (context, index) {
                       final user = users[index];
                       final bool isMe = user.id == _usersCubit.currentUser?.id;
-                      return Card(
-                        margin: const EdgeInsets.all(8.0),
-                        color: Colors.white,
-                        child: ListTile(
-                          tileColor: isMe ? ColorsManager.primaryLight : null,
-                          leading: CircleAvatar(
-                            backgroundColor: ColorsManager.primaryLight,
-                            child: CustomCachedNetworkImage(user.photoUrl),
+                      return Column(
+                        children: [
+                          Card(
+                            margin: const EdgeInsets.all(8.0),
+                            color: Colors.white,
+                            child: ListTile(
+                              tileColor:
+                                  isMe ? ColorsManager.primaryLight : null,
+                              leading: CircleAvatar(
+                                backgroundColor: ColorsManager.primaryLight,
+                                child: CustomCachedNetworkImage(user.photoUrl),
+                              ),
+                              title: Text(user.name),
+                              subtitle: Text(user.country ?? ''),
+                              trailing: Text("+${user.score}"),
+                            ),
                           ),
-                          title: Text(user.name),
-                          subtitle: Text(user.country ?? ''),
-                          trailing: Text("+${user.score}"),
-                        ),
+                          if (index == users.length - 1)
+                            const SizedBox(height: 100),
+                        ],
                       );
                     },
                   ),
@@ -125,6 +134,24 @@ class _UsersRankScreenState extends State<UsersRankScreen> {
           return Container();
         },
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: _usersCubit.currentUser == null
+          ? Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CustomButtonWidget(
+                width: double.infinity,
+                onPressed: () {
+                  Navigator.of(context).popAndPushNamed(
+                    AppRoutes.loginRoute,
+                    arguments: {
+                      "next_route": AppRoutes.usersRankRoute,
+                    },
+                  );
+                },
+                label: 'تسجيل الدخول',
+              ),
+            )
+          : null,
     );
   }
 }
@@ -162,6 +189,7 @@ class UserRankCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            const Spacer(),
             Stack(
               alignment: Alignment.center,
               children: [
@@ -184,6 +212,7 @@ class UserRankCard extends StatelessWidget {
                 ),
               ],
             ),
+            const Spacer(),
             const SizedBox(height: 10),
             Text(
               user.name,

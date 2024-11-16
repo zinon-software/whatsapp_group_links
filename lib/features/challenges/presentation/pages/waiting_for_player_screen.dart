@@ -40,7 +40,10 @@ class _WaitingForPlayerScreenState extends State<WaitingForPlayerScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        return await _showExitConfirmationDialog(context);
+        return await AppAlert.showExitConfirmationDialog(context).then((value) {
+          if (value) _challengesCubit.endGameEvent(widget.game);
+          return value;
+        });
       },
       child: Scaffold(
         backgroundColor: Colors.blueAccent.shade700,
@@ -115,22 +118,6 @@ class _WaitingForPlayerScreenState extends State<WaitingForPlayerScreen> {
         Navigator.of(context).pop();
       });
     }
-  }
-
-  Future<bool> _showExitConfirmationDialog(BuildContext context) async {
-    return await AppAlert.showAlert(
-      context,
-      title: 'تأكيد الخروج',
-      subTitle: 'هل تريد الخروج من اللعبة؟',
-      confirmText: 'نعم، خروج',
-      dismissOn: false,
-      onConfirm: () {
-        _challengesCubit.endGameEvent(widget.game);
-        Navigator.of(context).pop(true);
-      },
-      cancelText: 'اغلاق',
-      onCancel: () => Navigator.of(context).pop(false),
-    );
   }
 }
 

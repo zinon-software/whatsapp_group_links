@@ -89,11 +89,11 @@ class AppAlert {
               title,
               style: TextStyle(
                 color: ColorsManager.black,
-                fontSize: 15,
+                fontSize: 16,
               ),
             ),
           ],
-          SizedBox(height: 5),
+          SizedBox(height: 10),
           InkWell(
             onTap: () {
               Clipboard.setData(ClipboardData(text: subTitle));
@@ -176,4 +176,22 @@ class AppAlert {
       dismissOnBackKeyPress: dismissOn,
     ).show();
   }
+
+  
+
+  static Future<bool> showExitConfirmationDialog(BuildContext context, {String? subTitle}) async {
+    return await showAlert(
+      context,
+      title: 'تأكيد الخروج',
+      subTitle: subTitle?? 'هل تريد الخروج من اللعبة؟',
+      confirmText: 'نعم، خروج',
+      dismissOn: false,
+      onConfirm: () {
+        Navigator.of(context).pop(true);
+      },
+      cancelText: 'اغلاق',
+      onCancel: () => Navigator.of(context).pop(false),
+    );
+  }
+  
 }
