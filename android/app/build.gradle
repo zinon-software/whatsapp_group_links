@@ -78,6 +78,10 @@ dependencies {
     implementation("androidx.window:window-java:1.0.0")
 
     implementation("com.google.firebase:firebase-analytics:22.1.2")
+
+
+    // إضافة مكتبة Play Integrity API
+    implementation("com.google.android.play:integrity:1.4.0")
 }
 
 
