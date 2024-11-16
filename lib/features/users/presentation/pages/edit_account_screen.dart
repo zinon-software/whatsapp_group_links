@@ -70,12 +70,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                 CustomTextField(
                   controller: _phoneController,
                   labelText: 'رقم الجوال',
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'يرجى إدخال رقم الجوال';
-                    }
-                    return null;
-                  },
+                  isNotValidator: true,
                 ),
                 SizedBox(height: 10),
                 SelectedCountryWidget(

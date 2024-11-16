@@ -465,10 +465,10 @@ packages:
     dependency: transitive
     description:
       name: google_identity_services_web
-      sha256: "304e2a4c25d84c287df6d7ebf5b93d8bbd4ceb817d96c2686d44f6a346f227b6"
+      sha256: "55580f436822d64c8ff9a77e37d61f5fb1e6c7ec9d632a43ee324e2a05c3c6c9"
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.1+5"
+    version: "0.3.3"
   google_mobile_ads:
     dependency: "direct main"
     description:
@@ -761,10 +761,10 @@ packages:
     dependency: transitive
     description:
       name: rive
-      sha256: "468f0880d49c513e09fdfba26e4abd9d50433c2cf398210b62948d8de3837dd5"
+      sha256: b44b62feb908610ca6c85e05f4573a66118a23867425926cf06152d171236141
       url: "https://pub.dev"
     source: hosted
-    version: "0.13.15"
+    version: "0.13.17"
   rive_common:
     dependency: transitive
     description:
@@ -902,10 +902,10 @@ packages:
     dependency: transitive
     description:
       name: timezone
-      sha256: "2236ec079a174ce07434e89fcd3fcda430025eb7692244139a9cf54fdcf1fc7d"
+      sha256: ffc9d5f4d1193534ef051f9254063fa53d588609418c84299956c3db9383587d
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.4"
+    version: "0.10.0"
   typed_data:
     dependency: transitive
     description:
@@ -942,10 +942,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher_linux
-      sha256: e2b9622b4007f97f504cd64c0128309dfb978ae66adbe944125ed9e1750f06af
+      sha256: "4e9ba368772369e3e08f231d2301b4ef72b9ff87c31192ef471b380ef29a4935"
       url: "https://pub.dev"
     source: hosted
-    version: "3.2.0"
+    version: "3.2.1"
   url_launcher_macos:
     dependency: transitive
     description:
@@ -1062,10 +1062,10 @@ packages:
     dependency: transitive
     description:
       name: webview_flutter_wkwebview
-      sha256: f14ee08021772fed913da8daebcfdeb46be457081e521e93e9918fe6cd1ce9e8
+      sha256: "3be297aa4ca78205abdd284cf55f168c35246c75b3079990ad8ba9d257681a30"
       url: "https://pub.dev"
     source: hosted
-    version: "3.16.1"
+    version: "3.16.2"
   xdg_directories:
     dependency: transitive
     description:

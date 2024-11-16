@@ -107,7 +107,8 @@ class AppAlert {
               ),
             ),
           ),
-          SizedBox(height: 50),
+          SizedBox(height: 20),
+          Divider(),
           Row(
             children: [
               if (onConfirm != null)

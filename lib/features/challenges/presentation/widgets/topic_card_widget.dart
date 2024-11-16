@@ -22,10 +22,38 @@ class TopicCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).pushNamed(
-          AppRoutes.gamesRoute,
-          arguments: {'topic': topic},
-        );
+        if (usersCubit.currentUser?.country == null) {
+          AppAlert.showAlert(
+            context,
+            subTitle: 'يرجى تحديد الدولتك',
+            confirmText: 'تحديد الدولة',
+            onConfirm: () {
+              Navigator.pushNamed(
+                context,
+                AppRoutes.editAccountRoute,
+                arguments: {
+                  'user': usersCubit.currentUser,
+                  'is_edit': usersCubit.currentUser != null,
+                },
+              ).then(
+                (value) {
+                  if (usersCubit.currentUser?.country != null) {
+                    // ignore: use_build_context_synchronously
+                    Navigator.of(context).pushNamed(
+                      AppRoutes.gamesRoute,
+                      arguments: {'topic': topic},
+                    );
+                  }
+                },
+              );
+            },
+          );
+        } else {
+          Navigator.of(context).pushNamed(
+            AppRoutes.gamesRoute,
+            arguments: {'topic': topic},
+          );
+        }
       },
       child: Container(
         decoration: BoxDecoration(
@@ -134,12 +162,6 @@ class TopicCardWidget extends StatelessWidget {
                           return Expanded(
                             child: CustomButtonWidget(
                               width: double.infinity,
-                              onPressed: () {
-                                Navigator.of(context).pushNamed(
-                                  AppRoutes.gamesRoute,
-                                  arguments: {'topic': topic},
-                                );
-                              },
                               label: "المشاركة في التحدي",
                             ),
                           );

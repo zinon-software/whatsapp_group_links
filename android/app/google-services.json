@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "623939344647-6mjr4n6pc53g0ghcuflo0dmfdt83esg9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zainon.whatsapp_group_links",
+            "certificate_hash": "8cfbe5a7090eb911c2884a5b306c39db3005c2dc"
+          }
+        },
+        {
           "client_id": "623939344647-gr6aq5u1gnvmg1vlq3qa32hbn0qqq326.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

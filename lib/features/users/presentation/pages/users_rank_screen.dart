@@ -73,18 +73,21 @@ class _UsersRankScreenState extends State<UsersRankScreen> {
                     children: [
                       Expanded(
                         child: UserRankCard(
+                          isMe: topTwoUser.id == _usersCubit.currentUser?.id,
                           user: topTwoUser,
                           rank: 2,
                         ),
                       ), // المرتبة الثانية
                       Expanded(
                         child: UserRankCard(
+                          isMe: topOneUser.id == _usersCubit.currentUser?.id,
                           user: topOneUser,
                           rank: 1,
                         ),
                       ), // المرتبة الأولى
                       Expanded(
                         child: UserRankCard(
+                          isMe: topThreeUser.id == _usersCubit.currentUser?.id,
                           user: topThreeUser,
                           rank: 3,
                         ),
@@ -97,16 +100,20 @@ class _UsersRankScreenState extends State<UsersRankScreen> {
                     itemCount: users.length,
                     itemBuilder: (context, index) {
                       final user = users[index];
-                      return ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: ColorsManager.primaryLight,
-                          child: Text(
-                            user.name.substring(0, 1).toUpperCase(),
+                      final bool isMe = user.id == _usersCubit.currentUser?.id;
+                      return Card(
+                        margin: const EdgeInsets.all(8.0),
+                        color: Colors.white,
+                        child: ListTile(
+                          tileColor: isMe ? ColorsManager.primaryLight : null,
+                          leading: CircleAvatar(
+                            backgroundColor: ColorsManager.primaryLight,
+                            child: CustomCachedNetworkImage(user.photoUrl),
                           ),
+                          title: Text(user.name),
+                          subtitle: Text(user.country ?? ''),
+                          trailing: Text("+${user.score}"),
                         ),
-                        title: Text(user.name),
-                        subtitle: Text(user.country ?? ''),
-                        trailing: Text("+${user.score}"),
                       );
                     },
                   ),
@@ -125,11 +132,13 @@ class _UsersRankScreenState extends State<UsersRankScreen> {
 class UserRankCard extends StatelessWidget {
   final UserModel user;
   final int rank;
+  final bool isMe;
 
   const UserRankCard({
     super.key,
     required this.user,
     required this.rank,
+    this.isMe = false,
   });
 
   @override
@@ -142,6 +151,7 @@ class UserRankCard extends StatelessWidget {
             : '🥉';
 
     return Card(
+      color: isMe ? ColorsManager.primaryLight : null,
       elevation: 5,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -179,7 +189,6 @@ class UserRankCard extends StatelessWidget {
               user.name,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
-                // fontSize: 16,
               ),
               textAlign: TextAlign.center,
               maxLines: 1,
@@ -189,7 +198,6 @@ class UserRankCard extends StatelessWidget {
               Text(
                 user.country!,
                 style: const TextStyle(
-                  color: Colors.grey,
                   fontSize: 12,
                 ),
                 textAlign: TextAlign.center,

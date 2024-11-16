@@ -15,9 +15,11 @@ class SelectedCountryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // تأكد من أن selectedCountry هو قيمة صالحة
-    final Country selectedValue = countries.firstWhere(
-        (c) => c.getName(lang) == selectedCountryName,
-        orElse: () => countries.first);
+    Country? selectedValue = countries
+        .where(
+          (c) => c.getName(lang) == selectedCountryName,
+        )
+        .firstOrNull;
 
     return DropdownButtonFormField<String>(
       hint: const Text('اختر دولة'),
@@ -30,7 +32,7 @@ class SelectedCountryWidget extends StatelessWidget {
         fillColor: Colors.grey[200],
         contentPadding: const EdgeInsets.all(16),
       ),
-      value: selectedValue.code,
+      value: selectedValue?.code,
       onChanged: (String? selectedCountryCode) {
         if (selectedCountryCode != null) {
           final country =
