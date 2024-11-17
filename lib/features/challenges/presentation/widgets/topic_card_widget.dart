@@ -7,6 +7,7 @@ import 'package:linkati/core/widgets/custom_cached_network_image_widget.dart';
 import 'package:linkati/features/users/presentation/cubit/users_cubit.dart';
 
 import '../../../../core/routes/app_routes.dart';
+import '../../../../core/utils/color_manager.dart';
 import '../../data/models/topic_model.dart';
 
 class TopicCardWidget extends StatelessWidget {
@@ -96,89 +97,109 @@ class TopicCardWidget extends StatelessWidget {
                     SizedBox(
                       height: 10,
                     ),
-                    BlocBuilder<UsersCubit, UsersState>(
-                      bloc: usersCubit,
-                      builder: (context, state) {
-                        if (usersCubit.currentUser?.permissions.isAdmin ??
-                            false) {
-                          return Expanded(
-                            child: CustomButtonWidget(
-                              width: double.infinity,
-                              icon: Icons.more_vert,
-                              label: "أدوات",
-                              onPressed: () {
-                                AppAlert.showAlertWidget(
-                                  context,
-                                  child: Column(
-                                    children: [
-                                      CustomButtonWidget(
-                                        width: double.infinity,
-                                        onPressed: () {
-                                          AppAlert.dismissDialog(context);
-                                          Navigator.of(context).pushNamed(
-                                            AppRoutes.topicFormRoute,
-                                            arguments: {'topic': topic},
-                                          );
-                                        },
-                                        label: "تعديل",
-                                      ),
-                                      SizedBox(height: 10),
-                                      // questionsRoute
-                                      CustomButtonWidget(
-                                        width: double.infinity,
-                                        onPressed: () {
-                                          AppAlert.dismissDialog(context);
-                                          Navigator.of(context).pushNamed(
-                                            AppRoutes.questionsRoute,
-                                            arguments: {'topic': topic.id},
-                                          );
-                                        },
-                                        label: "الاسئلة",
-                                      ),
-                                      SizedBox(height: 10),
-                                      CustomButtonWidget(
-                                        width: double.infinity,
-                                        onPressed: () {
-                                          AppAlert.dismissDialog(context);
-                                          Navigator.of(context).pushNamed(
-                                            AppRoutes.gamesRoute,
-                                            arguments: {'topic': topic},
-                                          );
-                                        },
-                                        label: "المشاركة في التحدي",
-                                      ),
-
-                                      SizedBox(height: 10),
-                                      CustomButtonWidget(
-                                        width: double.infinity,
-                                        onPressed: () {
-                                          AppAlert.dismissDialog(context);
-                                          // usersCubit.deleteTopicEvent(topic.id);
-                                        },
-                                        label: "حذف",
-                                        backgroundColor: Colors.red,
-                                      ),
-                                      SizedBox(height: 10),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                          );
-                        } else {
-                          return Expanded(
-                            child: CustomButtonWidget(
-                              width: double.infinity,
-                              label: "المشاركة في التحدي",
-                            ),
-                          );
-                        }
-                      },
-                    ),
                   ],
                 ),
               ),
-            )
+            ),
+            BlocBuilder<UsersCubit, UsersState>(
+              bloc: usersCubit,
+              builder: (context, state) {
+                if (usersCubit.currentUser?.permissions.isAdmin ?? false) {
+                  return InkWell(
+                    onTap: () {
+                      AppAlert.showAlertWidget(
+                        context,
+                        child: Column(
+                          children: [
+                            Text(
+                              topic.title,
+                              style: const TextStyle(fontSize: 18),
+                            ),
+                            Text("${topic.questionCount} سؤال"),
+                            SizedBox(height: 10),
+                            CustomButtonWidget(
+                              width: double.infinity,
+                              onPressed: () {
+                                AppAlert.dismissDialog(context);
+                                Navigator.of(context).pushNamed(
+                                  AppRoutes.topicFormRoute,
+                                  arguments: {'topic': topic},
+                                );
+                              },
+                              label: "تعديل",
+                            ),
+                            SizedBox(height: 10),
+                            // questionsRoute
+                            CustomButtonWidget(
+                              width: double.infinity,
+                              onPressed: () {
+                                AppAlert.dismissDialog(context);
+                                Navigator.of(context).pushNamed(
+                                  AppRoutes.questionsRoute,
+                                  arguments: {'topic': topic},
+                                );
+                              },
+                              label: "الاسئلة",
+                            ),
+                            SizedBox(height: 10),
+                            CustomButtonWidget(
+                              width: double.infinity,
+                              onPressed: () {
+                                AppAlert.dismissDialog(context);
+                                Navigator.of(context).pushNamed(
+                                  AppRoutes.gamesRoute,
+                                  arguments: {'topic': topic},
+                                );
+                              },
+                              label: "المشاركة في التحدي",
+                            ),
+
+                            SizedBox(height: 10),
+                            CustomButtonWidget(
+                              width: double.infinity,
+                              onPressed: () {
+                                AppAlert.dismissDialog(context);
+                                // usersCubit.deleteTopicEvent(topic.id);
+                              },
+                              label: "حذف",
+                              backgroundColor: Colors.red,
+                            ),
+                            SizedBox(height: 10),
+                          ],
+                        ),
+                      );
+                    },
+                    child: Container(
+                      height: 110,
+                      width: 40,
+                      margin: const EdgeInsets.symmetric(horizontal: 8),
+                      decoration: BoxDecoration(
+                        color: ColorsManager.card,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(
+                        Icons.more_vert,
+                        color: Colors.black,
+                      ),
+                    ),
+                  );
+                } else {
+                  return Container(
+                    height: 110,
+                    width: 40,
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    decoration: BoxDecoration(
+                      color: ColorsManager.card,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Icon(
+                      Icons.chevron_right,
+                      color: Colors.black,
+                    ),
+                  );
+                }
+              },
+            ),
           ],
         ),
       ),

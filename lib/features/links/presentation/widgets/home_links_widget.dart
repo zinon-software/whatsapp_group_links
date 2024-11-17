@@ -7,7 +7,7 @@ import 'package:linkati/core/widgets/custom_skeletonizer_widget.dart';
 import '../../../../core/ads/ads_manager.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../data/models/link_model.dart';
-import 'link_item_widget.dart';
+import 'link_card_widget.dart';
 
 class HomeLinksWidget extends StatelessWidget {
   const HomeLinksWidget({
@@ -76,7 +76,7 @@ class HomeLinksWidget extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
                     itemCount: 2,
                     itemBuilder: (context, index) {
-                      return LinkItemWidget(
+                      return LinkCardWidget(
                         adsManager: adsManager,
                         link: LinkModel.isEmpty(),
                         width: MediaQuery.sizeOf(context).width - 70,
@@ -111,7 +111,7 @@ class HomeLinksWidget extends StatelessWidget {
 
                   return Row(
                     children: [
-                      LinkItemWidget(
+                      LinkCardWidget(
                         adsManager: adsManager,
                         link: link,
                         width: MediaQuery.sizeOf(context).width - 70,

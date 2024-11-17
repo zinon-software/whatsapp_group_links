@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:linkati/core/routes/app_routes.dart';
-import 'package:linkati/core/utils/color_manager.dart';
 import 'package:linkati/core/widgets/alert_widget.dart';
-import 'package:linkati/core/widgets/custom_button_widget.dart';
 import 'package:linkati/features/users/presentation/cubit/users_cubit.dart';
 
 import '../../../../../core/ads/ads_manager.dart';
@@ -98,19 +96,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   bloc: _usersCubit,
                   builder: (context, state) {
                     if (_usersCubit.currentUser?.permissions.isAdmin ?? false) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: CustomButtonWidget(
-                          width: double.infinity,
-                          backgroundColor: ColorsManager.aed5e5,
-                          textColor: ColorsManager.primaryLight,
-                          onPressed: () {
-                            Navigator.of(context).pushNamed(
-                              AppRoutes.linksDashboardRoute,
-                            );
-                          },
-                          label: "لوحة التحكم",
-                        ),
+                      return HomeButtonWidget(
+                        onTap: () {
+                          Navigator.of(context).pushNamed(
+                            AppRoutes.linksDashboardRoute,
+                          );
+                        },
+                        logo: 'assets/svg/challenges.svg',
+                        title: "لوحة التحكم",
+                        icon: Icons.shield_outlined,
                       );
                     }
                     return const SizedBox.shrink();

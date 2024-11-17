@@ -45,36 +45,37 @@ class _LinkDetailsScreenState extends State<LinkDetailsScreen> {
       appBar: AppBar(
         title: Text(widget.link.title),
         actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              onPressed: () {
-                AppAlert.showAlert(
-                  context,
-                  title: "تبليغ عن محتوى غير لائق",
-                  subTitle:
-                      "هل ترغب في التبليغ عن محتوى غير لائق في هذا الرابط؟",
-                  confirmText: "تقديم بلاغ",
-                  onConfirm: () {
-                    AppAlert.dismissDialog(context);
-                    Navigator.of(context).pushNamed(
-                      AppRoutes.bannedWordsRoute,
-                      arguments: {
-                        'words': widget.link.title.split(' ').toList() +
-                            [widget.link.url],
-                      },
-                    );
-                  },
-                  cancelText: "الغاء",
-                  onCancel: () => AppAlert.dismissDialog(context),
-                );
-              },
-              icon: const Icon(
-                Icons.report,
-                color: Colors.redAccent,
+          if (!widget.link.isVerified)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: IconButton(
+                onPressed: () {
+                  AppAlert.showAlert(
+                    context,
+                    title: "تبليغ عن محتوى غير لائق",
+                    subTitle:
+                        "هل ترغب في التبليغ عن محتوى غير لائق في هذا الرابط؟",
+                    confirmText: "تقديم بلاغ",
+                    onConfirm: () {
+                      AppAlert.dismissDialog(context);
+                      Navigator.of(context).pushNamed(
+                        AppRoutes.bannedWordsRoute,
+                        arguments: {
+                          'words': widget.link.title.split(' ').toList() +
+                              [widget.link.url],
+                        },
+                      );
+                    },
+                    cancelText: "الغاء",
+                    onCancel: () => AppAlert.dismissDialog(context),
+                  );
+                },
+                icon: const Icon(
+                  Icons.report,
+                  color: Colors.redAccent,
+                ),
               ),
             ),
-          ),
         ],
       ),
       body: Center(

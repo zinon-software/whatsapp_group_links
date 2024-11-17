@@ -4,10 +4,11 @@ import 'package:linkati/features/challenges/presentation/cubit/challenges_cubit.
 
 import '../../../../core/routes/app_routes.dart';
 import '../../data/models/question_model.dart';
+import '../../data/models/topic_model.dart';
 
 class QuestionsScreen extends StatefulWidget {
   const QuestionsScreen({super.key, required this.topic});
-  final String topic;
+  final TopicModel topic;
 
   @override
   State<QuestionsScreen> createState() => _QuestionsScreenState();
@@ -20,14 +21,14 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
   void initState() {
     _challengesCubit = context.read<ChallengesCubit>();
     super.initState();
-    _challengesCubit.fetchQuestionsEvent(widget.topic);
+    _challengesCubit.fetchQuestionsEvent(widget.topic.id);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.topic),
+        title: Text(widget.topic.title),
       ),
       body: BlocBuilder<ChallengesCubit, ChallengesState>(
         bloc: _challengesCubit,
@@ -48,6 +49,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
               itemBuilder: (context, index) {
                 final QuestionModel question = state.questions[index];
                 return ListTile(
+                  leading: Text('${index + 1}'),
                   title: Text(question.question),
                   subtitle: Wrap(
                     spacing: 8,
@@ -81,10 +83,10 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                         AppRoutes.questionFormRoute,
                         arguments: {
                           'question': question,
-                          'topic': widget.topic
+                          'topic': widget.topic.id
                         },
-                      ).then((value) =>
-                          _challengesCubit.fetchQuestionsEvent(widget.topic));
+                      ).then((value) => _challengesCubit
+                          .fetchQuestionsEvent(widget.topic.id));
                     },
                   ),
                 );
@@ -95,12 +97,13 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        heroTag: 'add_question${widget.topic.id}',
+        onPressed: () async {
           Navigator.of(context).pushNamed(
             AppRoutes.questionFormRoute,
-            arguments: {'topic': widget.topic},
+            arguments: {'topic': widget.topic.id},
           ).then(
-            (value) => _challengesCubit.fetchQuestionsEvent(widget.topic),
+            (value) => _challengesCubit.fetchQuestionsEvent(widget.topic.id),
           );
         },
         child: const Icon(Icons.add),

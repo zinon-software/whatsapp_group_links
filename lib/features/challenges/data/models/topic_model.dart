@@ -42,4 +42,20 @@ class TopicModel {
       questionCount: 0,
     );
   }
+
+  TopicModel copyWith({
+    String? id,
+    String? title,
+    String? description,
+    String? imageUrl,
+    int? questionCount,
+  }) {
+    return TopicModel(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      imageUrl: imageUrl ?? this.imageUrl,
+      questionCount: questionCount ?? this.questionCount,
+    );
+  }
 }

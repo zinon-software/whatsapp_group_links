@@ -30,6 +30,8 @@ abstract class ChallengesRepository {
   Future<Either<String, GameModel>> updateGame(GameModel game);
 
   Future<Either<String, String>> deleteGame(String id);
+
+  Future<Either<String, String>> deleteQuestion(QuestionModel question);
 }
 
 class ChallengesRepositoryImpl implements ChallengesRepository {
@@ -192,9 +194,9 @@ class ChallengesRepositoryImpl implements ChallengesRepository {
       return Left(handleException(e));
     }
   }
-  
+
   @override
-  Future<Either<String, String>> deleteGame(String id)  async{
+  Future<Either<String, String>> deleteGame(String id) async {
     if (await connectionStatus.isNotConnected) {
       return const Left("تحقق من جودة اتصالك بالانترنت");
     }
@@ -202,7 +204,21 @@ class ChallengesRepositoryImpl implements ChallengesRepository {
     try {
       final response = await datasources.deleteGame(id);
       return Right(response);
-    } catch (e) { 
+    } catch (e) {
+      return Left(handleException(e));
+    }
+  }
+  
+  @override
+  Future<Either<String, String>> deleteQuestion(QuestionModel question) async{
+    if (await connectionStatus.isNotConnected) {
+      return const Left("تحقق من جودة اتصالك بالانترنت");
+    }
+
+    try {
+      final response = await datasources.deleteQuestion(question);
+      return Right(response);
+    } catch (e) {
       return Left(handleException(e));
     }
   }

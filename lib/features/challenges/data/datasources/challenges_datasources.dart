@@ -9,6 +9,7 @@ abstract class ChallengesDatasources {
   Future<String> createQuestion(QuestionModel question);
   Future<List<QuestionModel>> fetchQuestions(String topic);
   Future<String> updateQuestion(QuestionModel question);
+  Future<String> deleteQuestion(QuestionModel question);
   // games
   Future<GameModel> createGame(GameModel game);
   Future<GameModel> joinGameEvent(GameModel game);
@@ -20,6 +21,9 @@ abstract class ChallengesDatasources {
   Future<String> createTopic(TopicModel topic);
   Future<String> updateTopic(TopicModel topic);
   Future<List<TopicModel>> fetchTopics();
+  Future<TopicModel> fetchTopic(String topicId);
+  Future<String> incrementTopicQuestionCount(String topic);
+  Future<String> decrementTopicQuestionCount(String topic);
 }
 
 class ChallengesDatasourcesImpl implements ChallengesDatasources {
@@ -38,9 +42,10 @@ class ChallengesDatasourcesImpl implements ChallengesDatasources {
     try {
       final DocumentReference docRef = questions.doc();
 
-      await questions.doc(docRef.id).set(
-            question.toJson(id: docRef.id),
-          );
+      await questions.doc(docRef.id).set(question.toJson(id: docRef.id));
+
+      incrementTopicQuestionCount(question.topic);
+
       return 'success';
     } catch (e) {
       rethrow;
@@ -51,9 +56,7 @@ class ChallengesDatasourcesImpl implements ChallengesDatasources {
   Future<String> createTopic(TopicModel topic) async {
     try {
       final DocumentReference docRef = topics.doc();
-      await topics.doc(docRef.id).set(
-            topic.toJson(id: docRef.id),
-          );
+      await topics.doc(docRef.id).set(topic.toJson(id: docRef.id));
       return 'success';
     } catch (e) {
       rethrow;
@@ -135,6 +138,21 @@ class ChallengesDatasourcesImpl implements ChallengesDatasources {
   }
 
   @override
+  Future<TopicModel> fetchTopic(String topicId) async {
+    try {
+      final DocumentSnapshot documentSnapshot = await topics.doc(topicId).get();
+      if (!documentSnapshot.exists) {
+        return throw Exception('Topic not found');
+      }
+      return TopicModel.fromJson(
+        documentSnapshot.data() as Map<String, dynamic>,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
   Future<GameModel> joinGameEvent(GameModel game) async {
     try {
       await games.doc(game.id).update(game.toJson());
@@ -183,6 +201,45 @@ class ChallengesDatasourcesImpl implements ChallengesDatasources {
         return 'Game not found';
       }
       await doc.reference.delete();
+      return 'success';
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<String> incrementTopicQuestionCount(String topic) async {
+    try {
+      TopicModel topicModel = await fetchTopic(topic);
+
+      await updateTopic(
+        topicModel.copyWith(questionCount: topicModel.questionCount + 1),
+      );
+
+      return 'success';
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<String> decrementTopicQuestionCount(String topic) async {
+    try {
+      TopicModel topicModel = await fetchTopic(topic);
+
+      await updateTopic(
+          topicModel.copyWith(questionCount: topicModel.questionCount - 1));
+      return 'success';
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<String> deleteQuestion(QuestionModel question) async {
+    try {
+      await questions.doc(question.id).delete();
+      decrementTopicQuestionCount(question.topic);
       return 'success';
     } catch (e) {
       rethrow;

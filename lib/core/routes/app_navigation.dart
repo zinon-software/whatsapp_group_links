@@ -122,7 +122,7 @@ class AppNavigation {
         return _moveRoute(
           settings: settings,
           view: QuestionsScreen(
-            topic: query['topic'] as String,
+            topic: query['topic'] as TopicModel,
           ),
         );
 

@@ -6,16 +6,16 @@ import '../../../../core/ads/ads_manager.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../data/models/link_model.dart';
 
-class LinkItemWidget extends StatelessWidget {
-  const LinkItemWidget({
+class LinkCardWidget extends StatelessWidget {
+  const LinkCardWidget({
     super.key,
-    required AdsManager adsManager,
+    required this.adsManager,
     required this.link,
     this.width = double.infinity,
     this.height,
-  }) : _adsManager = adsManager;
+  });
 
-  final AdsManager _adsManager;
+  final AdsManager adsManager;
   final LinkModel link;
   final double width;
   final double? height;
@@ -24,7 +24,7 @@ class LinkItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        _adsManager.showRewardedAd();
+        adsManager.showRewardedAd();
         Navigator.of(context).pushNamed(
           AppRoutes.linkDetailsRoute,
           arguments: {'link': link},

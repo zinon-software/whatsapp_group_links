@@ -4,7 +4,7 @@ import 'package:linkati/core/widgets/custom_skeletonizer_widget.dart';
 
 import '../../../../core/ads/ads_manager.dart';
 import '../../data/models/link_model.dart';
-import '../widgets/link_item_widget.dart';
+import '../widgets/link_card_widget.dart';
 
 class LinksScreen extends StatefulWidget {
   const LinksScreen({super.key, required this.title, required this.query});
@@ -57,7 +57,7 @@ class _LinksScreenState extends State<LinksScreen> {
                     child: ListView.builder(
                       itemBuilder: (context, index) => Column(
                         children: [
-                          LinkItemWidget(
+                          LinkCardWidget(
                             adsManager: _adsManager,
                             link: LinkModel.isEmpty(),
                           ),
@@ -94,7 +94,7 @@ class _LinksScreenState extends State<LinksScreen> {
                               child: _adsManager.getNativeAdWidget(),
                             ),
                           ),
-                        LinkItemWidget(adsManager: _adsManager, link: link),
+                        LinkCardWidget(adsManager: _adsManager, link: link),
                         SizedBox(height: 10),
                       ],
                     );

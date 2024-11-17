@@ -68,33 +68,37 @@ class _UsersRankScreenState extends State<UsersRankScreen> {
             return Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: 250,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Expanded(
-                        child: UserRankCard(
-                          isMe: topTwoUser.id == _usersCubit.currentUser?.id,
-                          user: topTwoUser,
-                          rank: 2,
-                        ),
-                      ), // المرتبة الثانية
-                      Expanded(
-                        child: UserRankCard(
-                          isMe: topOneUser.id == _usersCubit.currentUser?.id,
-                          user: topOneUser,
-                          rank: 1,
-                        ),
-                      ), // المرتبة الأولى
-                      Expanded(
-                        child: UserRankCard(
-                          isMe: topThreeUser.id == _usersCubit.currentUser?.id,
-                          user: topThreeUser,
-                          rank: 3,
-                        ),
-                      ), // المرتبة الثالثة
-                    ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: SizedBox(
+                    height: 250,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Expanded(
+                          child: UserRankCard(
+                            isMe: topTwoUser.id == _usersCubit.currentUser?.id,
+                            user: topTwoUser,
+                            rank: 2,
+                          ),
+                        ), // المرتبة الثانية
+                        Expanded(
+                          child: UserRankCard(
+                            isMe: topOneUser.id == _usersCubit.currentUser?.id,
+                            user: topOneUser,
+                            rank: 1,
+                          ),
+                        ), // المرتبة الأولى
+                        Expanded(
+                          child: UserRankCard(
+                            isMe:
+                                topThreeUser.id == _usersCubit.currentUser?.id,
+                            user: topThreeUser,
+                            rank: 3,
+                          ),
+                        ), // المرتبة الثالثة
+                      ],
+                    ),
                   ),
                 ),
                 Expanded(
@@ -105,9 +109,23 @@ class _UsersRankScreenState extends State<UsersRankScreen> {
                       final bool isMe = user.id == _usersCubit.currentUser?.id;
                       return Column(
                         children: [
-                          Card(
+                          Container(
                             margin: const EdgeInsets.all(8.0),
-                            color: Colors.white,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(
+                                color: isMe ? Colors.amber : Colors.transparent,
+                                width: 2,
+                              ),
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.grey,
+                                  blurRadius: 5,
+                                  offset: Offset(0, 3),
+                                ),
+                              ],
+                            ),
                             child: ListTile(
                               tileColor:
                                   isMe ? ColorsManager.primaryLight : null,
@@ -177,19 +195,30 @@ class UserRankCard extends StatelessWidget {
             ? '🥈'
             : '🥉';
 
-    return Card(
-      color: isMe ? ColorsManager.primaryLight : null,
-      elevation: 5,
-      shape: RoundedRectangleBorder(
+    return Container(
+      decoration: BoxDecoration(
+        color: ColorsManager.container,
         borderRadius: BorderRadius.circular(12),
+        shape: BoxShape.rectangle,
+        boxShadow: [
+          BoxShadow(
+            color: ColorsManager.aed5e5.withOpacity(0.5),
+            spreadRadius: 5,
+            blurRadius: 7,
+            offset: const Offset(0, 3),
+          ),
+        ],
+        border: Border.all(
+          color: isMe ? Colors.amber : Colors.transparent,
+          width: 2,
+        ),
       ),
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 10),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Spacer(),
             Stack(
               alignment: Alignment.center,
               children: [
@@ -212,7 +241,6 @@ class UserRankCard extends StatelessWidget {
                 ),
               ],
             ),
-            const Spacer(),
             const SizedBox(height: 10),
             Text(
               user.name,
@@ -248,6 +276,13 @@ class UserRankCard extends StatelessWidget {
                   color: Colors.white,
                   fontSize: 14,
                 ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'المرتبة: $rank',
+              style: const TextStyle(
+                fontSize: 12,
               ),
             ),
           ],

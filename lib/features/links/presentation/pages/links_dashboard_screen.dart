@@ -209,6 +209,20 @@ class LinksDashboardScreen extends StatelessWidget {
                                           label: 'Edit Link',
                                         ),
                                         SizedBox(height: 10),
+                                        // Verified
+                                        CustomButtonWidget(
+                                          width: double.infinity,
+                                          height: 50,
+                                          backgroundColor: Colors.green,
+                                          onPressed: () {
+                                            AppAlert.dismissDialog(context);
+                                            linksCubit.updateLinkEvent(
+                                              link.copyWith(isVerified: true),
+                                            );
+                                          },
+                                          label: 'Verified Link',
+                                        ),
+                                        SizedBox(height: 10),
                                         // delete
                                         CustomButtonWidget(
                                           width: double.infinity,

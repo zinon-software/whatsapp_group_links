@@ -188,28 +188,30 @@ class _GameScreenState extends State<GameScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  CustomButtonWidget(
-                    radius: 100,
-                    height: 60,
-                    width: 60,
-                    backgroundColor: isPlayerTurn
-                        ? Colors.green
-                        : game.currentTurnPlayerId != null
-                            ? Colors.red
-                            : Colors.grey,
-                    enableClick: game.currentTurnPlayerId == null,
-                    onPressed: game.currentTurnPlayerId == null
-                        ? () {
-                            _challengesCubit.updateGameEvent(game.copyWith(
-                              currentTurnPlayerId:
-                                  FirebaseAuth.instance.currentUser!.uid,
-                            ));
-                          }
-                        : null,
-                    child: Icon(Icons.check, color: Colors.white),
-                  ),
-                  const SizedBox(height: 8),
-                  Text('انقر للحصول على الدور'),
+                  if (!game.isWithAi) ...[
+                    CustomButtonWidget(
+                      radius: 100,
+                      height: 60,
+                      width: 60,
+                      backgroundColor: isPlayerTurn
+                          ? Colors.green
+                          : game.currentTurnPlayerId != null
+                              ? Colors.red
+                              : Colors.grey,
+                      enableClick: game.currentTurnPlayerId == null,
+                      onPressed: game.currentTurnPlayerId == null
+                          ? () {
+                              _challengesCubit.updateGameEvent(game.copyWith(
+                                currentTurnPlayerId:
+                                    FirebaseAuth.instance.currentUser!.uid,
+                              ));
+                            }
+                          : null,
+                      child: Icon(Icons.check, color: Colors.white),
+                    ),
+                    const SizedBox(height: 8),
+                    Text('انقر للحصول على الدور'),
+                  ]
                 ],
               ),
             ),

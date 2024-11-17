@@ -49,7 +49,7 @@ class _WaitingForPlayerScreenState extends State<WaitingForPlayerScreen> {
         backgroundColor: Colors.blueAccent.shade700,
         appBar: AppBar(
           backgroundColor: Colors.blueAccent.shade700,
-          // foregroundColor: Colors.black,
+          foregroundColor: Colors.white,
           title: const Text('انتظار انضمام لاعب آخر'),
           centerTitle: true,
           systemOverlayStyle: SystemUiOverlayStyle(

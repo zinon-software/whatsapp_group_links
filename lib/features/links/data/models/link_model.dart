@@ -9,6 +9,7 @@ class LinkModel {
   late int views;
   late String type;
   late bool isActive;
+  late bool isVerified;
 
   LinkModel({
     required this.id,
@@ -19,6 +20,7 @@ class LinkModel {
     required this.views,
     required this.type,
     required this.isActive,
+    this.isVerified = false,
   });
 
   factory LinkModel.fromJson(Map<String, dynamic> json) => LinkModel(
@@ -30,6 +32,7 @@ class LinkModel {
         views: json["views"],
         type: json["type"],
         isActive: json["is_active"],
+        isVerified: json["is_verified"]?? false,
       );
 
   Map<String, dynamic> toJson({String? id}) {
@@ -41,7 +44,8 @@ class LinkModel {
       'url': url,
       'views': views,
       'type': type,
-      'is_active': isActive
+      'is_active': isActive,
+      'is_verified': isVerified,
     };
   }
 
@@ -55,6 +59,7 @@ class LinkModel {
       int? views,
       String? type,
       bool? isActive,
+      bool? isVerified
     }
   ) {
     return LinkModel(
@@ -66,6 +71,7 @@ class LinkModel {
       views: views ?? this.views,
       type: type ?? this.type,
       isActive: isActive ?? this.isActive,
+      isVerified: isVerified ?? this.isVerified
     );
   }
 
@@ -79,6 +85,7 @@ class LinkModel {
       views: 100,
       type: 'whatsapp',
       isActive: true,
+      isVerified: true,
     );
   }
 }

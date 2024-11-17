@@ -26,24 +26,25 @@ class HomeButtonWidget extends StatelessWidget {
         margin: const EdgeInsets.all(8),
         padding: EdgeInsets.all(0),
         decoration: BoxDecoration(
-          color: ColorsManager.card,
-          borderRadius: BorderRadius.circular(8),
-          // shape: BoxShape.rectangle,
-          // boxShadow: [
-          //   BoxShadow(
-          //     color: ColorsManager.aed5e5.withOpacity(0.5),
-          //     spreadRadius: 5,
-          //     blurRadius: 7,
-          //     offset: const Offset(0, 3),
-          //   ),
-          // ],
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.grey,
+              blurRadius: 2,
+              offset: Offset(0, 2),
+            ),
+          ],
         ),
         child: Row(
           children: [
-            SvgPicture.asset(
-              logo,
-              height: 90,
-              width: 90,
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: SvgPicture.asset(
+                logo,
+                height: 90,
+                width: 90,
+              ),
             ),
             const SizedBox(width: 8),
             Icon(
@@ -64,12 +65,12 @@ class HomeButtonWidget extends StatelessWidget {
               width: 40,
               margin: const EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: ColorsManager.card,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Icon(
                 Icons.chevron_right,
-                color: Colors.black,
+                color: Colors.white,
               ),
             ),
           ],
