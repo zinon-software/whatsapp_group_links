@@ -29,31 +29,33 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
+  final List<QuestionModel> questions = [];
   late GameModel game;
-  bool isPlayerTurn = false;
+  late QuestionModel _currentQuestion;
 
-  bool isMePlayer1 = false;
+  bool isMyTurn = false;
+
   late ChallengesCubit _challengesCubit;
   late UsersCubit _usersCubit;
-  late QuestionModel _currentQuestion;
+
   UserModel player1 = UserModel.isEmpty();
   UserModel player2 = UserModel.isEmpty();
 
   @override
   void initState() {
     super.initState();
+    questions.addAll(widget.questions);
     game = widget.game;
     _challengesCubit = context.read<ChallengesCubit>();
     _usersCubit = context.read<UsersCubit>();
     _currentQuestion = _getCurrentQuestion(game);
-    isMePlayer1 = game.player1.userId == FirebaseAuth.instance.currentUser!.uid;
   }
 
   QuestionModel _getCurrentQuestion(GameModel game) {
-    if (widget.questions.isEmpty) return QuestionModel.isEmpty();
-    return widget.questions.firstWhere(
+    if (questions.isEmpty) return QuestionModel.isEmpty();
+    return questions.firstWhere(
       (question) => question.id == game.currntQuestionId,
-      orElse: () => widget.questions.first,
+      orElse: () => questions.first,
     );
   }
 
@@ -62,10 +64,15 @@ class _GameScreenState extends State<GameScreen> {
     // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () async {
-        return await AppAlert.showExitConfirmationDialog(context).then((value) {
-          if (value) _challengesCubit.endGameEvent(widget.game);
-          return value;
-        });
+        if (game.endedAt != null) {
+          return true;
+        }
+        return await AppAlert.showExitConfirmationDialog(
+          context,
+          onConfirm: () {
+            _challengesCubit.endGameEvent(widget.game);
+          },
+        );
       },
       child: StreamBuilder<DocumentSnapshot>(
         stream: instance<AppCollections>().games.doc(game.id).snapshots(),
@@ -76,22 +83,26 @@ class _GameScreenState extends State<GameScreen> {
             );
             _currentQuestion = _getCurrentQuestion(game);
 
-            isPlayerTurn = game.currentTurnPlayerId ==
+            isMyTurn = game.currentTurnPlayerId ==
                     FirebaseAuth.instance.currentUser!.uid ||
                 game.isWithAi;
           }
 
           // التحقق من انتهاء الأسئلة
-          if (game.currentQuestionNumber >= widget.questions.length ||
+          if (game.currentQuestionNumber >= game.questionCount ||
               game.endedAt != null) {
-            return WinnerView(game: game, challengesCubit: _challengesCubit);
+            return WinnerView(
+              game: game,
+              challengesCubit: _challengesCubit,
+              usersCubit: _usersCubit,
+            );
           }
 
           return GameContentView(
             game: game,
             challengesCubit: _challengesCubit,
-            isPlayerTurn: isPlayerTurn,
-            isMePlayer1: isMePlayer1,
+            isMyTurn: isMyTurn,
+            isMePlayer1: game.isMePlayer1,
             usersCubit: _usersCubit,
             currentQuestion: _currentQuestion,
             onSubmitAnswer: (String answer) => _onConfirmAnswer(answer),
@@ -103,51 +114,43 @@ class _GameScreenState extends State<GameScreen> {
 
   void _onConfirmAnswer(String answer) {
     bool isCorrect = answer == _currentQuestion.correctAnswer;
-    bool isLastQuestion =
-        game.currentQuestionNumber == widget.questions.length - 1;
+    bool isLastQuestion = game.currentQuestionNumber >= game.questionCount;
 
-    if ((isCorrect || game.isWithAi) && !isLastQuestion) {
+    int currentQuestionNumber = game.currentQuestionNumber;
+
+    String currntQuestionId = game.currntQuestionId;
+
+    if ((isCorrect || game.isWithAi) &&
+        !isLastQuestion &&
+        currentQuestionNumber < questions.length) {
       // next question
-      _currentQuestion = widget.questions[game.currentQuestionNumber + 1];
+      _currentQuestion = questions[game.currentQuestionNumber + 1];
+      currntQuestionId = _currentQuestion.id;
+      currentQuestionNumber = game.currentQuestionNumber + 1;
     }
 
     game = game.copyWith(
-      player1: isMePlayer1
+      player1: game.isMePlayer1
           ? game.player1.copyWith(
               score: isCorrect ? game.player1.score + 1 : game.player1.score,
+              correctAnswer: isCorrect ? null : answer,
             )
           : game.player1,
       player2: game.isWithAi
-          ? game.player2!.copyWith(
+          ? game.otherPlayer.copyWith(
               score: !isCorrect ? game.player2!.score + 1 : game.player2!.score,
+              correctAnswer: !isCorrect ? null : answer,
             )
-          : isMePlayer1
+          : game.isMePlayer1
               ? game.player2
               : game.player2!.copyWith(
                   score:
                       isCorrect ? game.player2!.score + 1 : game.player2!.score,
+                  correctAnswer: isCorrect ? null : answer,
                 ),
-      correctAnswerPlayer1: isCorrect
-          ? null
-          : isMePlayer1
-              ? answer
-              : game.correctAnswerPlayer1,
-      correctAnswerPlayer2: isCorrect
-          ? null
-          : isMePlayer1
-              ? game.correctAnswerPlayer2
-              : answer,
-      currentTurnPlayerId: isCorrect
-          ? null
-          : isMePlayer1
-              ? game.player2?.userId
-              : game.player1.userId,
-      currntQuestionId: isCorrect || game.isWithAi
-          ? _currentQuestion.id
-          : game.currntQuestionId,
-      currentQuestionNumber: isCorrect || game.isWithAi
-          ? game.currentQuestionNumber + 1
-          : game.currentQuestionNumber,
+      currentTurnPlayerId: isCorrect ? null : game.otherPlayer.userId,
+      currntQuestionId: currntQuestionId,
+      currentQuestionNumber: currentQuestionNumber,
     );
 
     _challengesCubit.updateGameEvent(game);
@@ -156,6 +159,12 @@ class _GameScreenState extends State<GameScreen> {
       _usersCubit.incrementScoreEvent(
         FirebaseAuth.instance.currentUser!.uid,
       );
+    }
+
+    isLastQuestion = game.currentQuestionNumber >= game.questionCount;
+
+    if (isLastQuestion) {
+      _challengesCubit.endGameEvent(game);
     }
   }
 }

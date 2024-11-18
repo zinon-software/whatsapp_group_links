@@ -179,7 +179,7 @@ class AppAlert {
 
   
 
-  static Future<bool> showExitConfirmationDialog(BuildContext context, {String? subTitle}) async {
+  static Future<bool> showExitConfirmationDialog(BuildContext context, {String? subTitle, void Function()? onConfirm}) async {
     return await showAlert(
       context,
       title: 'تأكيد الخروج',
@@ -187,6 +187,7 @@ class AppAlert {
       confirmText: 'نعم، خروج',
       dismissOn: false,
       onConfirm: () {
+        onConfirm?.call();
         Navigator.of(context).pop(true);
       },
       cancelText: 'اغلاق',

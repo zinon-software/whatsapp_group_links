@@ -44,6 +44,8 @@ dependencies:
   cached_network_image: ^3.4.1
   skeletonizer: ^1.4.2
 
+  circular_countdown_timer: ^0.2.4
+
 
 dev_dependencies:
   flutter_test:

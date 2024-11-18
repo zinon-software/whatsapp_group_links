@@ -40,10 +40,12 @@ class _WaitingForPlayerScreenState extends State<WaitingForPlayerScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        return await AppAlert.showExitConfirmationDialog(context).then((value) {
-          if (value) _challengesCubit.endGameEvent(widget.game);
-          return value;
-        });
+        return await AppAlert.showExitConfirmationDialog(
+          context,
+          onConfirm: () {
+            _challengesCubit.endGameEvent(widget.game);
+          },
+        );
       },
       child: Scaffold(
         backgroundColor: Colors.blueAccent.shade700,

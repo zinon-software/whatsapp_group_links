@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:linkati/features/challenges/data/models/question_model.dart';
@@ -13,7 +16,7 @@ class GameContentView extends StatelessWidget {
     super.key,
     required this.game,
     required this.challengesCubit,
-    required this.isPlayerTurn,
+    required this.isMyTurn,
     required this.isMePlayer1,
     required this.usersCubit,
     required this.currentQuestion,
@@ -22,7 +25,7 @@ class GameContentView extends StatelessWidget {
 
   final GameModel game;
   final ChallengesCubit challengesCubit;
-  final bool isPlayerTurn;
+  final bool isMyTurn;
   final bool isMePlayer1;
   final UsersCubit usersCubit;
   final QuestionModel currentQuestion;
@@ -82,36 +85,67 @@ class GameContentView extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 20),
-            QuestionOptions(
+            QuestionOptionsWidget(
               currentQuestion: currentQuestion,
-              isPlayerTurn: isPlayerTurn,
+              isPlayerTurn: isMyTurn,
               onSelectAnswer: onSubmitAnswer,
-              game: game,
+              opponentAnswer: game.otherPlayer.correctAnswer,
             ),
             const SizedBox(height: 20),
             if (!game.isWithAi) ...[
-              CustomButtonWidget(
-                radius: 100,
-                height: 60,
-                width: 60,
-                backgroundColor: isPlayerTurn
-                    ? Colors.green
-                    : game.currentTurnPlayerId != null
-                        ? Colors.red
-                        : Colors.grey,
-                enableClick: game.currentTurnPlayerId == null,
-                onPressed: game.currentTurnPlayerId == null
-                    ? () {
+              isMyTurn
+                  ? CircularCountDownTimer(
+                      duration: 20,
+                      initialDuration: 0,
+                      controller: CountDownController(),
+                      width: 60, // عرض المؤقت
+                      height: 60, // ارتفاع المؤقت
+                      ringColor: Colors.grey[300]!,
+                      fillColor: Colors.green,
+                      backgroundColor: Colors.white,
+                      strokeWidth: 10.0,
+                      strokeCap: StrokeCap.round,
+                      textStyle: const TextStyle(
+                        fontSize: 22.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textFormat: CountdownTextFormat.S,
+                      isReverse: true, // للعد التنازلي
+                      isTimerTextShown: true,
+                      autoStart: true, // تشغيل المؤقت تلقائيًا
+                      onComplete: () {
+                        // عند انتهاء المؤقت بدون إجابة، يتم نقل الدور للطرف الآخر
                         challengesCubit.updateGameEvent(game.copyWith(
                           currentTurnPlayerId:
-                              FirebaseAuth.instance.currentUser!.uid,
+                              game.currentTurnPlayerId == game.player1.userId
+                                  ? game.player2?.userId
+                                  : game.player1.userId,
                         ));
-                      }
-                    : null,
-                child: Icon(Icons.check, color: Colors.white),
-              ),
+                      },
+                    )
+                  : CustomButtonWidget(
+                      radius: 100,
+                      height: 60,
+                      width: 60,
+                      backgroundColor: isMyTurn
+                          ? Colors.green
+                          : game.currentTurnPlayerId != null
+                              ? Colors.red
+                              : Colors.grey,
+                      enableClick: game.currentTurnPlayerId == null,
+                      onPressed: game.currentTurnPlayerId == null
+                          ? () {
+                              challengesCubit.updateGameEvent(game.copyWith(
+                                currentTurnPlayerId:
+                                    FirebaseAuth.instance.currentUser!.uid,
+                              ));
+                            }
+                          : null,
+                      child: const Icon(Icons.check, color: Colors.white),
+                    ),
               const SizedBox(height: 8),
-              Text('انقر للحصول على الدور'),
+              const Text('انقر للحصول على الدور'),
             ]
           ],
         ),
@@ -120,37 +154,70 @@ class GameContentView extends StatelessWidget {
   }
 }
 
-class QuestionOptions extends StatefulWidget {
-  const QuestionOptions({
+class QuestionOptionsWidget extends StatefulWidget {
+  const QuestionOptionsWidget({
     super.key,
     required this.currentQuestion,
     required this.isPlayerTurn,
     required this.onSelectAnswer,
-    required this.game,
+    this.opponentAnswer,
   });
 
   final QuestionModel currentQuestion;
   final bool isPlayerTurn;
   final Function(String answer) onSelectAnswer;
-  final GameModel game;
+  final String? opponentAnswer; // إجابة الطرف الآخر
 
   @override
-  State<QuestionOptions> createState() => _QuestionOptionsState();
+  State<QuestionOptionsWidget> createState() => _QuestionOptionsWidgetState();
 }
 
-class _QuestionOptionsState extends State<QuestionOptions> {
+class _QuestionOptionsWidgetState extends State<QuestionOptionsWidget> {
   int? selectedIndex;
   bool showAnswerFeedback = false;
+  int? opponentSelectedIndex; // مؤشر الخيار الذي اختاره الطرف الآخر
+
+  List<String> shuffledOptions = []; // قائمة جديدة للخيارات المخلوطة
 
   @override
-  void didUpdateWidget(covariant QuestionOptions oldWidget) {
+  void initState() {
+    super.initState();
+
+    shuffledOptions = List.from(
+      widget.currentQuestion.options,
+    ); // نسخ الخيارات الأصلية
+    shuffledOptions.shuffle(Random()); // خلط الخيارات عشوائيًا
+  }
+
+  @override
+  void didUpdateWidget(covariant QuestionOptionsWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
+
     if (oldWidget.currentQuestion != widget.currentQuestion) {
       // إعادة تعيين الحالة عند تغيير السؤال
       setState(() {
         selectedIndex = null;
+        opponentSelectedIndex = null;
         showAnswerFeedback = false;
+        shuffledOptions = List.from(
+          widget.currentQuestion.options,
+        ); // نسخ الخيارات الأصلية
+        shuffledOptions.shuffle(Random()); // خلط الخيارات عشوائيًا
       });
+    }
+
+    // إذا تغيرت إجابة الطرف الآخر
+    if (oldWidget.opponentAnswer != widget.opponentAnswer &&
+        widget.opponentAnswer != null) {
+      final index = shuffledOptions.indexOf(
+        widget.opponentAnswer!,
+      ); // استخدام الخيارات المخلوطة لتحديد الخيار
+      if (index != -1) {
+        setState(() {
+          opponentSelectedIndex = index;
+          showAnswerFeedback = true;
+        });
+      }
     }
   }
 
@@ -158,11 +225,12 @@ class _QuestionOptionsState extends State<QuestionOptions> {
   Widget build(BuildContext context) {
     return Column(
       children: List.generate(
-        widget.currentQuestion.options.length,
+        shuffledOptions.length, // استخدام الخيارات المخلوطة
         (index) {
-          final isCorrectAnswer = widget.currentQuestion.correctAnswer ==
-              widget.currentQuestion.options[index];
+          final isCorrectAnswer =
+              widget.currentQuestion.correctAnswer == shuffledOptions[index];
           final isSelected = selectedIndex == index;
+          final isOpponentSelected = opponentSelectedIndex == index;
 
           return AnimatedOpacity(
             duration: const Duration(milliseconds: 300),
@@ -176,14 +244,14 @@ class _QuestionOptionsState extends State<QuestionOptions> {
                       });
 
                       // تأخير لعرض التغذية الراجعة (Feedback)
-                      await Future.delayed(const Duration(milliseconds: 500));
+                      await Future.delayed(const Duration(seconds: 1));
 
                       setState(() {
                         showAnswerFeedback = false;
                       });
 
                       widget.onSelectAnswer(
-                        widget.currentQuestion.options[index],
+                        shuffledOptions[index], // استخدام الخيار المخلوط
                       );
                     }
                   : null,
@@ -193,12 +261,12 @@ class _QuestionOptionsState extends State<QuestionOptions> {
                 margin: const EdgeInsets.only(bottom: 8.0),
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: isSelected
+                    color: isSelected || isOpponentSelected
                         ? (isCorrectAnswer ? Colors.green : Colors.red)
                         : (widget.isPlayerTurn ? Colors.green : Colors.grey),
                   ),
                   borderRadius: BorderRadius.circular(8.0),
-                  color: isSelected
+                  color: isSelected || isOpponentSelected
                       ? (isCorrectAnswer
                           ? Colors.green.withOpacity(0.2)
                           : Colors.red.withOpacity(0.2))
@@ -207,9 +275,10 @@ class _QuestionOptionsState extends State<QuestionOptions> {
                 child: Row(
                   children: [
                     const SizedBox(width: 8.0),
-                    Text(widget.currentQuestion.options[index]),
+                    Text(shuffledOptions[index]), // استخدام الخيار المخلوط
                     const Spacer(),
-                    if (showAnswerFeedback && isSelected)
+                    if (showAnswerFeedback &&
+                        (isSelected || isOpponentSelected))
                       Icon(
                         isCorrectAnswer ? Icons.check : Icons.close,
                         color: isCorrectAnswer ? Colors.green : Colors.red,

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:linkati/features/users/data/models/user_model.dart';
 
 class GameModel {
@@ -6,8 +7,6 @@ class GameModel {
   final PlayerModel? player2;
   final String topic;
   final int questionCount;
-  final String? correctAnswerPlayer1;
-  final String? correctAnswerPlayer2;
   final String? currentTurnPlayerId;
   final String currntQuestionId;
   final int currentQuestionNumber;
@@ -24,8 +23,6 @@ class GameModel {
     required this.questionCount,
     required this.currentTurnPlayerId,
     required this.currntQuestionId,
-    this.correctAnswerPlayer1,
-    this.correctAnswerPlayer2,
     required this.currentQuestionNumber,
     required this.startedAt,
     this.endedAt,
@@ -34,18 +31,16 @@ class GameModel {
   });
 
   factory GameModel.fromJson(Map<String, dynamic> json) {
-    return GameModel(
+    GameModel game = GameModel(
       id: json['id'],
       player1: PlayerModel.fromJson(json['player1']),
       player2: json['player2'] != null
           ? PlayerModel.fromJson(json['player2'])
           : null,
       topic: json['topic'],
-      questionCount: json['question_count']?? 10,
+      questionCount: json['question_count'] ?? 10,
       currentTurnPlayerId: json['current_turn_player_id'],
       currntQuestionId: json['currnt_question_id'],
-      correctAnswerPlayer1: json['correct_answer_player1'],
-      correctAnswerPlayer2: json['correct_answer_player2'],
       currentQuestionNumber: json['current_question_number'],
       startedAt: DateTime.parse(json['started_at']),
       endedAt:
@@ -53,6 +48,13 @@ class GameModel {
       duration: Duration(seconds: json['duration']),
       isWithAi: json['is_with_ai'] ?? false,
     );
+
+    game.player1.copyWith(correctAnswer: json['correct_answer_player1']);
+    if(game.player2 != null) {
+      game.player2!.copyWith(correctAnswer: json['correct_answer_player2']);
+    }
+
+    return game;
   }
 
   Map<String, dynamic> toJson({String? id}) {
@@ -62,8 +64,8 @@ class GameModel {
       'player2': player2?.toJson(),
       'topic': topic,
       'question_count': questionCount,
-      'correct_answer_player1': correctAnswerPlayer1,
-      'correct_answer_player2': correctAnswerPlayer2,
+      'correct_answer_player1': player1.correctAnswer,
+      'correct_answer_player2': player2?.correctAnswer,
       'current_turn_player_id': currentTurnPlayerId,
       'currnt_question_id': currntQuestionId,
       'current_question_number': currentQuestionNumber,
@@ -81,8 +83,6 @@ class GameModel {
     PlayerModel? player2,
     String? topic,
     int? questionCount,
-    String? correctAnswerPlayer1,
-    String? correctAnswerPlayer2,
     String? currentTurnPlayerId,
     String? currntQuestionId,
     int? currentQuestionNumber,
@@ -99,8 +99,6 @@ class GameModel {
       questionCount: questionCount ?? this.questionCount,
       currentTurnPlayerId: currentTurnPlayerId,
       currntQuestionId: currntQuestionId ?? this.currntQuestionId,
-      correctAnswerPlayer1: correctAnswerPlayer1,
-      correctAnswerPlayer2: correctAnswerPlayer2,
       currentQuestionNumber:
           currentQuestionNumber ?? this.currentQuestionNumber,
       startedAt: startedAt ?? this.startedAt,
@@ -109,16 +107,31 @@ class GameModel {
       isWithAi: isWithAi ?? this.isWithAi,
     );
   }
+
+  PlayerModel get myPlayer =>
+      player1.userId == FirebaseAuth.instance.currentUser!.uid
+          ? player1
+          : (player2 ?? player1);
+
+  PlayerModel get otherPlayer =>
+      player1.userId == FirebaseAuth.instance.currentUser!.uid
+          ? player2 ?? player1
+          : player1;
+
+  bool get isMePlayer1 =>
+      player1.userId == FirebaseAuth.instance.currentUser!.uid;
 }
 
 class PlayerModel {
   final String userId;
   final int score;
+  final String? correctAnswer;
   UserModel? user;
 
   PlayerModel({
     required this.userId,
     required this.score,
+    this.correctAnswer,
     this.user,
   });
 
@@ -126,6 +139,7 @@ class PlayerModel {
     return PlayerModel(
       userId: json['user_id'],
       score: json['score'],
+      correctAnswer: json['correct_answer'],
     );
   }
 
@@ -133,13 +147,20 @@ class PlayerModel {
     return {
       'user_id': userId,
       'score': score,
+      'correct_answer': correctAnswer,
     };
   }
 
   // copy with
-  PlayerModel copyWith({String? userId, int? score, UserModel? user}) {
+  PlayerModel copyWith({
+    String? userId,
+    int? score,
+    UserModel? user,
+    String? correctAnswer,
+  }) {
     return PlayerModel(
       userId: userId ?? this.userId,
+      correctAnswer: correctAnswer,
       score: score ?? this.score,
       user: user ?? this.user,
     );

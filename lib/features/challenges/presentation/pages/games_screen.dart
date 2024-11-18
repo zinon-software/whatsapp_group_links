@@ -79,25 +79,7 @@ class _GamesScreenState extends State<GamesScreen> {
                     const SizedBox(height: 40),
                     CustomButtonWidget(
                       label: 'انشاء تحدي جديدة',
-                      onPressed: () {
-                        _challengesCubit.createGameEvent(
-                          GameModel(
-                            id: '',
-                            player1: PlayerModel(
-                              userId: _usersCubit.currentUser!.id,
-                              user: _usersCubit.currentUser!,
-                              score: 0,
-                            ),
-                            topic: widget.topic.id,
-                            currentTurnPlayerId: null,
-                            currntQuestionId: questions.first.id,
-                            currentQuestionNumber: 0,
-                            startedAt: DateTime.now(),
-                            duration: const Duration(minutes: 30),
-                            questionCount: questions.length,
-                          ),
-                        );
-                      },
+                      onPressed: _createGame,
                     ),
                   ],
                 ),
@@ -138,28 +120,77 @@ class _GamesScreenState extends State<GamesScreen> {
       floatingActionButton: _usersCubit.currentUser == null
           ? null
           : FloatingActionButton(
-              onPressed: () {
-                _challengesCubit.createGameEvent(
-                  GameModel(
-                    id: '',
-                    player1: PlayerModel(
-                      userId: _usersCubit.currentUser!.id,
-                      user: _usersCubit.currentUser!,
-                      score: 0,
-                    ),
-                    topic: widget.topic.id,
-                    currentTurnPlayerId: null,
-                    currntQuestionId: questions.first.id,
-                    currentQuestionNumber: 0,
-                    startedAt: DateTime.now(),
-                    duration: const Duration(minutes: 30),
-                    questionCount: questions.length,
-                  ),
-                );
-              },
+              onPressed: _createGame,
               child: const Icon(Icons.add),
             ),
     );
+  }
+
+  void _createGame() async {
+    // تحديد العدد المتاح من الأسئلة
+    int maxQuestions = questions.length;
+
+    // تقسيم العدد المتاح إلى مجموعة من الخيارات
+    List<int> options = [];
+    for (int i = 1; i <= maxQuestions ~/ 10; i++) {
+      options.add(i * 10);
+    }
+    if (!options.contains(maxQuestions)) {
+      options.add(maxQuestions);
+    }
+
+    // عرض حوار لاختيار عدد الأسئلة
+    int? selectedQuestionsCount = await showDialog<int>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('اختار عدد الأسئلة'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (int option in options)
+                RadioListTile<int>(
+                  title: Text('$option سؤال'),
+                  value: option,
+                  groupValue: null,
+                  onChanged: (int? value) {
+                    Navigator.pop(context, value);
+                  },
+                ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              child: const Text('الغاء'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+
+    if (selectedQuestionsCount != null && selectedQuestionsCount > 0) {
+      // إذا تم اختيار عدد من الأسئلة بشكل صحيح
+      _challengesCubit.createGameEvent(
+        GameModel(
+          id: '',
+          player1: PlayerModel(
+            userId: _usersCubit.currentUser!.id,
+            user: _usersCubit.currentUser!,
+            score: 0,
+          ),
+          topic: widget.topic.id,
+          currentTurnPlayerId: null,
+          currntQuestionId: questions.first.id,
+          currentQuestionNumber: 0,
+          startedAt: DateTime.now(),
+          duration: const Duration(minutes: 30),
+          questionCount: selectedQuestionsCount,
+        ),
+      );
+    }
   }
 
   void _onListener(context, state) {
