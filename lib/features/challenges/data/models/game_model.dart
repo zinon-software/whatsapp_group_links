@@ -5,6 +5,7 @@ class GameModel {
   final PlayerModel player1;
   final PlayerModel? player2;
   final String topic;
+  final int questionCount;
   final String? correctAnswerPlayer1;
   final String? correctAnswerPlayer2;
   final String? currentTurnPlayerId;
@@ -20,6 +21,7 @@ class GameModel {
     required this.player1,
     this.player2,
     required this.topic,
+    required this.questionCount,
     required this.currentTurnPlayerId,
     required this.currntQuestionId,
     this.correctAnswerPlayer1,
@@ -39,6 +41,7 @@ class GameModel {
           ? PlayerModel.fromJson(json['player2'])
           : null,
       topic: json['topic'],
+      questionCount: json['question_count']?? 10,
       currentTurnPlayerId: json['current_turn_player_id'],
       currntQuestionId: json['currnt_question_id'],
       correctAnswerPlayer1: json['correct_answer_player1'],
@@ -58,6 +61,7 @@ class GameModel {
       'player1': player1.toJson(),
       'player2': player2?.toJson(),
       'topic': topic,
+      'question_count': questionCount,
       'correct_answer_player1': correctAnswerPlayer1,
       'correct_answer_player2': correctAnswerPlayer2,
       'current_turn_player_id': currentTurnPlayerId,
@@ -76,6 +80,7 @@ class GameModel {
     PlayerModel? player1,
     PlayerModel? player2,
     String? topic,
+    int? questionCount,
     String? correctAnswerPlayer1,
     String? correctAnswerPlayer2,
     String? currentTurnPlayerId,
@@ -91,6 +96,7 @@ class GameModel {
       player1: player1 ?? this.player1,
       player2: player2 ?? this.player2,
       topic: topic ?? this.topic,
+      questionCount: questionCount ?? this.questionCount,
       currentTurnPlayerId: currentTurnPlayerId,
       currntQuestionId: currntQuestionId ?? this.currntQuestionId,
       correctAnswerPlayer1: correctAnswerPlayer1,

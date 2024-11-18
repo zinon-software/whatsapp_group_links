@@ -30,7 +30,7 @@ class _UsersRankScreenState extends State<UsersRankScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("اقسام التحديات"),
+        title: const Text("الترتيب"),
       ),
       body: BlocBuilder<UsersCubit, UsersState>(
         bloc: _usersCubit,
@@ -52,6 +52,7 @@ class _UsersRankScreenState extends State<UsersRankScreen> {
             List<UserModel> users = [];
 
             users.addAll(state.users);
+            users.sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
             users.sort((a, b) => b.score.compareTo(a.score));
 
@@ -71,7 +72,7 @@ class _UsersRankScreenState extends State<UsersRankScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: SizedBox(
-                    height: 250,
+                    height: 260,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -134,7 +135,29 @@ class _UsersRankScreenState extends State<UsersRankScreen> {
                                 child: CustomCachedNetworkImage(user.photoUrl),
                               ),
                               title: Text(user.name),
-                              subtitle: Text(user.country ?? ''),
+                              subtitle: Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 2,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: ColorsManager.primaryLight,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Text(
+                                      "المرتبة: ${index + 4}",
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text(user.country ?? ''),
+                                ],
+                              ),
                               trailing: Text("+${user.score}"),
                             ),
                           ),

@@ -94,6 +94,7 @@ class _GamesScreenState extends State<GamesScreen> {
                             currentQuestionNumber: 0,
                             startedAt: DateTime.now(),
                             duration: const Duration(minutes: 30),
+                            questionCount: questions.length,
                           ),
                         );
                       },
@@ -103,12 +104,22 @@ class _GamesScreenState extends State<GamesScreen> {
               );
             }
             if (snapshot.hasData) {
+              final List<GameModel> games = snapshot.data!.docs
+                  .map((doc) =>
+                      GameModel.fromJson(doc.data() as Map<String, dynamic>))
+                  .toList();
+
+              // remove the game after 24 hours
+              for (GameModel game in games) {
+                if (game.startedAt.isBefore(
+                    DateTime.now().subtract(const Duration(hours: 24)))) {
+                  _challengesCubit.endGameEvent(game);
+                }
+              }
               return ListView.builder(
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (context, index) {
-                  GameModel game = GameModel.fromJson(
-                    snapshot.data!.docs[index].data() as Map<String, dynamic>,
-                  );
+                  GameModel game = games[index];
                   return GameCardWidget(
                     game: game,
                     questions: questions,
@@ -142,6 +153,7 @@ class _GamesScreenState extends State<GamesScreen> {
                     currentQuestionNumber: 0,
                     startedAt: DateTime.now(),
                     duration: const Duration(minutes: 30),
+                    questionCount: questions.length,
                   ),
                 );
               },
