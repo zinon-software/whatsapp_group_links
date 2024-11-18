@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:audioplayers/audioplayers.dart'; // استيراد مكتبة الصوت
 
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -154,6 +155,7 @@ class GameContentView extends StatelessWidget {
   }
 }
 
+
 class QuestionOptionsWidget extends StatefulWidget {
   const QuestionOptionsWidget({
     super.key,
@@ -176,6 +178,7 @@ class _QuestionOptionsWidgetState extends State<QuestionOptionsWidget> {
   int? selectedIndex;
   bool showAnswerFeedback = false;
   int? opponentSelectedIndex; // مؤشر الخيار الذي اختاره الطرف الآخر
+  late AudioPlayer _audioPlayer; // متغير لتشغيل الصوت
 
   List<String> shuffledOptions = []; // قائمة جديدة للخيارات المخلوطة
 
@@ -187,6 +190,7 @@ class _QuestionOptionsWidgetState extends State<QuestionOptionsWidget> {
       widget.currentQuestion.options,
     ); // نسخ الخيارات الأصلية
     shuffledOptions.shuffle(Random()); // خلط الخيارات عشوائيًا
+    _audioPlayer = AudioPlayer(); // تهيئة مشغل الصوت
   }
 
   @override
@@ -210,7 +214,7 @@ class _QuestionOptionsWidgetState extends State<QuestionOptionsWidget> {
     if (oldWidget.opponentAnswer != widget.opponentAnswer &&
         widget.opponentAnswer != null) {
       final index = shuffledOptions.indexOf(
-        widget.opponentAnswer!,
+        widget.opponentAnswer!, 
       ); // استخدام الخيارات المخلوطة لتحديد الخيار
       if (index != -1) {
         setState(() {
@@ -218,6 +222,14 @@ class _QuestionOptionsWidgetState extends State<QuestionOptionsWidget> {
           showAnswerFeedback = true;
         });
       }
+    }
+  }
+
+  void playAnswerFeedbackSound(bool isCorrect) async {
+    if (isCorrect) {
+      await _audioPlayer.play(AssetSource('sounds/correct_answer.wav'));
+    } else {
+      await _audioPlayer.play(AssetSource('sounds/incorrect_answer.wav'));
     }
   }
 
@@ -242,6 +254,9 @@ class _QuestionOptionsWidgetState extends State<QuestionOptionsWidget> {
                         selectedIndex = index;
                         showAnswerFeedback = true;
                       });
+
+                      // تشغيل الصوت عند اختيار الإجابة
+                      playAnswerFeedbackSound(isCorrectAnswer);
 
                       // تأخير لعرض التغذية الراجعة (Feedback)
                       await Future.delayed(const Duration(seconds: 1));
@@ -293,3 +308,144 @@ class _QuestionOptionsWidgetState extends State<QuestionOptionsWidget> {
     );
   }
 }
+
+
+// class QuestionOptionsWidget extends StatefulWidget {
+//   const QuestionOptionsWidget({
+//     super.key,
+//     required this.currentQuestion,
+//     required this.isPlayerTurn,
+//     required this.onSelectAnswer,
+//     this.opponentAnswer,
+//   });
+
+//   final QuestionModel currentQuestion;
+//   final bool isPlayerTurn;
+//   final Function(String answer) onSelectAnswer;
+//   final String? opponentAnswer; // إجابة الطرف الآخر
+
+//   @override
+//   State<QuestionOptionsWidget> createState() => _QuestionOptionsWidgetState();
+// }
+
+// class _QuestionOptionsWidgetState extends State<QuestionOptionsWidget> {
+//   int? selectedIndex;
+//   bool showAnswerFeedback = false;
+//   int? opponentSelectedIndex; // مؤشر الخيار الذي اختاره الطرف الآخر
+
+//   List<String> shuffledOptions = []; // قائمة جديدة للخيارات المخلوطة
+
+//   @override
+//   void initState() {
+//     super.initState();
+
+//     shuffledOptions = List.from(
+//       widget.currentQuestion.options,
+//     ); // نسخ الخيارات الأصلية
+//     shuffledOptions.shuffle(Random()); // خلط الخيارات عشوائيًا
+//   }
+
+//   @override
+//   void didUpdateWidget(covariant QuestionOptionsWidget oldWidget) {
+//     super.didUpdateWidget(oldWidget);
+
+//     if (oldWidget.currentQuestion != widget.currentQuestion) {
+//       // إعادة تعيين الحالة عند تغيير السؤال
+//       setState(() {
+//         selectedIndex = null;
+//         opponentSelectedIndex = null;
+//         showAnswerFeedback = false;
+//         shuffledOptions = List.from(
+//           widget.currentQuestion.options,
+//         ); // نسخ الخيارات الأصلية
+//         shuffledOptions.shuffle(Random()); // خلط الخيارات عشوائيًا
+//       });
+//     }
+
+//     // إذا تغيرت إجابة الطرف الآخر
+//     if (oldWidget.opponentAnswer != widget.opponentAnswer &&
+//         widget.opponentAnswer != null) {
+//       final index = shuffledOptions.indexOf(
+//         widget.opponentAnswer!,
+//       ); // استخدام الخيارات المخلوطة لتحديد الخيار
+//       if (index != -1) {
+//         setState(() {
+//           opponentSelectedIndex = index;
+//           showAnswerFeedback = true;
+//         });
+//       }
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: List.generate(
+//         shuffledOptions.length, // استخدام الخيارات المخلوطة
+//         (index) {
+//           final isCorrectAnswer =
+//               widget.currentQuestion.correctAnswer == shuffledOptions[index];
+//           final isSelected = selectedIndex == index;
+//           final isOpponentSelected = opponentSelectedIndex == index;
+
+//           return AnimatedOpacity(
+//             duration: const Duration(milliseconds: 300),
+//             opacity: widget.isPlayerTurn ? 1 : 0.5,
+//             child: GestureDetector(
+//               onTap: widget.isPlayerTurn
+//                   ? () async {
+//                       setState(() {
+//                         selectedIndex = index;
+//                         showAnswerFeedback = true;
+//                       });
+
+//                       // تأخير لعرض التغذية الراجعة (Feedback)
+//                       await Future.delayed(const Duration(seconds: 1));
+
+//                       setState(() {
+//                         showAnswerFeedback = false;
+//                       });
+
+//                       widget.onSelectAnswer(
+//                         shuffledOptions[index], // استخدام الخيار المخلوط
+//                       );
+//                     }
+//                   : null,
+//               child: AnimatedContainer(
+//                 duration: const Duration(milliseconds: 300),
+//                 padding: const EdgeInsets.all(8.0),
+//                 margin: const EdgeInsets.only(bottom: 8.0),
+//                 decoration: BoxDecoration(
+//                   border: Border.all(
+//                     color: isSelected || isOpponentSelected
+//                         ? (isCorrectAnswer ? Colors.green : Colors.red)
+//                         : (widget.isPlayerTurn ? Colors.green : Colors.grey),
+//                   ),
+//                   borderRadius: BorderRadius.circular(8.0),
+//                   color: isSelected || isOpponentSelected
+//                       ? (isCorrectAnswer
+//                           ? Colors.green.withOpacity(0.2)
+//                           : Colors.red.withOpacity(0.2))
+//                       : Colors.transparent,
+//                 ),
+//                 child: Row(
+//                   children: [
+//                     const SizedBox(width: 8.0),
+//                     Text(shuffledOptions[index]), // استخدام الخيار المخلوط
+//                     const Spacer(),
+//                     if (showAnswerFeedback &&
+//                         (isSelected || isOpponentSelected))
+//                       Icon(
+//                         isCorrectAnswer ? Icons.check : Icons.close,
+//                         color: isCorrectAnswer ? Colors.green : Colors.red,
+//                       ),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }
