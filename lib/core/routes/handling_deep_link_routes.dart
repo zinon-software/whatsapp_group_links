@@ -5,12 +5,6 @@ import 'app_routes.dart';
 
 class HandlingDeepLinkRoutes {
   static DeepLinkRoute handleDeepLink(String deepLink) {
-    // if (deepLink == '') {
-    //   deepLink = "${AppConfig.instance.baseUrl}/";
-    // }
-    // if (!deepLink.contains(AppConfig.instance.baseUrl)) {
-    //   deepLink = AppConfig.instance.baseUrl + deepLink;
-    // }
     Uri uri = Uri.parse(deepLink);
     print('CURRENT URI HAMADA $uri');
     switch (uri.path) {
@@ -23,7 +17,7 @@ class HandlingDeepLinkRoutes {
 
       default:
                return DeepLinkRoute(
-          routeName: uri.path == AppRoutes.homeRoute ? AppRoutes.homeRoute : deepLink,
+          routeName: uri.path == '' ? AppRoutes.homeRoute : deepLink,
           arguments: uri.queryParameters,
         );
     }
