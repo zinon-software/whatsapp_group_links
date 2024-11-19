@@ -1,0 +1,11 @@
+[
+    {
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.zainon.whatsapp_group_links",
+        "sha256_cert_fingerprints":
+          ["D8:EB:A3:EE:6F:98:97:60:13:F7:C3:68:89:8D:F5:3C:3F:8F:75:F4:7B:EC:B0:5F:41:78:52:45:61:FE:39:EB"]
+      }
+    }
+  ]
