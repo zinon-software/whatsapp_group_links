@@ -29292,7 +29292,7 @@ this.a=b},
 bf1(a){var s,r=A.eQ(a,0,null)
 A.ix("CURRENT URI HAMADA "+r.j(0))
 switch(r.gdA()){case"/bills/bills/":return B.Tb
-default:s=r.gdA()==="/"?"/":a
+default:s=r.gdA()===""?"/":a
 return new A.a0T(s,r.gabW())}},
 b8q(){var s=0,r=A.q(t.H)
 var $async$b8q=A.m(function(a,b){if(a===1)return A.n(b,r)
