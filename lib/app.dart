@@ -1,3 +1,4 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,42 +24,49 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiRepositoryProvider(
-      providers: [
-        RepositoryProvider(
-          lazy: false,
-          create: (__) => UsersCubit(
-            repository: instance<UsersRepository>(),
-            auth: FirebaseAuth.instance,
-          )..fetchMyUserAccount(),
-        ),
-        RepositoryProvider(
-          create: (__) => ChallengesCubit(
-            repository: instance<ChallengesRepository>(),
+    return ScreenUtilInit(
+      designSize: const Size(411, 866),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (__, child) {
+        return MultiRepositoryProvider(
+          providers: [
+            RepositoryProvider(
+              lazy: false,
+              create: (__) => UsersCubit(
+                repository: instance<UsersRepository>(),
+                auth: FirebaseAuth.instance,
+              )..fetchMyUserAccount(),
+            ),
+            RepositoryProvider(
+              create: (__) => ChallengesCubit(
+                repository: instance<ChallengesRepository>(),
+              ),
+            ),
+            RepositoryProvider(
+              create: (__) => LinksCubit(
+                repository: instance<LinksRepository>(),
+              ),
+            ),
+          ],
+          child: MaterialApp(
+            navigatorKey: AppNavigation.navigatorKey,
+            initialRoute: AppRoutes.homeRoute,
+            onGenerateRoute: AppNavigation.generate,
+            debugShowCheckedModeBanner: false,
+            title: "Linkati",
+            theme: AppThemes.light(),
+            navigatorObservers: <NavigatorObserver>[observer],
+            localizationsDelegates: const [
+              GlobalCupertinoLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            supportedLocales: const [Locale("ar", "AE")],
+            locale: const Locale("ar", "AE"),
           ),
-        ),
-        RepositoryProvider(
-          create: (__) => LinksCubit(
-            repository: instance<LinksRepository>(),
-          ),
-        ),
-      ],
-      child: MaterialApp(
-        navigatorKey: AppNavigation.navigatorKey,
-        initialRoute: AppRoutes.homeRoute,
-        onGenerateRoute: AppNavigation.generate,
-        debugShowCheckedModeBanner: false,
-        title: "Linkati",
-        theme: AppThemes.light(),
-        navigatorObservers: <NavigatorObserver>[observer],
-        localizationsDelegates: const [
-          GlobalCupertinoLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-        ],
-        supportedLocales: const [Locale("ar", "AE")],
-        locale: const Locale("ar", "AE"),
-      ),
+        );
+      }
     );
   }
 }

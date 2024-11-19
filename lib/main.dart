@@ -12,6 +12,7 @@ import 'package:linkati/firebase_options.dart';
 import 'app.dart';
 import 'config/app_bloc_observer.dart';
 import 'config/app_injector.dart';
+import 'core/routes/handling_deep_link_routes.dart';
 
 
 Future<void> main() async {
@@ -73,4 +74,7 @@ Future<void> main() async {
   );
 
   runApp(const App());
+
+  HandlingDeepLinkRoutes.initAppLinks();
+
 }
