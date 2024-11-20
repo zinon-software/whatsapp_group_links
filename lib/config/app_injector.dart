@@ -1,8 +1,11 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import '../core/api/app_collections.dart';
 import '../core/network/connection_status.dart';
+import '../core/storage/hive_storage.dart';
+import '../core/storage/storage_repository.dart';
 import '../features/challenges/data/datasources/challenges_datasources.dart';
 import '../features/challenges/data/repositories/challenges_repositories.dart';
 import '../features/links/data/datasources/links_datasources.dart';
@@ -11,18 +14,12 @@ import '../features/main/data/datasources/main_datasources.dart';
 import '../features/main/data/repositories/main_repositories.dart';
 import '../features/users/data/datasources/users_datasources.dart';
 import '../features/users/data/repositories/users_repositories.dart';
+import 'app_hive_config.dart';
 
 final instance = GetIt.instance;
 
-void setupGetIt() {
-  // // Hive
-  // await Hive.initFlutter();
-
-  // Hive.registerAdapter(BaseCityModelAdapter());
-
-  // Box box = await Hive.openBox(AppHiveConfig.instance.wasselakCustomerBox);
-
-  // instance.registerLazySingleton<StorageRepository>(() => HiveStorage(box));
+Future<void> setupGetIt() async {
+  await sutpHive();
 
   // InternetConnection
   final Connectivity internetConnection = Connectivity();
@@ -38,6 +35,17 @@ void setupGetIt() {
   stupLinks();
   stupChallenges();
   stupMain();
+}
+
+Future<void> sutpHive() async {
+  // // Hive
+  await Hive.initFlutter();
+
+  // Hive.registerAdapter(UserModelAdapter());
+
+  Box box = await Hive.openBox(AppHiveConfig.instance.linkatiBox);
+
+  instance.registerLazySingleton<StorageRepository>(() => HiveStorage(box));
 }
 
 void stupUsers() {

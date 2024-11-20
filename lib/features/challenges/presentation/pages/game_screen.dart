@@ -210,9 +210,8 @@ class _GameScreenState extends State<GameScreen> {
             usersCubit: _usersCubit,
             currentQuestion: _currentQuestion,
             onSubmitAnswer: (String answer) => _onConfirmAnswer(answer),
-            adBannerWidget: Padding(
+            adBannerWidget: _adManager.getBannerAdWidget(
               padding: const EdgeInsets.all(8.0),
-              child: _adManager.getBannerAdWidget(),
             ),
           );
         },

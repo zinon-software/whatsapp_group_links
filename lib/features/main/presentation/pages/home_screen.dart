@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:linkati/core/routes/app_routes.dart';
 import 'package:linkati/core/widgets/alert_widget.dart';
+import 'package:linkati/core/widgets/custom_cached_network_image_widget.dart';
 import 'package:linkati/features/users/presentation/cubit/users_cubit.dart';
 
 import '../../../../../core/ads/ads_manager.dart';
@@ -70,11 +71,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               } else {
                 // user account
-                return IconButton(
-                  icon: const Icon(Icons.account_circle),
-                  onPressed: () {
+                return InkWell(
+                  onTap: () {
                     Navigator.pushNamed(context, AppRoutes.accountRoute);
                   },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: CircleAvatar(
+                      radius: 18,
+                      backgroundImage: CustomCachedNetworkImage(
+                        _usersCubit.auth.currentUser!.photoURL ?? '',
+                      ).imageProvider,
+                    ),
+                  ),
                 );
               }
             },
@@ -158,11 +167,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 adsManager: _adsManager,
               ),
               // telegram
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Center(
-                  child: _adsManager.getNativeAdWidget(),
-                ),
+              Center(
+                child: _adsManager.getNativeAdWidget(),
               ),
               HomeLinksWidget(
                 adsManager: _adsManager,
@@ -197,11 +203,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               // snapchat
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Center(
-                  child: _adsManager.getNativeAdWidget(),
-                ),
+              Center(
+                child: _adsManager.getNativeAdWidget(),
               ),
               HomeLinksWidget(
                 adsManager: _adsManager,
@@ -242,11 +245,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 title: "روابط اخرى",
                 adsManager: _adsManager,
               ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Center(
-                  child: _adsManager.getNativeAdWidget(),
-                ),
+              Center(
+                child: _adsManager.getNativeAdWidget(),
               ),
               const SizedBox(height: 100),
             ],

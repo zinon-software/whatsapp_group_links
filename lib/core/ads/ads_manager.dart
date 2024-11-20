@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:linkati/config/app_injector.dart';
+import 'package:linkati/core/storage/storage_repository.dart';
 
 import 'ad_helper.dart';
 
@@ -62,9 +64,13 @@ class AdsManager {
     _createBannerAd(adSize: adSize);
   }
 
-  Widget getBannerAdWidget({AdSize? adSize}) {
-    return _BannerAdWidget(
+  Widget getBannerAdWidget({
+    AdSize? adSize,
+    required EdgeInsetsGeometry padding,
+  }) {
+    return BannerAdWidget(
       adSize: adSize,
+      padding: padding,
     );
   }
 
@@ -141,19 +147,24 @@ class AdsManager {
   }
 
   void loadInterstitialAd() {
+    if (instance<StorageRepository>().isStopAds) return;
     _createInterstitialAd();
   }
 
   void loadRewardedAd() {
+    if (instance<StorageRepository>().isStopAds) return;
     _createRewardedAd();
   }
 
   void loadRewardedInterstitialAd() {
+    if (instance<StorageRepository>().isStopAds) return;
     _createRewardedInterstitialAd();
   }
 
   // عرض الاعلان البيني
   void showInterstitialAd() {
+    if (instance<StorageRepository>().isStopAds) return;
+
     if (_interstitialAd == null) {
       log('Warning: attempt to show interstitial before loaded.');
       return;
@@ -190,6 +201,8 @@ class AdsManager {
 
   // عرض اعلان المكافئة
   void showRewardedAd() {
+    if (instance<StorageRepository>().isStopAds) return;
+
     if (_rewardedAd == null) {
       log('Warning: attempt to show rewarded before loaded.');
       return;
@@ -233,6 +246,8 @@ class AdsManager {
   }
 
   void showRewardedInterstitialAd() {
+    if (instance<StorageRepository>().isStopAds) return;
+
     if (_rewardedInterstitialAd == null) {
       log('Warning: attempt to show rewarded interstitial before loaded.');
       return;
@@ -282,6 +297,8 @@ class AdsManager {
   }
 
   void showAppOpenAd() {
+    if (instance<StorageRepository>().isStopAds) return;
+
     if (openAd == null) {
       log('trying tto show before loading');
       loadAppOpenAd();
@@ -373,17 +390,21 @@ class _NativeAdWidgetState extends State<NativeAdWidget> {
 
   @override
   Widget build(BuildContext context) {
+    if (instance<StorageRepository>().isStopAds) return const SizedBox();
     if (_nativeAd != null && _nativeAdIsLoaded) {
-      return Align(
-        alignment: Alignment.center,
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(
-            minWidth: 320, // minimum recommended width
-            minHeight: 320, // minimum recommended height
-            maxWidth: 400,
-            maxHeight: 400,
+      return Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Align(
+          alignment: Alignment.center,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              minWidth: 320, // minimum recommended width
+              minHeight: 320, // minimum recommended height
+              maxWidth: 400,
+              maxHeight: 400,
+            ),
+            child: AdWidget(ad: _nativeAd!),
           ),
-          child: AdWidget(ad: _nativeAd!),
         ),
       );
     } else {
@@ -468,14 +489,15 @@ class _NativeAdWidgetState extends State<NativeAdWidget> {
   }
 }
 
-class _BannerAdWidget extends StatefulWidget {
+class BannerAdWidget extends StatefulWidget {
+  final EdgeInsetsGeometry padding;
   final AdSize? adSize;
-  const _BannerAdWidget({this.adSize});
+  const BannerAdWidget({super.key, this.adSize, required this.padding});
   @override
-  State<_BannerAdWidget> createState() => _BannerAdWidgetState();
+  State<BannerAdWidget> createState() => _BannerAdWidgetState();
 }
 
-class _BannerAdWidgetState extends State<_BannerAdWidget> {
+class _BannerAdWidgetState extends State<BannerAdWidget> {
   late BannerAd _bannerAd;
 
   @override
@@ -504,10 +526,14 @@ class _BannerAdWidgetState extends State<_BannerAdWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: _bannerAd.size.height.toDouble(),
-      width: _bannerAd.size.width.toDouble(),
-      child: AdWidget(ad: _bannerAd),
+    if (instance<StorageRepository>().isStopAds) return const SizedBox();
+    return Padding(
+      padding: widget.padding,
+      child: SizedBox(
+        height: _bannerAd.size.height.toDouble(),
+        width: _bannerAd.size.width.toDouble(),
+        child: AdWidget(ad: _bannerAd),
+      ),
     );
   }
 }

@@ -24,7 +24,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  setupGetIt();
+  await setupGetIt();
 
 
   MobileAds.instance.initialize();

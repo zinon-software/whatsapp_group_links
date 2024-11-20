@@ -24,6 +24,14 @@ class UsersCubit extends Cubit<UsersState> {
       if (auth.currentUser == null) {
         return;
       }
+      currentUser = UserModel.isEmpty().copyWith(
+        id: auth.currentUser!.uid,
+        email: auth.currentUser!.email,
+        name: auth.currentUser!.displayName,
+        photoUrl: auth.currentUser!.photoURL,
+        phoneNumber: auth.currentUser!.phoneNumber,
+        
+      );
       final uid = auth.currentUser!.uid;
       (await repository.fetchUser(uid)).fold(
         (error) => null,

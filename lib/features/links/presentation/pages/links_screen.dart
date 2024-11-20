@@ -43,10 +43,8 @@ class _LinksScreenState extends State<LinksScreen> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: _adsManager.getBannerAdWidget(),
-          ),
+           _adsManager.getBannerAdWidget(padding: const EdgeInsets.all(8.0)),
+          
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: widget.query.snapshots(),
@@ -88,11 +86,8 @@ class _LinksScreenState extends State<LinksScreen> {
                     return Column(
                       children: [
                         if ((index + 1) % 10 == 0)
-                          Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Center(
-                              child: _adsManager.getNativeAdWidget(),
-                            ),
+                          Center(
+                            child: _adsManager.getNativeAdWidget(),
                           ),
                         LinkCardWidget(adsManager: _adsManager, link: link),
                         SizedBox(height: 10),

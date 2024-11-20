@@ -99,12 +99,10 @@ class _LinkFormScreenState extends State<LinkFormScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                child: Center(
-                  child: _adsManager.getBannerAdWidget(
-                    adSize: AdSize.mediumRectangle,
-                  ),
+              Center(
+                child: _adsManager.getBannerAdWidget(
+                  adSize: AdSize.mediumRectangle,
+                  padding: const EdgeInsets.symmetric(vertical: 20),
                 ),
               ),
               const SizedBox(height: 40),

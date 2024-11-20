@@ -83,12 +83,10 @@ class _LinkDetailsScreenState extends State<LinkDetailsScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Center(
-                child: _adsManager.getBannerAdWidget(
-                  adSize: AdSize.mediumRectangle,
-                ),
+            Center(
+              child: _adsManager.getBannerAdWidget(
+                adSize: AdSize.mediumRectangle,
+                padding: const EdgeInsets.symmetric(vertical: 20),
               ),
             ),
             const SizedBox(height: 10),

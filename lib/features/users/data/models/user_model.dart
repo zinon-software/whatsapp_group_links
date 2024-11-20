@@ -1,3 +1,8 @@
+import 'package:linkati/config/app_injector.dart';
+
+import '../../../../config/app_hive_config.dart';
+import '../../../../core/storage/storage_repository.dart';
+
 class UserModel {
   final String id;
   final String name;
@@ -10,6 +15,7 @@ class UserModel {
   final int score;
   final double coins;
   final String? country;
+  final bool isStopAds;
 
   UserModel({
     required this.id,
@@ -23,11 +29,12 @@ class UserModel {
     this.score = 0,
     this.coins = 0,
     this.country,
+    this.isStopAds = false,
   });
 
   // إنشاء كائن UserModel من مستند Firestore
   factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(
+    UserModel user = UserModel(
       id: json['id'] ?? '',
       name: json['name'] ?? 'No Name',
       email: json['email'] ?? 'No Email',
@@ -43,7 +50,18 @@ class UserModel {
       score: json['score'] ?? 0,
       coins: json['coins'] ?? 0,
       country: json['country'],
+      isStopAds: json['is_stop_ads'] ?? false,
     );
+
+    if (user.isStopAds) {
+      // save local storage
+      instance<StorageRepository>().setData(
+        key: AppHiveConfig.instance.keyIsStopAds,
+        value: true,
+      );
+    }
+
+    return user;
   }
 
   // تحويل الكائن إلى Map لتخزينه في Firestore
@@ -60,6 +78,7 @@ class UserModel {
       'score': score,
       'coins': coins,
       'country': country,
+      'is_stop_ads': isStopAds
     };
   }
 
@@ -75,6 +94,7 @@ class UserModel {
     int? score,
     double? coins,
     String? country,
+    bool? isStopAds,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -88,6 +108,7 @@ class UserModel {
       score: score ?? this.score,
       coins: coins ?? this.coins,
       country: country ?? this.country,
+      isStopAds: isStopAds ?? this.isStopAds,
     );
   }
 
@@ -101,7 +122,6 @@ class UserModel {
       lastLoginAt: DateTime.now(),
       phoneNumber: '',
       permissions: PermissionModel(),
-      
     );
   }
 }
