@@ -43,6 +43,7 @@ class WinnerView extends StatelessWidget {
     }
 
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: AppBar(
         backgroundColor: backgroundColor,
         title: const Text('نتيجة اللعبة'),
@@ -54,83 +55,89 @@ class WinnerView extends StatelessWidget {
           systemNavigationBarColor: backgroundColor,
         ),
       ),
-      body: Container(
-        color: backgroundColor,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    PlayerWidget(
-                      isMe: true,
-                      isHost: game.myPlayer.score >= game.otherPlayer.score,
-                      isAi: false,
-                      player: game.myPlayer,
-                      usersCubit: usersCubit,
-                      gameId: game.id,
-                    ),
-                    Expanded(
-                      child: Center(
-                        child: Image.asset(
-                          "assets/images/vs.png",
-                          height: 90,
-                          width: 90,
-                        ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              margin: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 16.0,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  PlayerWidget(
+                    isMe: true,
+                    isHost: game.myPlayer.score >= game.otherPlayer.score,
+                    isAi: false,
+                    player: game.myPlayer,
+                    usersCubit: usersCubit,
+                    gameId: game.id,
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: Image.asset(
+                        "assets/images/vs.png",
+                        height: 90,
+                        width: 90,
                       ),
                     ),
-                    PlayerWidget(
-                      isMe: false,
-                      isHost: game.myPlayer.score <= game.otherPlayer.score,
-                      isAi: game.isWithAi,
-                      player: game.otherPlayer,
-                      usersCubit: usersCubit,
-                      gameId: game.id,
-                    ),
-                  ],
-                ),
+                  ),
+                  PlayerWidget(
+                    isMe: false,
+                    isHost: game.myPlayer.score <= game.otherPlayer.score,
+                    isAi: game.isWithAi,
+                    player: game.otherPlayer,
+                    usersCubit: usersCubit,
+                    gameId: game.id,
+                  ),
+                ],
               ),
-              Icon(
-                winnerIcon,
-                size: 80,
+            ),
+            const SizedBox(height: 20),
+            Icon(
+              winnerIcon,
+              size: 80,
+              color: Colors.white,
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'نتيجة اللعبة',
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
-              const SizedBox(height: 20),
-              Text(
-                'نتيجة اللعبة',
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              winnerMessage,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
-              const SizedBox(height: 20),
-              Text(
-                winnerMessage,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              CustomButtonWidget(
-                label: 'إغلاق',
-                radius: 10,
-                height: 50,
-                width: 200,
-                onPressed: () {
-                  challengesCubit.endGameEvent(game);
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+            CustomButtonWidget(
+              label: 'إغلاق',
+              radius: 10,
+              height: 50,
+              width: 200,
+              onPressed: () {
+                challengesCubit.endGameEvent(game);
+                Navigator.pop(context);
+              },
+            ),
+          ],
         ),
       ),
     );

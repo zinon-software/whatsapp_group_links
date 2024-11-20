@@ -7,6 +7,8 @@ import '../features/challenges/data/datasources/challenges_datasources.dart';
 import '../features/challenges/data/repositories/challenges_repositories.dart';
 import '../features/links/data/datasources/links_datasources.dart';
 import '../features/links/data/repositories/links_repositories.dart';
+import '../features/main/data/datasources/main_datasources.dart';
+import '../features/main/data/repositories/main_repositories.dart';
 import '../features/users/data/datasources/users_datasources.dart';
 import '../features/users/data/repositories/users_repositories.dart';
 
@@ -35,6 +37,7 @@ void setupGetIt() {
   stupUsers();
   stupLinks();
   stupChallenges();
+  stupMain();
 }
 
 void stupUsers() {
@@ -94,6 +97,26 @@ void stupLinks() {
     instance.registerLazySingleton<LinksRepository>(
       () => LinksRepositoryImpl(
         instance<LinksDatasources>(),
+        instance<ConnectionStatus>(),
+      ),
+    );
+  }
+}
+
+void stupMain() {
+  // data Source
+  if (!GetIt.I.isRegistered<MainDatasources>()) {
+    instance.registerLazySingleton<MainDatasources>(
+      () => MainDatasourcesImpl(
+        slideshows: instance<AppCollections>().slideshows,
+      ),
+    );
+  }
+  // Repository
+  if (!GetIt.I.isRegistered<MainRepository>()) {
+    instance.registerLazySingleton<MainRepository>(
+      () => MainRepositoryImpl(
+        instance<MainDatasources>(),
         instance<ConnectionStatus>(),
       ),
     );

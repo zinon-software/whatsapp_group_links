@@ -49,7 +49,7 @@ class HomeButtonWidget extends StatelessWidget {
             const SizedBox(width: 8),
             Icon(
               icon,
-              color: Colors.black,
+              color: ColorsManager.primaryLight,
             ),
             const SizedBox(width: 4),
             Text(
@@ -70,7 +70,7 @@ class HomeButtonWidget extends StatelessWidget {
               ),
               child: const Icon(
                 Icons.chevron_right,
-                color: Colors.white,
+                color: Colors.black,
               ),
             ),
           ],

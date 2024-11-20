@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:linkati/core/widgets/alert_widget.dart';
@@ -140,38 +142,41 @@ class _GamesScreenState extends State<GamesScreen> {
     }
 
     // عرض حوار لاختيار عدد الأسئلة
-    int? selectedQuestionsCount = await showDialog<int>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('اختار عدد الأسئلة'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              for (int option in options)
-                RadioListTile<int>(
-                  title: Text('$option سؤال'),
-                  value: option,
-                  groupValue: null,
-                  onChanged: (int? value) {
-                    Navigator.pop(context, value);
-                  },
-                ),
-            ],
+    int? selectedQuestionsCount;
+
+    await AppAlert.showAlertWidget(
+      context,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'حدد عدد اسئلة التحدي',
+            style: Theme.of(context).textTheme.titleMedium,
           ),
-          actions: [
-            TextButton(
-              child: const Text('الغاء'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
+          SizedBox(height: 16.0),
+          Wrap(
+            spacing: 8.0,
+            children: options
+                .map(
+                  (option) => InkWell(
+                    onTap: () {
+                      selectedQuestionsCount = option;
+                      AppAlert.dismissDialog(context);
+                    },
+                    child: Chip(
+                      label: Text('$option سؤال'),
+                    ),
+                  ),
+                )
+                .toList(),
+          ),
+        ],
+      ),
     );
 
-    if (selectedQuestionsCount != null && selectedQuestionsCount > 0) {
+    if (selectedQuestionsCount != null && selectedQuestionsCount! > 0) {
+      Random random = Random();
+
       // إذا تم اختيار عدد من الأسئلة بشكل صحيح
       _challengesCubit.createGameEvent(
         GameModel(
@@ -183,11 +188,11 @@ class _GamesScreenState extends State<GamesScreen> {
           ),
           topic: widget.topic.id,
           currentTurnPlayerId: null,
-          currntQuestionId: questions.first.id,
+          currntQuestionId: questions[random.nextInt(questions.length)].id,
           currentQuestionNumber: 0,
           startedAt: DateTime.now(),
           duration: const Duration(minutes: 30),
-          questionCount: selectedQuestionsCount,
+          questionCount: selectedQuestionsCount!,
         ),
       );
     }

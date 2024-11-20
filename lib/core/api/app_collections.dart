@@ -24,4 +24,6 @@ class AppCollections {
       _db.collection('challenges').doc("topics").collection("topics");
   CollectionReference get games =>
       _db.collection('challenges').doc("games").collection("games");
+
+  CollectionReference get slideshows => _db.collection('slideshows');
 }

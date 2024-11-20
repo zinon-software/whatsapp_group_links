@@ -22,6 +22,7 @@ class GameContentView extends StatelessWidget {
     required this.usersCubit,
     required this.currentQuestion,
     required this.onSubmitAnswer,
+    required this.adBannerWidget,
   });
 
   final GameModel game;
@@ -31,6 +32,7 @@ class GameContentView extends StatelessWidget {
   final UsersCubit usersCubit;
   final QuestionModel currentQuestion;
   final Function(String answer) onSubmitAnswer;
+  final Widget adBannerWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +47,7 @@ class GameContentView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            adBannerWidget,
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -80,7 +83,7 @@ class GameContentView extends StatelessWidget {
             Text(
               currentQuestion.question,
               style: const TextStyle(
-                fontSize: 24,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
               textAlign: TextAlign.center,
@@ -93,68 +96,20 @@ class GameContentView extends StatelessWidget {
               opponentAnswer: game.otherPlayer.correctAnswer,
             ),
             const SizedBox(height: 20),
-            if (!game.isWithAi) ...[
-              isMyTurn
-                  ? CircularCountDownTimer(
-                      duration: 20,
-                      initialDuration: 0,
-                      controller: CountDownController(),
-                      width: 60, // عرض المؤقت
-                      height: 60, // ارتفاع المؤقت
-                      ringColor: Colors.grey[300]!,
-                      fillColor: Colors.green,
-                      backgroundColor: Colors.white,
-                      strokeWidth: 10.0,
-                      strokeCap: StrokeCap.round,
-                      textStyle: const TextStyle(
-                        fontSize: 22.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textFormat: CountdownTextFormat.S,
-                      isReverse: true, // للعد التنازلي
-                      isTimerTextShown: true,
-                      autoStart: true, // تشغيل المؤقت تلقائيًا
-                      onComplete: () {
-                        // عند انتهاء المؤقت بدون إجابة، يتم نقل الدور للطرف الآخر
-                        challengesCubit.updateGameEvent(game.copyWith(
-                          currentTurnPlayerId:
-                              game.currentTurnPlayerId == game.player1.userId
-                                  ? game.player2?.userId
-                                  : game.player1.userId,
-                        ));
-                      },
-                    )
-                  : CustomButtonWidget(
-                      radius: 100,
-                      height: 60,
-                      width: 60,
-                      backgroundColor: isMyTurn
-                          ? Colors.green
-                          : game.currentTurnPlayerId != null
-                              ? Colors.red
-                              : Colors.grey,
-                      enableClick: game.currentTurnPlayerId == null,
-                      onPressed: game.currentTurnPlayerId == null
-                          ? () {
-                              challengesCubit.updateGameEvent(game.copyWith(
-                                currentTurnPlayerId:
-                                    FirebaseAuth.instance.currentUser!.uid,
-                              ));
-                            }
-                          : null,
-                      child: const Icon(Icons.check, color: Colors.white),
-                    ),
-              const SizedBox(height: 8),
-              const Text('انقر للحصول على الدور'),
-            ]
+            DownTimerWidget(
+              game: game,
+              isMyTurn: isMyTurn,
+              challengesCubit: challengesCubit,
+              onSubmitAnswer: onSubmitAnswer,
+            ),
+            const SizedBox(height: 8),
+            const Text('انقر للحصول على الدور'),
           ],
         ),
       ),
     );
   }
 }
-
 
 class QuestionOptionsWidget extends StatefulWidget {
   const QuestionOptionsWidget({
@@ -176,6 +131,7 @@ class QuestionOptionsWidget extends StatefulWidget {
 
 class _QuestionOptionsWidgetState extends State<QuestionOptionsWidget> {
   int? selectedIndex;
+  bool isAnswerSelected = false;
   bool showAnswerFeedback = false;
   int? opponentSelectedIndex; // مؤشر الخيار الذي اختاره الطرف الآخر
   late AudioPlayer _audioPlayer; // متغير لتشغيل الصوت
@@ -200,6 +156,7 @@ class _QuestionOptionsWidgetState extends State<QuestionOptionsWidget> {
     if (oldWidget.currentQuestion != widget.currentQuestion) {
       // إعادة تعيين الحالة عند تغيير السؤال
       setState(() {
+        isAnswerSelected = false;
         selectedIndex = null;
         opponentSelectedIndex = null;
         showAnswerFeedback = false;
@@ -208,13 +165,17 @@ class _QuestionOptionsWidgetState extends State<QuestionOptionsWidget> {
         ); // نسخ الخيارات الأصلية
         shuffledOptions.shuffle(Random()); // خلط الخيارات عشوائيًا
       });
+    } else {
+      setState(() {
+        isAnswerSelected = false;
+      });
     }
 
     // إذا تغيرت إجابة الطرف الآخر
     if (oldWidget.opponentAnswer != widget.opponentAnswer &&
         widget.opponentAnswer != null) {
       final index = shuffledOptions.indexOf(
-        widget.opponentAnswer!, 
+        widget.opponentAnswer!,
       ); // استخدام الخيارات المخلوطة لتحديد الخيار
       if (index != -1) {
         setState(() {
@@ -248,9 +209,10 @@ class _QuestionOptionsWidgetState extends State<QuestionOptionsWidget> {
             duration: const Duration(milliseconds: 300),
             opacity: widget.isPlayerTurn ? 1 : 0.5,
             child: GestureDetector(
-              onTap: widget.isPlayerTurn
+              onTap: widget.isPlayerTurn && !isAnswerSelected
                   ? () async {
                       setState(() {
+                        isAnswerSelected = true;
                         selectedIndex = index;
                         showAnswerFeedback = true;
                       });
@@ -298,6 +260,8 @@ class _QuestionOptionsWidgetState extends State<QuestionOptionsWidget> {
                         isCorrectAnswer ? Icons.check : Icons.close,
                         color: isCorrectAnswer ? Colors.green : Colors.red,
                       ),
+                    if (showAnswerFeedback && isOpponentSelected)
+                      const Text('الخصم'),
                   ],
                 ),
               ),
@@ -309,143 +273,114 @@ class _QuestionOptionsWidgetState extends State<QuestionOptionsWidget> {
   }
 }
 
+class DownTimerWidget extends StatefulWidget {
+  const DownTimerWidget({
+    super.key,
+    required this.isMyTurn,
+    required this.onSubmitAnswer,
+    required this.challengesCubit,
+    required this.game,
+  });
 
-// class QuestionOptionsWidget extends StatefulWidget {
-//   const QuestionOptionsWidget({
-//     super.key,
-//     required this.currentQuestion,
-//     required this.isPlayerTurn,
-//     required this.onSelectAnswer,
-//     this.opponentAnswer,
-//   });
+  final bool isMyTurn;
+  final Function(String answer) onSubmitAnswer;
+  final ChallengesCubit challengesCubit;
+  final GameModel game;
 
-//   final QuestionModel currentQuestion;
-//   final bool isPlayerTurn;
-//   final Function(String answer) onSelectAnswer;
-//   final String? opponentAnswer; // إجابة الطرف الآخر
+  @override
+  State<DownTimerWidget> createState() => _DownTimerWidgetState();
+}
 
-//   @override
-//   State<QuestionOptionsWidget> createState() => _QuestionOptionsWidgetState();
-// }
+class _DownTimerWidgetState extends State<DownTimerWidget> {
+  late final CountDownController _countDownController;
+  late ValueNotifier<bool> isMyTurnNotifier;
 
-// class _QuestionOptionsWidgetState extends State<QuestionOptionsWidget> {
-//   int? selectedIndex;
-//   bool showAnswerFeedback = false;
-//   int? opponentSelectedIndex; // مؤشر الخيار الذي اختاره الطرف الآخر
+  @override
+  void initState() {
+    super.initState();
+    _countDownController = CountDownController();
+    isMyTurnNotifier = ValueNotifier(widget.isMyTurn);
+  }
 
-//   List<String> shuffledOptions = []; // قائمة جديدة للخيارات المخلوطة
+  @override
+  void didUpdateWidget(covariant DownTimerWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
 
-//   @override
-//   void initState() {
-//     super.initState();
+    if (widget.isMyTurn != oldWidget.isMyTurn) {
+      isMyTurnNotifier.value = widget.isMyTurn;
+    }
+  }
 
-//     shuffledOptions = List.from(
-//       widget.currentQuestion.options,
-//     ); // نسخ الخيارات الأصلية
-//     shuffledOptions.shuffle(Random()); // خلط الخيارات عشوائيًا
-//   }
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<bool>(
+      valueListenable: isMyTurnNotifier,
+      builder: (context, isMyTurn, child) {
+        return isMyTurn
+            ? CircularCountDownTimer(
+                duration: 20,
+                initialDuration: 0,
+                controller: _countDownController,
+                width: 60,
+                height: 60,
+                ringColor: Colors.grey[300]!,
+                fillColor: Colors.green,
+                backgroundColor: Colors.white,
+                strokeWidth: 10.0,
+                strokeCap: StrokeCap.round,
+                textStyle: const TextStyle(
+                  fontSize: 22.0,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+                textFormat: CountdownTextFormat.S,
+                isReverse: true,
+                isReverseAnimation: true,
+                isTimerTextShown: true,
+                autoStart: true,
+                onComplete: () {
+                  if (widget.game.isWithAi) {
+                    widget.onSubmitAnswer.call('');
+                  } else {
+                    widget.challengesCubit.updateGameEvent(
+                      widget.game.copyWith(
+                        currentTurnPlayerId: widget.game.currentTurnPlayerId ==
+                                widget.game.player1.userId
+                            ? widget.game.player2?.userId
+                            : widget.game.player1.userId,
+                      ),
+                    );
+                  }
+                },
+              )
+            : CustomButtonWidget(
+                radius: 100,
+                height: 60,
+                width: 60,
+                backgroundColor: widget.isMyTurn
+                    ? Colors.green
+                    : widget.game.currentTurnPlayerId != null
+                        ? Colors.red
+                        : Colors.grey,
+                enableClick: widget.game.currentTurnPlayerId == null,
+                onPressed: widget.game.currentTurnPlayerId == null
+                    ? () {
+                        widget.challengesCubit
+                            .updateGameEvent(widget.game.copyWith(
+                          currentTurnPlayerId:
+                              FirebaseAuth.instance.currentUser!.uid,
+                        ));
+                      }
+                    : null,
+                child: const Icon(Icons.check, color: Colors.white),
+              );
+      },
+    );
+  }
 
-//   @override
-//   void didUpdateWidget(covariant QuestionOptionsWidget oldWidget) {
-//     super.didUpdateWidget(oldWidget);
-
-//     if (oldWidget.currentQuestion != widget.currentQuestion) {
-//       // إعادة تعيين الحالة عند تغيير السؤال
-//       setState(() {
-//         selectedIndex = null;
-//         opponentSelectedIndex = null;
-//         showAnswerFeedback = false;
-//         shuffledOptions = List.from(
-//           widget.currentQuestion.options,
-//         ); // نسخ الخيارات الأصلية
-//         shuffledOptions.shuffle(Random()); // خلط الخيارات عشوائيًا
-//       });
-//     }
-
-//     // إذا تغيرت إجابة الطرف الآخر
-//     if (oldWidget.opponentAnswer != widget.opponentAnswer &&
-//         widget.opponentAnswer != null) {
-//       final index = shuffledOptions.indexOf(
-//         widget.opponentAnswer!,
-//       ); // استخدام الخيارات المخلوطة لتحديد الخيار
-//       if (index != -1) {
-//         setState(() {
-//           opponentSelectedIndex = index;
-//           showAnswerFeedback = true;
-//         });
-//       }
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       children: List.generate(
-//         shuffledOptions.length, // استخدام الخيارات المخلوطة
-//         (index) {
-//           final isCorrectAnswer =
-//               widget.currentQuestion.correctAnswer == shuffledOptions[index];
-//           final isSelected = selectedIndex == index;
-//           final isOpponentSelected = opponentSelectedIndex == index;
-
-//           return AnimatedOpacity(
-//             duration: const Duration(milliseconds: 300),
-//             opacity: widget.isPlayerTurn ? 1 : 0.5,
-//             child: GestureDetector(
-//               onTap: widget.isPlayerTurn
-//                   ? () async {
-//                       setState(() {
-//                         selectedIndex = index;
-//                         showAnswerFeedback = true;
-//                       });
-
-//                       // تأخير لعرض التغذية الراجعة (Feedback)
-//                       await Future.delayed(const Duration(seconds: 1));
-
-//                       setState(() {
-//                         showAnswerFeedback = false;
-//                       });
-
-//                       widget.onSelectAnswer(
-//                         shuffledOptions[index], // استخدام الخيار المخلوط
-//                       );
-//                     }
-//                   : null,
-//               child: AnimatedContainer(
-//                 duration: const Duration(milliseconds: 300),
-//                 padding: const EdgeInsets.all(8.0),
-//                 margin: const EdgeInsets.only(bottom: 8.0),
-//                 decoration: BoxDecoration(
-//                   border: Border.all(
-//                     color: isSelected || isOpponentSelected
-//                         ? (isCorrectAnswer ? Colors.green : Colors.red)
-//                         : (widget.isPlayerTurn ? Colors.green : Colors.grey),
-//                   ),
-//                   borderRadius: BorderRadius.circular(8.0),
-//                   color: isSelected || isOpponentSelected
-//                       ? (isCorrectAnswer
-//                           ? Colors.green.withOpacity(0.2)
-//                           : Colors.red.withOpacity(0.2))
-//                       : Colors.transparent,
-//                 ),
-//                 child: Row(
-//                   children: [
-//                     const SizedBox(width: 8.0),
-//                     Text(shuffledOptions[index]), // استخدام الخيار المخلوط
-//                     const Spacer(),
-//                     if (showAnswerFeedback &&
-//                         (isSelected || isOpponentSelected))
-//                       Icon(
-//                         isCorrectAnswer ? Icons.check : Icons.close,
-//                         color: isCorrectAnswer ? Colors.green : Colors.red,
-//                       ),
-//                   ],
-//                 ),
-//               ),
-//             ),
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
+  @override
+  void dispose() {
+    isMyTurnNotifier.dispose();
+    super.dispose();
+  }
+}

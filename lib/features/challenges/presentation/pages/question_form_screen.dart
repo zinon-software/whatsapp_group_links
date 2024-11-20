@@ -65,6 +65,8 @@ class _QuestionFormScreenState extends State<QuestionFormScreen> {
                 CustomTextField(
                   controller: _questionController,
                   labelText: 'السؤال',
+                  maxLines: 3,
+                  keyboardType: TextInputType.multiline,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'يرجى ادخال السؤال';

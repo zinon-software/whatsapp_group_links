@@ -18,7 +18,9 @@ import '../../features/links/presentation/pages/banned_words_screen.dart';
 import '../../features/links/presentation/pages/link_form_screen.dart';
 import '../../features/links/presentation/pages/links_dashboard_screen.dart';
 import '../../features/links/presentation/pages/links_screen.dart';
+import '../../features/main/data/models/slideshow_model.dart';
 import '../../features/main/presentation/pages/home_screen.dart';
+import '../../features/main/presentation/pages/slideshow_form_screen.dart';
 import '../../features/users/data/models/user_model.dart';
 import '../../features/users/presentation/pages/edit_account_screen.dart';
 import '../../features/users/presentation/pages/login_screen.dart';
@@ -30,7 +32,9 @@ part 'app_navigation.dart';
 class AppRoutes {
   AppRoutes._();
 
+  // main
   static const String homeRoute = '/';
+  static const String slideshowFormRoute = '/slideshow_form_route';
 
   // users
   static const String loginRoute = '/login_route';
@@ -54,4 +58,5 @@ class AppRoutes {
   static const String questionFormRoute = '/question_form_route';
   static const String waitingForPlayerRoute = '/waiting_for_player_route';
   static const String gameRoute = '/game_route';
+
 }

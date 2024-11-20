@@ -107,8 +107,7 @@ class AppAlert {
               ),
             ),
           ),
-          SizedBox(height: 20),
-          Divider(),
+          SizedBox(height: 30),
           Row(
             children: [
               if (onConfirm != null)
@@ -177,13 +176,12 @@ class AppAlert {
     ).show();
   }
 
-  
-
-  static Future<bool> showExitConfirmationDialog(BuildContext context, {String? subTitle, void Function()? onConfirm}) async {
+  static Future<bool> showExitConfirmationDialog(BuildContext context,
+      {String? subTitle, void Function()? onConfirm}) async {
     return await showAlert(
       context,
       title: 'تأكيد الخروج',
-      subTitle: subTitle?? 'هل تريد الخروج من اللعبة؟',
+      subTitle: subTitle ?? 'هل تريد الخروج من اللعبة؟',
       confirmText: 'نعم، خروج',
       dismissOn: false,
       onConfirm: () {
@@ -194,5 +192,4 @@ class AppAlert {
       onCancel: () => Navigator.of(context).pop(false),
     );
   }
-  
 }

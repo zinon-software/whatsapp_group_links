@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../utils/color_manager.dart';
 
@@ -11,6 +12,12 @@ class AppThemes {
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.white,
           primary: ColorsManager.primaryLight,
+        ),
+        textTheme: Typography.englishLike2018.apply(
+          fontSizeFactor: 1.sp,
+          fontFamily: 'Poppins',
+          displayColor: Colors.black,
+          bodyColor: Colors.black,
         ),
         appBarTheme: const AppBarTheme(
           foregroundColor: Colors.black,

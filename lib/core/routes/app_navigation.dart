@@ -11,11 +11,21 @@ class AppNavigation {
     final query = settings.arguments as Map<String, dynamic>? ?? {};
 
     switch (settings.name) {
+      // start main
       case AppRoutes.homeRoute:
         return _moveRoute(
           settings: settings,
           view: const HomeScreen(),
         );
+
+      case AppRoutes.slideshowFormRoute:
+        return _moveRoute(
+          settings: settings,
+          view: SlideshowFormScreen(
+            slideshow: query['slideshow'] as SlideshowModel?,
+          ),
+        );
+      // end main
 
       // start users
       case AppRoutes.loginRoute:
@@ -166,7 +176,6 @@ class AppNavigation {
     required Widget view,
     required RouteSettings settings,
   }) {
-
     return PageRouteBuilder(
       settings: settings,
       pageBuilder: (context, animation, secondaryAnimation) => view,
@@ -187,7 +196,6 @@ class AppNavigation {
     );
   }
 }
-
 
 class NoRouteFound extends StatelessWidget {
   const NoRouteFound({super.key, required this.routeName});
