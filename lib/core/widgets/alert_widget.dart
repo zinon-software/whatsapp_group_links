@@ -65,10 +65,12 @@ class AppAlert {
     void Function()? onConfirm,
     void Function()? onCancel,
     bool dismissOn = true,
+    Color? dialogBackgroundColor,
   }) async {
     dismissDialog(context);
     return await AwesomeDialog(
       context: context,
+      dialogBackgroundColor: dialogBackgroundColor,
       animType: AnimType.scale,
       dialogType: DialogType.noHeader,
       headerAnimationLoop: false,
@@ -141,15 +143,18 @@ class AppAlert {
   static Future<void> showAlertWidget(
     BuildContext context, {
     required Widget child,
+    DialogType dialogType = DialogType.noHeader,
     bool dismissOn = true,
     EdgeInsetsGeometry? padding,
+    Color? dialogBackgroundColor,
   }) async {
     dismissDialog(context);
     await AwesomeDialog(
       context: context,
       animType: AnimType.scale,
-      dialogType: DialogType.noHeader,
+      dialogType: dialogType,
       headerAnimationLoop: false,
+      dialogBackgroundColor: dialogBackgroundColor,
       body: Column(
         children: [
           child,

@@ -12,4 +12,5 @@ class AppHiveConfig {
   final int keyUserID = 0;
 
   final String keyIsStopAds = 'isStopAds';
+  final String keyLastSpinTime = 'lastSpinTime';  
 }

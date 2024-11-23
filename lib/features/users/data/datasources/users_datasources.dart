@@ -14,8 +14,7 @@ abstract class UsersDatasources {
     bool newStatus,
   );
 
-  Future<String> incrementScore(String uid);
-
+  Future<UserModel> incrementScore(String uid, int score);
 }
 
 class UsersDatasourcesImpl implements UsersDatasources {
@@ -76,22 +75,22 @@ class UsersDatasourcesImpl implements UsersDatasources {
   }
 
   @override
-  Future<String> incrementScore(String uid) async {
+  Future<UserModel> incrementScore(String uid, int score) async {
     try {
       UserModel user = await fetchUser(uid);
 
-      await users
-          .doc(uid)
-          .update(user.copyWith(score: user.score + 1).toJson());
+      user = user.copyWith(score: user.score + score);
 
-      return "تم تحديث حالة التصريح بنجاح";
+      await users.doc(uid).update(user.toJson());
+
+      return user;
     } catch (e) {
       rethrow;
     }
   }
-  
+
   @override
-  Future<List<UserModel>> fetchUsers()  async {
+  Future<List<UserModel>> fetchUsers() async {
     try {
       QuerySnapshot snapshot = await users.get();
       return snapshot.docs

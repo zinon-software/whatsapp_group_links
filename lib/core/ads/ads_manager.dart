@@ -200,11 +200,18 @@ class AdsManager {
   }
 
   // عرض اعلان المكافئة
-  void showRewardedAd() {
+  void showRewardedAd({
+    Function(double rewardAmount)? onAdRewarded,
+    Function? onAdClosed,
+    Function? onAdFailedToLoad,
+    Function? onAdFailedToShow,
+    Function? onAdOpened,
+  }) {
     if (instance<StorageRepository>().isStopAds) return;
 
     if (_rewardedAd == null) {
       log('Warning: attempt to show rewarded before loaded.');
+      if (onAdFailedToLoad != null) onAdFailedToLoad();
       return;
     }
 
@@ -213,6 +220,7 @@ class AdsManager {
         DateTime.now().difference(_lastRewardedAdTime!) <
             const Duration(seconds: 60)) {
       log('تحذير: لم يتم عرض الإعلان المكافأة الجديد بعد 60 ثانية.');
+      if (onAdFailedToLoad != null) onAdFailedToLoad();
       return;
     }
 
@@ -228,11 +236,13 @@ class AdsManager {
         log('$ad onAdDismissedFullScreenContent.');
         ad.dispose();
         _createRewardedAd();
+        if (onAdClosed != null) onAdClosed();
       },
       onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
         log('$ad onAdFailedToShowFullScreenContent: $error');
         ad.dispose();
         _createRewardedAd();
+        if (onAdFailedToShow != null) onAdFailedToShow();
       },
     );
 
@@ -240,6 +250,9 @@ class AdsManager {
     _rewardedAd!.show(
       onUserEarnedReward: (Ad ad, RewardItem reward) {
         log('$ad with reward $RewardItem(${reward.amount}, ${reward.type})');
+        if (onAdRewarded != null) {
+          onAdRewarded(reward.amount.toDouble());
+        }
       },
     );
     _rewardedAd = null;

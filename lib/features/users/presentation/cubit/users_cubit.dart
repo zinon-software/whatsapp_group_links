@@ -30,7 +30,6 @@ class UsersCubit extends Cubit<UsersState> {
         name: auth.currentUser!.displayName,
         photoUrl: auth.currentUser!.photoURL,
         phoneNumber: auth.currentUser!.phoneNumber,
-        
       );
       final uid = auth.currentUser!.uid;
       (await repository.fetchUser(uid)).fold(
@@ -141,10 +140,14 @@ class UsersCubit extends Cubit<UsersState> {
     );
   }
 
-  void incrementScoreEvent(String uid) async {
-    (await repository.incrementScore(uid)).fold(
+  void incrementScoreEvent({int score = 1}) async {
+    (await repository.incrementScore(auth.currentUser!.uid, score)).fold(
       (error) => null,
-      (data) => null,
+      (user) {
+        currentUser = user;
+        emit(UsersInitialState());
+        emit(UserSuccessState());
+      },
     );
   }
 

@@ -18,7 +18,7 @@ abstract class UsersRepository {
     bool newStatus,
   );
 
-  Future<Either<String, String>> incrementScore(String uid);
+  Future<Either<String, UserModel>> incrementScore(String uid, int score);
 }
 
 class UsersRepositoryImpl implements UsersRepository {
@@ -86,13 +86,13 @@ class UsersRepositoryImpl implements UsersRepository {
   }
 
   @override
-  Future<Either<String, String>> incrementScore(String uid) async {
+  Future<Either<String, UserModel>> incrementScore(String uid, int score) async {
     if (await connectionStatus.isNotConnected) {
       return const Left("تحقق من جودة اتصالك بالانترنت");
     }
 
     try {
-      final response = await datasources.incrementScore(uid);
+      final response = await datasources.incrementScore(uid, score);
       return Right(response);
     } catch (e) {
       return Left(handleException(e));

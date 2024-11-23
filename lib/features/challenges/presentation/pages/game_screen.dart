@@ -138,9 +138,7 @@ class _GameScreenState extends State<GameScreen> {
     _challengesCubit.updateGameEvent(game);
 
     if (isCorrect && !isAiAnswer) {
-      _usersCubit.incrementScoreEvent(
-        FirebaseAuth.instance.currentUser!.uid,
-      );
+      _usersCubit.incrementScoreEvent();
     }
 
     if (isLastQuestion) {
