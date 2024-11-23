@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:linkati/config/app_injector.dart';
 
 import '../../../../config/app_hive_config.dart';
@@ -53,13 +55,12 @@ class UserModel {
       isStopAds: json['is_stop_ads'] ?? false,
     );
 
-    if (user.isStopAds) {
-      // save local storage
-      instance<StorageRepository>().setData(
-        key: AppHiveConfig.instance.keyIsStopAds,
-        value: true,
-      );
-    }
+    log('isStopAds: ${user.isStopAds}');
+    // save local storage
+    instance<StorageRepository>().setData(
+      key: AppHiveConfig.instance.keyIsStopAds,
+      value: user.isStopAds,
+    );
 
     return user;
   }
