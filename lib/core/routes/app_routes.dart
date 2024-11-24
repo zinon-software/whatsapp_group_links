@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:linkati/config/app_injector.dart';
 import 'package:linkati/features/links/presentation/pages/link_details_screen.dart';
 import 'package:linkati/features/users/presentation/pages/account_screen.dart';
 
@@ -21,6 +23,12 @@ import '../../features/links/presentation/pages/links_screen.dart';
 import '../../features/main/data/models/slideshow_model.dart';
 import '../../features/main/presentation/pages/home_screen.dart';
 import '../../features/main/presentation/pages/slideshow_form_screen.dart';
+import '../../features/qna/data/models/qna_question_model.dart';
+import '../../features/qna/data/repositories/qna_repositories.dart';
+import '../../features/qna/presentation/cubit/qna_cubit.dart';
+import '../../features/qna/presentation/pages/qna_details_screen.dart';
+import '../../features/qna/presentation/pages/qna_form_screen.dart';
+import '../../features/qna/presentation/pages/qnas_screen.dart';
 import '../../features/users/data/models/user_model.dart';
 import '../../features/users/presentation/pages/edit_account_screen.dart';
 import '../../features/users/presentation/pages/login_screen.dart';
@@ -58,5 +66,10 @@ class AppRoutes {
   static const String questionFormRoute = '/question_form_route';
   static const String waitingForPlayerRoute = '/waiting_for_player_route';
   static const String gameRoute = '/game_route';
+
+  // qna
+  static const String qnasRoute = '/qnas_route';
+  static const String qnaFormRoute = '/qna_form_route';
+  static const String qnaDetailsRoute = '/qna_details_route';
 
 }

@@ -10,6 +10,7 @@ import 'package:linkati/config/app_injector.dart';
 import 'package:linkati/core/storage/storage_repository.dart';
 
 import '../../../../core/ads/ads_manager.dart';
+import '../../../../core/routes/app_routes.dart';
 import '../../../../core/utils/color_manager.dart';
 import '../../../../core/widgets/alert_widget.dart';
 import '../../../../core/widgets/custom_button_widget.dart';
@@ -66,13 +67,27 @@ class _FortuneWheelButtonState extends State<FortuneWheelButton>
           right: 10,
           child: IconButton(
             onPressed: () {
-              AppAlert.showAlertWidget(
-                context,
-                child: DailySpinView(
-                  adsManager: widget.adsManager,
-                  usersCubit: widget.usersCubit,
-                ),
-              );
+              if (widget.usersCubit.auth.currentUser == null) {
+                AppAlert.showAlert(
+                  context,
+                  subTitle: "يرجى تسجيل الدخول",
+                  confirmText: "تسجيل الدخول",
+                  onConfirm: () {
+                    AppAlert.dismissDialog(context);
+                    Navigator.of(context).pushNamed(
+                      AppRoutes.loginRoute,
+                    );
+                  },
+                );
+              } else {
+                AppAlert.showAlertWidget(
+                  context,
+                  child: DailySpinView(
+                    adsManager: widget.adsManager,
+                    usersCubit: widget.usersCubit,
+                  ),
+                );
+              }
             },
             icon: Container(
               decoration: BoxDecoration(
@@ -81,7 +96,7 @@ class _FortuneWheelButtonState extends State<FortuneWheelButton>
               ),
               child: const Icon(
                 CupertinoIcons.game_controller_solid,
-                color: ColorsManager.fillColor,
+                color: ColorsManager.aed5e5,
                 size: 40,
               ),
             ),
@@ -161,11 +176,11 @@ class _DailySpinViewState extends State<DailySpinView> {
       lastSpinTime = DateTime.now();
     });
 
+    await Future.delayed(Duration(seconds: 5)); // انتظار نتيجة العجلة
+
     widget.usersCubit.incrementScoreEvent(
       score: points[selected],
     );
-
-    await Future.delayed(Duration(seconds: 5)); // انتظار نتيجة العجلة
 
     AppAlert.showAlertWidget(
       // ignore: use_build_context_synchronously

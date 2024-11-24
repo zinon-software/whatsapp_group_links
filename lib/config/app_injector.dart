@@ -12,6 +12,8 @@ import '../features/links/data/datasources/links_datasources.dart';
 import '../features/links/data/repositories/links_repositories.dart';
 import '../features/main/data/datasources/main_datasources.dart';
 import '../features/main/data/repositories/main_repositories.dart';
+import '../features/qna/data/datasources/qna_datasources.dart';
+import '../features/qna/data/repositories/qna_repositories.dart';
 import '../features/users/data/datasources/users_datasources.dart';
 import '../features/users/data/repositories/users_repositories.dart';
 import 'app_hive_config.dart';
@@ -35,7 +37,9 @@ Future<void> setupGetIt() async {
   stupLinks();
   stupChallenges();
   stupMain();
+  stupQna();
 }
+
 
 Future<void> sutpHive() async {
   // // Hive
@@ -130,3 +134,26 @@ void stupMain() {
     );
   }
 }
+
+void stupQna() {
+  // data Source
+  if (!GetIt.I.isRegistered<QnaDatasources>()) {
+    instance.registerLazySingleton<QnaDatasources>(
+      () => QnaDatasourcesImpl(
+        questions: instance<AppCollections>().qnaQuestions,
+        answers: instance<AppCollections>().qnaAnswers,
+      ),
+    );
+  }
+  
+  // Repository
+  if (!GetIt.I.isRegistered<QnaRepository>()) {
+    instance.registerLazySingleton<QnaRepository>(
+      () => QnaRepositoryImpl(
+        instance<QnaDatasources>(),
+        instance<ConnectionStatus>(),
+      ),
+    );
+  }
+}
+

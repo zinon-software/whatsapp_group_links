@@ -148,6 +148,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: "المتسابقين",
                     icon: Icons.group,
                   ),
+                  HomeButtonWidget(
+                    onTap: () {
+                      Navigator.of(context).pushNamed(
+                        AppRoutes.qnasRoute,
+                      );
+                    },
+                    logo: 'assets/svg/ask.svg',
+                    title: "مجتمع تساؤلات",
+                    icon: Icons.question_answer,
+                  ),
                   HomeLinksWidget(
                     query: instance<AppCollections>()
                         .links

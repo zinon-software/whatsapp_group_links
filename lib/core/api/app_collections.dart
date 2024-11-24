@@ -26,4 +26,11 @@ class AppCollections {
       _db.collection('challenges').doc("games").collection("games");
 
   CollectionReference get slideshows => _db.collection('slideshows');
+
+  // New Collections for Questions and Answers
+  CollectionReference get qnaQuestions =>
+      _db.collection('qna').doc('questions').collection('questions');
+
+  CollectionReference get qnaAnswers => 
+      _db.collection('qna').doc('answers').collection('answers');
 }

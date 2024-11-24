@@ -164,6 +164,42 @@ class AppNavigation {
         );
       // end challenges
 
+      // start qna
+      case AppRoutes.qnasRoute:
+        return _moveRoute(
+          settings: settings,
+          view: BlocProvider(
+            create: (context) => QnaCubit(
+              repository: instance<QnaRepository>(),
+            )..fetchQnaQuestionsEvent(),
+            child: const QnasScreen(),
+          ),
+        );
+
+      case AppRoutes.qnaFormRoute:
+        return _moveRoute(
+          settings: settings,
+          view: BlocProvider.value(
+            value: QnaCubit(repository: instance<QnaRepository>()),
+            child: QnaFormScreen(
+              question: query['question'] as QnaQuestionModel?,
+            ),
+          ),
+        );
+
+      case AppRoutes.qnaDetailsRoute:
+        return _moveRoute(
+          settings: settings,
+          view: BlocProvider.value(
+            value: QnaCubit(repository: instance<QnaRepository>()),
+            child: QnaDetailsScreen(
+              question: query['question'] as QnaQuestionModel,
+            ),
+          ),
+        );
+
+      // end qna
+
       default:
         return _moveRoute(
           settings: settings,
