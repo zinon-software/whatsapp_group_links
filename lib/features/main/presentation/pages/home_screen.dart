@@ -34,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _adsManager = AdsManager();
     _adsManager.loadRewardedAd();
+    _adsManager.loadInterstitialAd();
     _adsManager.loadNativeAd();
     appReview();
 
@@ -108,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SlideshowsWidget(),
+                  const SlideshowsWidget(),
                   AdminDashboardButtonWidget(usersCubit: _usersCubit),
                   HomeButtonWidget(
                     onTap: () {

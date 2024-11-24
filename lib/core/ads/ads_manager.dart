@@ -173,7 +173,7 @@ class AdsManager {
     // التحقق مما إذا كان الإعلان السابق قد تم عرضه قبل أكثر من 30 ثانية أو لا
     if (_lastInterstitialAdTime != null &&
         DateTime.now().difference(_lastInterstitialAdTime!) <
-            const Duration(seconds: 30)) {
+            const Duration(seconds: 60)) {
       log('تحذير: لم يتم عرض الإعلان الجديد بعد 30 ثانية.');
       return;
     }

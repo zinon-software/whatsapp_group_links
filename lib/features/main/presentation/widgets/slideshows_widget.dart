@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:linkati/core/widgets/alert_widget.dart';
@@ -8,8 +9,48 @@ import 'package:linkati/features/users/presentation/cubit/users_cubit.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../data/models/slideshow_model.dart';
 
-class SlideshowsWidget extends StatelessWidget {
+class SlideshowsWidget extends StatefulWidget {
   const SlideshowsWidget({super.key});
+
+  @override
+  State<SlideshowsWidget> createState() => _SlideshowsWidgetState();
+}
+
+class _SlideshowsWidgetState extends State<SlideshowsWidget> {
+  final PageController _pageController = PageController();
+  Timer? _autoScrollTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _startAutoScroll();
+  }
+
+  @override
+  void dispose() {
+    _autoScrollTimer?.cancel();
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _startAutoScroll() {
+  _autoScrollTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
+    if (_pageController.hasClients) {
+      final nextPage = (_pageController.page?.toInt() ?? 0) + 1;
+
+      if (nextPage < (context.read<MainCubit>().state as SlideshowsSuccessState).slideshows.length) {
+        _pageController.animateToPage(
+          nextPage,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      } else {
+        _pageController.jumpToPage(0); // العودة إلى الصفحة الأولى مباشرة
+      }
+    }
+  });
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +64,8 @@ class SlideshowsWidget extends StatelessWidget {
           return SizedBox(
             height: 150,
             width: double.infinity,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
+            child: PageView.builder(
+              controller: _pageController,
               itemCount: state.slideshows.length,
               itemBuilder: (context, index) {
                 final SlideshowModel slideShow = state.slideshows[index];
@@ -83,10 +124,10 @@ class SlideshowsWidget extends StatelessWidget {
                             slideShow.imageUrl,
                             width: MediaQuery.of(context).size.width - 16,
                             height: 150,
-                            fit: BoxFit.cover,
+                            fit: BoxFit.fill,
                           ),
                         ),
-                        // titel
+                        // Title
                         Positioned(
                           top: 5,
                           right: 5,
@@ -106,7 +147,7 @@ class SlideshowsWidget extends StatelessWidget {
                             ),
                           ),
                         ),
-                        // description
+                        // Description
                         Positioned(
                           bottom: 10,
                           left: 10,
@@ -139,7 +180,7 @@ class SlideshowsWidget extends StatelessWidget {
             ),
           );
         } else {
-          return SizedBox.shrink();
+          return const SizedBox.shrink();
         }
       },
     );
