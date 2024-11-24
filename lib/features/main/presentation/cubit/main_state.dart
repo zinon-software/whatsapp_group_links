@@ -36,3 +36,9 @@ class ManageSlideshowErrorState extends MainState {
 }
 
 class ManageSlideshowLoadingState extends MainState {}
+
+class ViewSlideshowDetailsState extends MainState {
+  final SlideshowModel slideshow;
+
+  const ViewSlideshowDetailsState(this.slideshow);
+}

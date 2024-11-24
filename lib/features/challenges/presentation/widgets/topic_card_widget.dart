@@ -42,7 +42,7 @@ class TopicCardWidget extends StatelessWidget {
               ).then(
                 (value) {
                   if (usersCubit.currentUser?.country != null) {
-                    adsManager.showRewardedAd();
+                    adsManager.showInterstitialAd();
                     // ignore: use_build_context_synchronously
                     AppAlert.dismissDialog(context);
                     // ignore: use_build_context_synchronously
@@ -56,7 +56,7 @@ class TopicCardWidget extends StatelessWidget {
             },
           );
         } else {
-          adsManager.showRewardedAd();
+          adsManager.showInterstitialAd();
           Navigator.of(context).pushNamed(
             AppRoutes.gamesRoute,
             arguments: {'topic': topic},

@@ -42,4 +42,9 @@ class MainCubit extends Cubit<MainState> {
       },
     );
   }
+
+  void viewSlideshowDetailsEvint(SlideshowModel slideshow) async {
+    emit(SlideshowsLoadingState());
+    emit(ViewSlideshowDetailsState(slideshow));
+  }
 }

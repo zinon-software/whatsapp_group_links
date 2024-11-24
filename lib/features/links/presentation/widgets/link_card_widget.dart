@@ -24,7 +24,8 @@ class LinkCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        adsManager.showRewardedAd();
+        adsManager.showInterstitialAd();
+        
         Navigator.of(context).pushNamed(
           AppRoutes.linkDetailsRoute,
           arguments: {'link': link},

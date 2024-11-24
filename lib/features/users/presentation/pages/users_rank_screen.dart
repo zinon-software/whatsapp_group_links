@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:linkati/core/ads/ads_manager.dart';
 import 'package:linkati/core/utils/color_manager.dart';
 import 'package:linkati/core/widgets/custom_button_widget.dart';
 import 'package:linkati/features/users/presentation/cubit/users_cubit.dart';
@@ -17,13 +18,23 @@ class UsersRankScreen extends StatefulWidget {
 
 class _UsersRankScreenState extends State<UsersRankScreen> {
   late final UsersCubit _usersCubit;
+  late final AdsManager _adsManager;
 
   @override
   void initState() {
     super.initState();
+    _adsManager = AdsManager();
     _usersCubit = context.read<UsersCubit>();
 
+    _adsManager.loadNativeAd();
+
     _usersCubit.fetchUsers();
+  }
+
+  @override
+  void dispose() {
+    _adsManager.disposeNativeAd();
+    super.dispose();
   }
 
   @override
@@ -110,6 +121,10 @@ class _UsersRankScreenState extends State<UsersRankScreen> {
                       final bool isMe = user.id == _usersCubit.currentUser?.id;
                       return Column(
                         children: [
+                          if ((index + 1) % 10 == 0)
+                            Center(
+                              child: _adsManager.getNativeAdWidget(),
+                            ),
                           Container(
                             margin: const EdgeInsets.all(8.0),
                             decoration: BoxDecoration(

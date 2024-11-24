@@ -29,7 +29,14 @@ class _TopicsScreenState extends State<TopicsScreen> {
     super.initState();
     _challengesCubit.fetchTopicsEvent();
     _adsManager = AdsManager();
-    _adsManager.loadRewardedAd();
+    _adsManager.loadNativeAd();
+    _adsManager.loadInterstitialAd();
+  }
+
+  @override
+  void dispose() {
+    _adsManager.disposeNativeAd();
+    super.dispose();
   }
 
   @override
@@ -63,10 +70,18 @@ class _TopicsScreenState extends State<TopicsScreen> {
                   child: ListView.builder(
                     itemCount: 10,
                     itemBuilder: (context, index) {
-                      return TopicCardWidget(
-                        topic: TopicModel.empty(),
-                        usersCubit: _usersCubit,
-                        adsManager: _adsManager,
+                      return Column(
+                        children: [
+                          if (index == 6 || index == 11)
+                            Center(
+                              child: _adsManager.getNativeAdWidget(),
+                            ),
+                          TopicCardWidget(
+                            topic: TopicModel.empty(),
+                            usersCubit: _usersCubit,
+                            adsManager: _adsManager,
+                          ),
+                        ],
                       );
                     },
                   ),
@@ -85,7 +100,7 @@ class _TopicsScreenState extends State<TopicsScreen> {
                   child: Text("لا يوجد تحديات"),
                 );
               }
-              
+
               return ListView.builder(
                 itemCount: topics.length,
                 itemBuilder: (context, index) {

@@ -40,12 +40,15 @@ class HomeLinksWidget extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                  adsManager.showInterstitialAd();
-                  Navigator.pushNamed(context, AppRoutes.linksRoute,
-                      arguments: {
-                        'title': title,
-                        'query': query,
-                      });
+                  adsManager.showRewardedAd();
+                  Navigator.pushNamed(
+                    context,
+                    AppRoutes.linksRoute,
+                    arguments: {
+                      'title': title,
+                      'query': query,
+                    },
+                  );
                 },
                 child: const Row(
                   children: [
