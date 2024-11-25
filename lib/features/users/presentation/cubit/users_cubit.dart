@@ -5,6 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../../../../config/app_hive_config.dart';
+import '../../../../config/app_injector.dart';
+import '../../../../core/storage/storage_repository.dart';
 import '../../data/models/user_model.dart';
 import '../../data/repositories/users_repositories.dart';
 
@@ -31,15 +34,23 @@ class UsersCubit extends Cubit<UsersState> {
         photoUrl: auth.currentUser!.photoURL,
         phoneNumber: auth.currentUser!.phoneNumber,
       );
+      currentUser = repository.getUser(auth.currentUser!.uid);
       final uid = auth.currentUser!.uid;
       (await repository.fetchUser(uid)).fold(
         (error) => null,
         (response) {
           currentUser = response;
+
           emit(UserSuccessState());
           if (isEdit) {
             repository.updateUser(response);
           }
+
+          // save isStopAds local storage
+          instance<StorageRepository>().setData(
+            key: AppHiveConfig.instance.keyIsStopAds,
+            value: response.isStopAds,
+          );
         },
       );
     } catch (e) {
@@ -124,22 +135,6 @@ class UsersCubit extends Cubit<UsersState> {
     emit(LogoutRouteToLoginState());
   }
 
-  FutureOr<void> fetchPlayerUserEvent(
-      {required String userId, required String gameId}) async {
-    emit(FetchPlayerUserLoadingState(userId: userId, gameId: gameId));
-    (await repository.fetchUser(userId)).fold(
-      (error) => emit(FetchPlayerUserErrorState(
-        error: error,
-        userId: userId,
-        gameId: gameId,
-      )),
-      (data) => emit(FetchPlayerUserSuccessState(
-        user: data,
-        gameId: gameId,
-      )),
-    );
-  }
-
   void incrementScoreEvent({int score = 1}) async {
     (await repository.incrementScore(auth.currentUser!.uid, score)).fold(
       (error) => null,
@@ -151,11 +146,26 @@ class UsersCubit extends Cubit<UsersState> {
     );
   }
 
-  void fetchUsers() async {
+  void fetchUsersEvent() async {
     emit(FetchUsersLoadingState());
     (await repository.fetchUsers()).fold(
       (error) => emit(FetchUsersErrorState(error)),
       (data) => emit(FetchUsersSuccessState(data)),
+    );
+  }
+
+  void fetchUserEvent({required String userId, required String query}) async {
+    emit(FetchUserLoadingState(userId: userId, query: query));
+    (await repository.fetchUser(userId)).fold(
+      (error) => emit(FetchUserErrorState(
+        error: error,
+        userId: userId,
+        query: query,
+      )),
+      (data) => emit(FetchUserSuccessState(
+        user: data,
+        query: query,
+      )),
     );
   }
 }

@@ -92,12 +92,12 @@ class _FortuneWheelButtonState extends State<FortuneWheelButton>
             icon: Container(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: ColorsManager.primaryLight,
+                color: Colors.blue[50],
               ),
               child: const Icon(
                 CupertinoIcons.game_controller_solid,
-                color: ColorsManager.aed5e5,
-                size: 40,
+                color: ColorsManager.primaryLight,
+                size: 45,
               ),
             ),
           ),
@@ -160,7 +160,7 @@ class _DailySpinViewState extends State<DailySpinView> {
     );
   }
 
-  void _spinWheel() async {
+  void _spinWheel({bool isWatchAd = false}) async {
     if (!canSpin) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('يمكنك اللعب مرة أخرى بعد 24 ساعة.')),
@@ -176,7 +176,7 @@ class _DailySpinViewState extends State<DailySpinView> {
       lastSpinTime = DateTime.now();
     });
 
-    await Future.delayed(Duration(seconds: 5)); // انتظار نتيجة العجلة
+    await Future.delayed(Duration(seconds: 5));
 
     widget.usersCubit.incrementScoreEvent(
       score: points[selected],
@@ -210,7 +210,9 @@ class _DailySpinViewState extends State<DailySpinView> {
       ),
     );
 
-    _saveLastSpinTime();
+    if (!isWatchAd) {
+      _saveLastSpinTime();
+    }
   }
 
   void _watchAdAndSpin() {
@@ -219,7 +221,7 @@ class _DailySpinViewState extends State<DailySpinView> {
         setState(() {
           canSpin = true;
         });
-        _spinWheel();
+        _spinWheel(isWatchAd: true);
       },
       onAdFailedToLoad: () {
         ScaffoldMessenger.of(context).showSnackBar(

@@ -32,3 +32,16 @@ class QnaQuestionsErrorState extends QnaState {
 
   const QnaQuestionsErrorState(this.message);
 }
+
+
+
+class ManageAnswerLoadingState extends QnaState {}
+
+class ManageAnswerErrorState extends QnaState {
+  final String message;
+
+  const ManageAnswerErrorState(this.message);
+}
+
+class ManageAnswerSuccessState extends QnaState {}
+

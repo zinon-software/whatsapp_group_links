@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/user_model.dart';
 
-abstract class UsersDatasources {
+abstract class UsersRemoteDatasources {
   Future<List<UserModel>> fetchUsers();
   Future<UserModel> fetchUser(String id);
   Future<String> createUser(UserModel request);
@@ -17,10 +17,10 @@ abstract class UsersDatasources {
   Future<UserModel> incrementScore(String uid, int score);
 }
 
-class UsersDatasourcesImpl implements UsersDatasources {
+class UsersRemoteDatasourcesImpl implements UsersRemoteDatasources {
   final CollectionReference users;
 
-  UsersDatasourcesImpl(this.users);
+  UsersRemoteDatasourcesImpl(this.users);
 
   @override
   Future<UserModel> fetchUser(String id) async {

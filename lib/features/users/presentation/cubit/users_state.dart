@@ -29,21 +29,28 @@ class LogoutRouteToLoginState extends UsersState {
   const LogoutRouteToLoginState();
 }
 
-class FetchPlayerUserLoadingState extends UsersState {
-  final String userId, gameId;
-  const FetchPlayerUserLoadingState({required this.userId, required this.gameId});
+class FetchUserLoadingState extends UsersState {
+  final String userId, query;
+  const FetchUserLoadingState({required this.userId, required this.query});
 }
 
-class FetchPlayerUserSuccessState extends UsersState {
-  final String gameId;
+class FetchUserSuccessState extends UsersState {
+  final String query;
   final UserModel user;
-  const FetchPlayerUserSuccessState({required this.user, required this.gameId,});
+  const FetchUserSuccessState({
+    required this.user,
+    required this.query,
+  });
 }
 
-class FetchPlayerUserErrorState extends UsersState {
-  final String userId, gameId;
+class FetchUserErrorState extends UsersState {
+  final String userId, query;
   final String error;
-  const FetchPlayerUserErrorState({required this.error, required this.userId, required this.gameId,});
+  const FetchUserErrorState({
+    required this.error,
+    required this.userId,
+    required this.query,
+  });
 }
 
 class UpdateUserLoadingState extends UsersState {
@@ -59,7 +66,6 @@ class UpdateUserErrorState extends UsersState {
   final String error;
   const UpdateUserErrorState(this.error);
 }
-
 
 class FetchUsersLoadingState extends UsersState {
   const FetchUsersLoadingState();

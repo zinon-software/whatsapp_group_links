@@ -61,7 +61,8 @@ class _HomeScreenState extends State<HomeScreen> {
     // ignore: deprecated_member_use
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text("مجموعاتي")),
+        title: Text("مجموعاتي"),
+        centerTitle: false,
         actions: [
           BlocBuilder<UsersCubit, UsersState>(
             bloc: _usersCubit,
@@ -81,9 +82,25 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                   child: Row(
                     children: [
-                      Text("${_usersCubit.currentUser!.score} نقطة"),
+                      Container(
+                        height: 30,
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        decoration: BoxDecoration(
+                          color: Colors.amber,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          "${_usersCubit.currentUser!.score} نقطة 🪙",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        padding: const EdgeInsets.fromLTRB(16, 0, 8, 0),
                         child: CircleAvatar(
                           radius: 18,
                           backgroundImage: CustomCachedNetworkImage(
@@ -113,6 +130,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   AdminDashboardButtonWidget(usersCubit: _usersCubit),
                   HomeButtonWidget(
                     onTap: () {
+                      Navigator.of(context).pushNamed(
+                        AppRoutes.usersRankRoute,
+                      );
+                    },
+                    logo: 'assets/svg/rank.svg',
+                    title: "المتسابقين",
+                    icon: Icons.group,
+                  ),
+                  HomeButtonWidget(
+                    onTap: () {
                       if (_usersCubit.auth.currentUser == null) {
                         AppAlert.showAlert(
                           context,
@@ -137,16 +164,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     logo: 'assets/svg/challenges.svg',
                     title: "التحديات",
                     icon: Icons.lightbulb,
-                  ),
-                  HomeButtonWidget(
-                    onTap: () {
-                      Navigator.of(context).pushNamed(
-                        AppRoutes.usersRankRoute,
-                      );
-                    },
-                    logo: 'assets/svg/rank.svg',
-                    title: "المتسابقين",
-                    icon: Icons.group,
                   ),
                   HomeButtonWidget(
                     onTap: () {

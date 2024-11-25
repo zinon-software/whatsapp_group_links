@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:linkati/core/routes/app_routes.dart';
 import 'package:linkati/core/widgets/alert_widget.dart';
 import 'package:linkati/features/users/presentation/cubit/users_cubit.dart';
@@ -7,13 +8,18 @@ import 'package:linkati/features/users/presentation/cubit/users_cubit.dart';
 import '../../../../core/widgets/custom_button_widget.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key, this.nextRoute, this.returnRoute});
+  const LoginScreen({
+    super.key,
+    this.nextRoute,
+    this.returnRoute = false,
+    this.queryParameters,
+  });
   final String? nextRoute;
-  final String? returnRoute;
+  final bool returnRoute;
+  final Map<String, dynamic>? queryParameters;
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
     final UsersCubit usersCubit = context.read<UsersCubit>();
 
     return Scaffold(
@@ -38,12 +44,22 @@ class LoginScreen extends StatelessWidget {
           if (state is LoginRouteToHomeState) {
             usersCubit.fetchMyUserAccount();
             AppAlert.dismissDialog(context);
-            Navigator.pushNamedAndRemoveUntil(
-              context,
-              returnRoute ?? AppRoutes.homeRoute,
-              (_) => false,
-            );
-            if (nextRoute != null) Navigator.pushNamed(context, nextRoute!);
+            if (returnRoute) {
+              Navigator.pop(context);
+            } else {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                AppRoutes.homeRoute,
+                (_) => false,
+              );
+              if (nextRoute != null) {
+                Navigator.pushNamed(
+                  context,
+                  nextRoute!,
+                  arguments: queryParameters,
+                );
+              }
+            }
           }
           if (state is SignInWithGoogleErrorState) {
             AppAlert.showAlert(
@@ -58,45 +74,37 @@ class LoginScreen extends StatelessWidget {
             AppAlert.loading(context);
           }
         },
-        child: Center(
-          child: SingleChildScrollView(
-            child: Container(
-              padding: const EdgeInsets.all(16.0),
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              const Text(
+                'تسجــــيل الــدخول',
+                style: TextStyle(fontSize: 28, color: Colors.black),
+              ),
+              Image.asset(
+                // 'assets/images/registration.png',
+                'assets/icon/icon.png',
+                width: 280.w,
+                fit: BoxFit.contain,
+              ),
+
+              const Text(
+                'مرحبا بعودتك',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.black,
+                ),
+              ),
+
+              SizedBox(height: 140.h),
+
+              Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    height: screenHeight * 0.05,
-                  ),
-                  const Text(
-                    'تسجيل الدخول',
-                    style: TextStyle(fontSize: 28, color: Colors.black),
-                  ),
-                  Image.asset(
-                    'assets/images/registration.png',
-                    height: screenHeight * 0.3,
-                    fit: BoxFit.contain,
-                  ),
-                  SizedBox(
-                    height: screenHeight * 0.02,
-                  ),
-
-                  SizedBox(
-                    height: screenHeight * 0.02,
-                  ),
-                  const Text(
-                    'مرحبا بعودتك',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
-                    ),
-                  ),
-                  SizedBox(
-                    height: screenHeight * 0.06,
-                  ),
                   // سياسة الخصوصية
                   Text(
                     "بالنقر على تسجيل الدخول",
@@ -133,21 +141,24 @@ class LoginScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 16),
-                  // تسجيل الدخول بواسطة Google
-                  CustomButtonWidget(
-                    label: "تسجيل الدخول بواسطة Google",
-                    height: 45,
-                    width: double.infinity,
-                    backgroundColor: const Color.fromARGB(255, 253, 188, 51),
-                    textColor: Colors.black,
-                    onPressed: () {
-                      usersCubit.onSignInWithGoogleEvent();
-                    },
-                  ),
                 ],
               ),
-            ),
+
+              SizedBox(height: 16),
+              // تسجيل الدخول بواسطة Google
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: CustomButtonWidget(
+                  label: "تسجيل الدخول بواسطة Google",
+                  height: 45,
+                  width: double.infinity,
+                  onPressed: () {
+                    usersCubit.onSignInWithGoogleEvent();
+                  },
+                ),
+              ),
+              SizedBox(height: 25),
+            ],
           ),
         ),
       ),

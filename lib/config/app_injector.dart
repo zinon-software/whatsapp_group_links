@@ -14,7 +14,9 @@ import '../features/main/data/datasources/main_datasources.dart';
 import '../features/main/data/repositories/main_repositories.dart';
 import '../features/qna/data/datasources/qna_datasources.dart';
 import '../features/qna/data/repositories/qna_repositories.dart';
-import '../features/users/data/datasources/users_datasources.dart';
+import '../features/users/data/datasources/users_local_datasources.dart';
+import '../features/users/data/datasources/users_remote_datasources.dart';
+import '../features/users/data/models/user_model_adapter.dart';
 import '../features/users/data/repositories/users_repositories.dart';
 import 'app_hive_config.dart';
 
@@ -40,12 +42,11 @@ Future<void> setupGetIt() async {
   stupQna();
 }
 
-
 Future<void> sutpHive() async {
   // // Hive
   await Hive.initFlutter();
 
-  // Hive.registerAdapter(UserModelAdapter());
+  Hive.registerAdapter(UserModelAdapter());
 
   Box box = await Hive.openBox(AppHiveConfig.instance.linkatiBox);
 
@@ -53,20 +54,30 @@ Future<void> sutpHive() async {
 }
 
 void stupUsers() {
-  // data Source
-  if (!GetIt.I.isRegistered<UsersDatasources>()) {
-    instance.registerLazySingleton<UsersDatasources>(
-      () => UsersDatasourcesImpl(
+  // remote data Source
+  if (!GetIt.I.isRegistered<UsersRemoteDatasources>()) {
+    instance.registerLazySingleton<UsersRemoteDatasources>(
+      () => UsersRemoteDatasourcesImpl(
         instance<AppCollections>().users,
       ),
     );
   }
+  // local data Source
+  if (!GetIt.I.isRegistered<UsersLocalDatasources>()) {
+    instance.registerLazySingleton<UsersLocalDatasources>(
+      () => UsersLocalDatasourcesImpl(
+        storageRepository: instance<StorageRepository>(),
+      ),
+    );
+  }
+
   // Repository
   if (!GetIt.I.isRegistered<UsersRepository>()) {
     instance.registerLazySingleton<UsersRepository>(
       () => UsersRepositoryImpl(
-        instance<UsersDatasources>(),
-        instance<ConnectionStatus>(),
+        remoteDatasources: instance<UsersRemoteDatasources>(),
+        localDatasources: instance<UsersLocalDatasources>(),
+        connectionStatus: instance<ConnectionStatus>(),
       ),
     );
   }
@@ -145,7 +156,7 @@ void stupQna() {
       ),
     );
   }
-  
+
   // Repository
   if (!GetIt.I.isRegistered<QnaRepository>()) {
     instance.registerLazySingleton<QnaRepository>(
@@ -156,4 +167,3 @@ void stupQna() {
     );
   }
 }
-

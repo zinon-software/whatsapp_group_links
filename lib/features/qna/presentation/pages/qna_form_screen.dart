@@ -144,9 +144,9 @@ class _QnaFormScreenState extends State<QnaFormScreen> {
                     border: OutlineInputBorder(),
                   ),
                   onChanged: (value) {
-                    setState(() {
-                      _categoryController.text = value.toString();
-                    });
+                    // setState(() {
+                    _categoryController.text = value.toString();
+                    // });
                   },
                 ),
                 SizedBox(height: 10),

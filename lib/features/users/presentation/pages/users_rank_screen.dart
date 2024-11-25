@@ -28,7 +28,7 @@ class _UsersRankScreenState extends State<UsersRankScreen> {
 
     _adsManager.loadNativeAd();
 
-    _usersCubit.fetchUsers();
+    _usersCubit.fetchUsersEvent();
   }
 
   @override
@@ -88,21 +88,21 @@ class _UsersRankScreenState extends State<UsersRankScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Expanded(
-                          child: UserRankCard(
+                          child: UserRankCardWidget(
                             isMe: topTwoUser.id == _usersCubit.currentUser?.id,
                             user: topTwoUser,
                             rank: 2,
                           ),
                         ), // المرتبة الثانية
                         Expanded(
-                          child: UserRankCard(
+                          child: UserRankCardWidget(
                             isMe: topOneUser.id == _usersCubit.currentUser?.id,
                             user: topOneUser,
                             rank: 1,
                           ),
                         ), // المرتبة الأولى
                         Expanded(
-                          child: UserRankCard(
+                          child: UserRankCardWidget(
                             isMe:
                                 topThreeUser.id == _usersCubit.currentUser?.id,
                             user: topThreeUser,
@@ -147,7 +147,12 @@ class _UsersRankScreenState extends State<UsersRankScreen> {
                                   isMe ? ColorsManager.primaryLight : null,
                               leading: CircleAvatar(
                                 backgroundColor: ColorsManager.primaryLight,
-                                child: CustomCachedNetworkImage(user.photoUrl),
+                                child: CustomCachedNetworkImage(
+                                  user.photoUrl,
+                                  width: 50,
+                                  height: 50,
+                                  borderRadius: 25,
+                                ),
                               ),
                               title: Text(user.name),
                               subtitle: Row(
@@ -212,12 +217,12 @@ class _UsersRankScreenState extends State<UsersRankScreen> {
   }
 }
 
-class UserRankCard extends StatelessWidget {
+class UserRankCardWidget extends StatelessWidget {
   final UserModel user;
   final int rank;
   final bool isMe;
 
-  const UserRankCard({
+  const UserRankCardWidget({
     super.key,
     required this.user,
     required this.rank,

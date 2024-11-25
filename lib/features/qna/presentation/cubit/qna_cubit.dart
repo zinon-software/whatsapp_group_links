@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:linkati/features/qna/data/models/qna_answer_model.dart';
 import 'package:linkati/features/qna/data/models/qna_question_model.dart';
 import 'package:linkati/features/qna/data/repositories/qna_repositories.dart';
 
@@ -46,5 +47,20 @@ class QnaCubit extends Cubit<QnaState> {
         emit(ManageQuestionSuccessState());
       },
     );
+  }
+
+  void createAnswerEvent(QnaAnswerModel newAnswer) async {
+    emit(ManageAnswerLoadingState());
+    final result = await repository.createAnswer(newAnswer);
+    result.fold(
+      (error) => emit(ManageAnswerErrorState(error)),
+      (success) {
+        emit(ManageAnswerSuccessState());
+      },
+    );
+  }
+
+  void voteForAnswerEvent(String id) async {
+    repository.incrementAnswerVotes(id);
   }
 }

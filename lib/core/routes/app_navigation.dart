@@ -33,7 +33,8 @@ class AppNavigation {
           settings: settings,
           view: LoginScreen(
             nextRoute: query['next_route'] as String?,
-            returnRoute: query['return_route'] as String?,
+            returnRoute: query['return_route'] as bool? ?? false,
+            queryParameters: query['query_parameters'] as Map<String, dynamic>?,
           ),
         );
 

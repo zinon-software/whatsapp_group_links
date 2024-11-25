@@ -30,14 +30,14 @@ class PlayerWidget extends StatefulWidget {
 }
 
 class _PlayerWidgetState extends State<PlayerWidget> {
-  UserModel? user;
+  UserModel? _user;
 
   @override
   void initState() {
     super.initState();
 
     if (widget.isAi) {
-      user = UserModel.isEmpty().copyWith(
+      _user = UserModel.isEmpty().copyWith(
         id: widget.player.userId,
         name: 'AI',
         phoneNumber: '1234567890',
@@ -45,14 +45,14 @@ class _PlayerWidgetState extends State<PlayerWidget> {
             'https://static.vecteezy.com/system/resources/previews/010/518/719/non_2x/artificial-intelligence-ai-processor-chip-icon-symbol-for-graphic-design-logo-website-social-media-mobile-app-ui-illustration-vector.jpg',
         score: widget.player.score,
       );
-    } else if (user == null) {
-      if (widget.player.user == null) {
-        widget.usersCubit.fetchPlayerUserEvent(
-          userId: widget.player.userId,
-          gameId: widget.gameId,
-        );
-      } else {
-        user = widget.player.user;
+    } else if (_user == null) {
+      _user = widget.usersCubit.repository.getUser(widget.player.userId);
+
+      if(_user == null) {
+        widget.usersCubit.fetchUserEvent(
+        userId: widget.player.userId,
+        query: widget.gameId,
+      );
       }
     }
   }
@@ -62,26 +62,26 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     return BlocBuilder<UsersCubit, UsersState>(
       bloc: widget.usersCubit,
       buildWhen: (previous, current) {
-        if (user != null) return false;
-        if (current is FetchPlayerUserSuccessState) {
-          return current.gameId == widget.gameId &&
+        if (_user != null) return false;
+        if (current is FetchUserSuccessState) {
+          return current.query == widget.gameId &&
               current.user.id == widget.player.userId;
         }
-        if (current is FetchPlayerUserErrorState) {
-          return current.gameId == widget.gameId &&
+        if (current is FetchUserErrorState) {
+          return current.query == widget.gameId &&
               current.userId == widget.player.userId;
         }
-        if (current is FetchPlayerUserLoadingState) {
-          return current.gameId == widget.gameId &&
+        if (current is FetchUserLoadingState) {
+          return current.query == widget.gameId &&
               current.userId == widget.player.userId;
         }
         return false;
       },
       builder: (context, state) {
-        if (state is FetchPlayerUserSuccessState &&
+        if (state is FetchUserSuccessState &&
             state.user.id == widget.player.userId &&
-            state.gameId == widget.gameId) {
-          user = state.user;
+            state.query == widget.gameId) {
+          _user = state.user;
           widget.player.user = state.user;
           return PlayerDataWidget(
             user: state.user,
@@ -91,9 +91,9 @@ class _PlayerWidgetState extends State<PlayerWidget> {
           );
         }
 
-        if (state is FetchPlayerUserErrorState &&
+        if (state is FetchUserErrorState &&
             state.userId == widget.player.userId &&
-            state.gameId == widget.gameId) {
+            state.query == widget.gameId) {
           return Column(
             children: [
               CircleAvatar(
@@ -109,18 +109,18 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                 isLoading: false,
                 height: 30,
                 radius: 10,
-                onPressed: () => widget.usersCubit.fetchPlayerUserEvent(
+                onPressed: () => widget.usersCubit.fetchUserEvent(
                   userId: widget.player.userId,
-                  gameId: widget.gameId,
+                  query: widget.gameId,
                 ),
               ),
             ],
           );
         }
 
-        if (state is FetchPlayerUserLoadingState &&
+        if (state is FetchUserLoadingState &&
             state.userId == widget.player.userId &&
-            state.gameId == widget.gameId) {
+            state.query == widget.gameId) {
           // عرض Skeleton عندما تكون البيانات قيد التحميل
           return CustomSkeletonizerWidget(
             enabled: true,
@@ -135,7 +135,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
 
         // إذا لم يتم تلبية أي من الحالات أعلاه، يعرض عنصر فارغ افتراضي
         return PlayerDataWidget(
-          user: user ?? UserModel.isEmpty(),
+          user: _user ?? UserModel.isEmpty(),
           isHost: widget.isHost,
           isMe: widget.isMe,
           score: widget.player.score,

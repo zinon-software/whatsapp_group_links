@@ -1,9 +1,4 @@
-import 'dart:developer';
 
-import 'package:linkati/config/app_injector.dart';
-
-import '../../../../config/app_hive_config.dart';
-import '../../../../core/storage/storage_repository.dart';
 
 class UserModel {
   final String id;
@@ -53,13 +48,6 @@ class UserModel {
       coins: json['coins'] ?? 0,
       country: json['country'],
       isStopAds: json['is_stop_ads'] ?? false,
-    );
-
-    log('isStopAds: ${user.isStopAds}');
-    // save local storage
-    instance<StorageRepository>().setData(
-      key: AppHiveConfig.instance.keyIsStopAds,
-      value: user.isStopAds,
     );
 
     return user;

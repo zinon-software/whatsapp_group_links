@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:linkati/core/widgets/alert_widget.dart';
 import 'package:linkati/features/qna/presentation/cubit/qna_cubit.dart';
 
 import '../../../../core/routes/app_routes.dart';
+import '../widgets/qna_question_widget.dart';
 
 class QnasScreen extends StatelessWidget {
   const QnasScreen({super.key});
@@ -28,25 +31,17 @@ class QnasScreen extends StatelessWidget {
             return Center(child: Text(state.message));
           } else if (state is QnaQuestionsSuccessState) {
             if (state.questions.isEmpty) {
-              return const Center(child: Text('لا يوجد اسئلة'));
+              return const Center(child: Text('لا يوجد أسئلة'));
             }
 
             return ListView.builder(
+              padding: const EdgeInsets.all(12.0),
               itemCount: state.questions.length,
               itemBuilder: (context, index) {
                 final qnaQuestion = state.questions[index];
-                return ListTile(
-                  title: Text(qnaQuestion.text),
-                  subtitle: Text(qnaQuestion.category ?? ''),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.edit),
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(
-                        AppRoutes.qnaFormRoute,
-                        arguments: {'question': qnaQuestion},
-                      );
-                    },
-                  ),
+                return QnaQuestionWidget(
+                  qnaQuestion: qnaQuestion,
+                  showUser: true,
                 );
               },
             );
@@ -57,8 +52,26 @@ class QnasScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () =>
-            Navigator.of(context).pushNamed(AppRoutes.qnaFormRoute),
+        onPressed: () {
+          if (FirebaseAuth.instance.currentUser != null) {
+            Navigator.of(context).pushNamed(AppRoutes.qnaFormRoute);
+          } else {
+            AppAlert.showAlert(
+              context,
+              subTitle: "يرجى تسجيل الدخول",
+              confirmText: "تسجيل الدخول",
+              onConfirm: () {
+                AppAlert.dismissDialog(context);
+                Navigator.of(context).pushNamed(
+                  AppRoutes.loginRoute,
+                  arguments: {
+                    "return_route": true,
+                  },
+                );
+              },
+            );
+          }
+        },
       ),
     );
   }
