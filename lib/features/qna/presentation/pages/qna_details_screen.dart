@@ -13,6 +13,7 @@ import '../../../../core/routes/app_routes.dart';
 import '../../../../core/widgets/alert_widget.dart';
 import '../../data/models/qna_answer_model.dart';
 import '../../data/models/qna_question_model.dart';
+import '../widgets/qna_answer_widget.dart';
 import '../widgets/qna_question_widget.dart';
 
 class QnaDetailsScreen extends StatefulWidget {
@@ -72,7 +73,6 @@ class _QnaDetailsScreenState extends State<QnaDetailsScreen> {
             qnaQuestion: widget.question,
             showUser: false,
           ),
-          const Divider(),
           // قائمة الإجابات
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
@@ -172,61 +172,3 @@ class _QnaDetailsScreenState extends State<QnaDetailsScreen> {
   }
 }
 
-class QnaAnswerWidget extends StatelessWidget {
-  const QnaAnswerWidget({
-    super.key,
-    required this.answer,
-    required QnaCubit qnaCubit,
-  }) : _qnaCubit = qnaCubit;
-
-  final QnaAnswerModel answer;
-  final QnaCubit _qnaCubit;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 8,
-      ),
-      child: Column(
-        children: [
-          LoadUserWidget(
-            userId: answer.authorId,
-            query: answer.id,
-          ),
-          ListTile(
-            title: Text(answer.text),
-            subtitle: Text(
-              'عدد التصويتات: ${answer.votes}',
-              style: const TextStyle(fontSize: 12),
-            ),
-            trailing: IconButton(
-              icon: const Icon(Icons.thumb_up),
-              onPressed: () {
-                if (FirebaseAuth.instance.currentUser == null) {
-                  AppAlert.showAlert(
-                    context,
-                    subTitle: "يرجى تسجيل الدخول",
-                    confirmText: "تسجيل الدخول",
-                    onConfirm: () {
-                      AppAlert.dismissDialog(context);
-                      Navigator.of(context).pushNamed(
-                        AppRoutes.loginRoute,
-                        arguments: {
-                          "return_route": true,
-                        },
-                      );
-                    },
-                  );
-                } else {
-                  _qnaCubit.voteForAnswerEvent(answer.id);
-                }
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}

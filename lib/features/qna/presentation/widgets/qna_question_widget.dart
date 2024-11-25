@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:linkati/core/extensions/date_format_extension.dart';
@@ -22,7 +21,7 @@ class QnaQuestionWidget extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: showUser ? BorderRadius.circular(10) : null,
         boxShadow: const [
           BoxShadow(
             color: Colors.grey,
@@ -79,7 +78,7 @@ class QnaQuestionWidget extends StatelessWidget {
                 const SizedBox(width: 8),
                 Chip(
                   label: Text(
-                    "عدد الاجابات ${qnaQuestion.answersCount}",
+                    "${qnaQuestion.answersCount} رداً",
                     style: const TextStyle(
                       fontSize: 12,
                       color: Colors.black,

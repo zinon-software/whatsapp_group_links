@@ -112,6 +112,7 @@ class QnaDatasourcesImpl implements QnaDatasources {
       final DocumentReference docRef = answers.doc();
       answer = answer.copyWith(id: docRef.id);
       await docRef.set(answer.toJson());
+      incrementAnswersCount(answer.questionId);
       return 'answer added successfully';
     } catch (e) {
       rethrow;

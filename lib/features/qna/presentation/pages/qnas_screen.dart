@@ -16,7 +16,14 @@ class QnasScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('تساؤلات'),
-        centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              qnaCubit.fetchQnaQuestionsEvent();
+            },
+            icon: const Icon(Icons.refresh),
+          ),
+        ],
       ),
       body: BlocBuilder<QnaCubit, QnaState>(
         bloc: qnaCubit,
@@ -27,27 +34,26 @@ class QnasScreen extends StatelessWidget {
         builder: (context, state) {
           if (state is QnaQuestionsLoadingState) {
             return const Center(child: CircularProgressIndicator());
-          } else if (state is QnaQuestionsErrorState) {
-            return Center(child: Text(state.message));
-          } else if (state is QnaQuestionsSuccessState) {
-            if (state.questions.isEmpty) {
-              return const Center(child: Text('لا يوجد أسئلة'));
-            }
-
-            return ListView.builder(
-              padding: const EdgeInsets.all(12.0),
-              itemCount: state.questions.length,
-              itemBuilder: (context, index) {
-                final qnaQuestion = state.questions[index];
-                return QnaQuestionWidget(
-                  qnaQuestion: qnaQuestion,
-                  showUser: true,
-                );
-              },
-            );
-          } else {
-            return Container();
           }
+          if (state is QnaQuestionsErrorState) {
+            return Center(child: Text(state.message));
+          }
+
+          if (qnaCubit.qnaQuestions.isEmpty) {
+            return const Center(child: Text('لا يوجد أسئلة'));
+          }
+
+          return ListView.builder(
+            padding: const EdgeInsets.all(12.0),
+            itemCount: qnaCubit.qnaQuestions.length,
+            itemBuilder: (context, index) {
+              final qnaQuestion = qnaCubit.qnaQuestions[index];
+              return QnaQuestionWidget(
+                qnaQuestion: qnaQuestion,
+                showUser: true,
+              );
+            },
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(

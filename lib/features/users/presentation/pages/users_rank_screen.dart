@@ -42,6 +42,14 @@ class _UsersRankScreenState extends State<UsersRankScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("الترتيب"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () {
+              _usersCubit.fetchUsersEvent();
+            },
+          ),
+        ],
       ),
       body: BlocBuilder<UsersCubit, UsersState>(
         bloc: _usersCubit,
@@ -49,7 +57,7 @@ class _UsersRankScreenState extends State<UsersRankScreen> {
           if (state is FetchUsersLoadingState) {
             return const Center(
               child:
-                  CircularProgressIndicator(color: ColorsManager.primaryLight),
+                  CircularProgressIndicator(color: ColorsManager.primaryLight,),
             );
           }
 

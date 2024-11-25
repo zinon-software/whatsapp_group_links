@@ -60,7 +60,11 @@ class QnaCubit extends Cubit<QnaState> {
     );
   }
 
-  void voteForAnswerEvent(String id) async {
+  void incrementAnswerVotesEvent(String id) async {
     repository.incrementAnswerVotes(id);
+  }
+
+  void decrementAnswerVotesEvent(String id) async {
+    repository.decrementAnswerVotes(id);
   }
 }
