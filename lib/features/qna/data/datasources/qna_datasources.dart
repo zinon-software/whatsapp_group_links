@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:linkati/config/app_injector.dart';
+import 'package:linkati/features/links/data/datasources/links_datasources.dart';
 
 import '../models/qna_answer_model.dart';
 import '../models/qna_question_model.dart';
@@ -30,6 +32,19 @@ class QnaDatasourcesImpl implements QnaDatasources {
   @override
   Future<String> createQuestion(QnaQuestionModel question) async {
     try {
+      final LinksDatasources linksDatasources = instance<LinksDatasources>();
+
+      final List<String> bannedWordsData =
+          await linksDatasources.fetchBannedWords();
+
+      List<String> titleWords = question.text.split(' ');
+      for (String word in titleWords) {
+        if (bannedWordsData.contains(word)) {
+          return throw Exception("تم حظر النشر بسبب مخالفتك لسياسة النشر");
+        }
+      }
+
+
       final DocumentReference docRef = questions.doc();
 
       question = question.copyWith(id: docRef.id);
@@ -99,6 +114,19 @@ class QnaDatasourcesImpl implements QnaDatasources {
   @override
   Future<String> updateQuestion(QnaQuestionModel question) async {
     try {
+      final LinksDatasources linksDatasources = instance<LinksDatasources>();
+
+      final List<String> bannedWordsData =
+          await linksDatasources.fetchBannedWords();
+
+      List<String> titleWords = question.text.split(' ');
+      for (String word in titleWords) {
+        if (bannedWordsData.contains(word)) {
+          return throw Exception("تم حظر النشر بسبب مخالفتك لسياسة النشر");
+        }
+      }
+
+
       await questions.doc(question.id).update(question.toJson());
       return 'question updated successfully';
     } catch (e) {
@@ -109,6 +137,18 @@ class QnaDatasourcesImpl implements QnaDatasources {
   @override
   Future<String> createAnswer(QnaAnswerModel answer) async {
     try {
+      final LinksDatasources linksDatasources = instance<LinksDatasources>();
+
+      final List<String> bannedWordsData =
+          await linksDatasources.fetchBannedWords();
+
+      List<String> titleWords = answer.text.split(' ');
+      for (String word in titleWords) {
+        if (bannedWordsData.contains(word)) {
+          return throw Exception("تم حظر النشر بسبب مخالفتك لسياسة النشر");
+        }
+      }
+
       final DocumentReference docRef = answers.doc();
       answer = answer.copyWith(id: docRef.id);
       await docRef.set(answer.toJson());
@@ -183,6 +223,18 @@ class QnaDatasourcesImpl implements QnaDatasources {
   @override
   Future<String> updateAnswer(QnaAnswerModel answer) async {
     try {
+      final LinksDatasources linksDatasources = instance<LinksDatasources>();
+
+      final List<String> bannedWordsData =
+          await linksDatasources.fetchBannedWords();
+
+      List<String> titleWords = answer.text.split(' ');
+      for (String word in titleWords) {
+        if (bannedWordsData.contains(word)) {
+          return throw Exception("تم حظر النشر بسبب مخالفتك لسياسة النشر");
+        }
+      }
+
       await answers.doc(answer.id).update(answer.toJson());
       return 'answer updated successfully';
     } catch (e) {

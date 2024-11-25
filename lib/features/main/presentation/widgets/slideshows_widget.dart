@@ -66,12 +66,12 @@ class SlideshowsWidget extends StatelessWidget {
       },
       buildWhen: (previous, current) => current is SlideshowsSuccessState,
       builder: (context, state) {
-        if (state is SlideshowsSuccessState && state.slideshows.isNotEmpty) {
+        if (state is SlideshowsSuccessState && mainCubit.slideshows.isNotEmpty) {
           return SizedBox(
             height: 150,
             width: double.infinity,
             child: FlipSlideshowsWidget(
-              slideshows: state.slideshows,
+              slideshows: mainCubit.slideshows,
               mainCubit: mainCubit,
             ),
           );

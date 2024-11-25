@@ -10,7 +10,9 @@ import '../features/challenges/data/datasources/challenges_datasources.dart';
 import '../features/challenges/data/repositories/challenges_repositories.dart';
 import '../features/links/data/datasources/links_datasources.dart';
 import '../features/links/data/repositories/links_repositories.dart';
-import '../features/main/data/datasources/main_datasources.dart';
+import '../features/main/data/datasources/main_local_datasources.dart';
+import '../features/main/data/datasources/main_remote_datasources.dart';
+import '../features/main/data/models/slideshow_model_adapter.dart';
 import '../features/main/data/repositories/main_repositories.dart';
 import '../features/qna/data/datasources/qna_datasources.dart';
 import '../features/qna/data/repositories/qna_repositories.dart';
@@ -47,6 +49,8 @@ Future<void> sutpHive() async {
   await Hive.initFlutter();
 
   Hive.registerAdapter(UserModelAdapter());
+  Hive.registerAdapter(SlideshowModelAdapter());
+  Hive.registerAdapter(ListSlideshowModelAdapter());
 
   Box box = await Hive.openBox(AppHiveConfig.instance.linkatiBox);
 
@@ -128,19 +132,29 @@ void stupLinks() {
 
 void stupMain() {
   // data Source
-  if (!GetIt.I.isRegistered<MainDatasources>()) {
-    instance.registerLazySingleton<MainDatasources>(
-      () => MainDatasourcesImpl(
+  if (!GetIt.I.isRegistered<MainRemoteDatasources>()) {
+    instance.registerLazySingleton<MainRemoteDatasources>(
+      () => MainRemoteDatasourcesImpl(
         slideshows: instance<AppCollections>().slideshows,
       ),
     );
   }
+
+  if (!GetIt.I.isRegistered<MainLocalDatasources>()) {
+    instance.registerLazySingleton<MainLocalDatasources>(
+      () => MainLocalDatasourcesImpl(
+        repository: instance<StorageRepository>(),
+      ),
+    );
+  }
+
   // Repository
   if (!GetIt.I.isRegistered<MainRepository>()) {
     instance.registerLazySingleton<MainRepository>(
       () => MainRepositoryImpl(
-        instance<MainDatasources>(),
-        instance<ConnectionStatus>(),
+        remoteDatasources: instance<MainRemoteDatasources>(),
+        localDatasources: instance<MainLocalDatasources>(),
+        connectionStatus: instance<ConnectionStatus>(),
       ),
     );
   }

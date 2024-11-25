@@ -44,4 +44,14 @@ class SlideshowModel {
       route: route ?? this.route,
     );
   }
+
+  static SlideshowModel empty() {
+    return SlideshowModel(
+      id: '',
+      imageUrl: '',
+      title: '',
+      description: '',
+      route: '',
+    );
+  }
 }

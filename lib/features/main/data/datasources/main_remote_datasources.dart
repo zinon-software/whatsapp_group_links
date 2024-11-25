@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/slideshow_model.dart';
 
-abstract class MainDatasources {
+abstract class MainRemoteDatasources {
   // slideshows
   Future<String> createSlideshow(SlideshowModel slideshow);
   Future<List<SlideshowModel>> fetchSlideshows();
@@ -10,10 +10,10 @@ abstract class MainDatasources {
   Future<String> deleteSlideshow(SlideshowModel slideshow);
 }
 
-class MainDatasourcesImpl implements MainDatasources {
+class MainRemoteDatasourcesImpl implements MainRemoteDatasources {
   final CollectionReference slideshows;
 
-  MainDatasourcesImpl({required this.slideshows});
+  MainRemoteDatasourcesImpl({required this.slideshows});
 
   @override
   Future<String> createSlideshow(SlideshowModel slideshow) async {

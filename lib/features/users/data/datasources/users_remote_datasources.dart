@@ -27,13 +27,16 @@ class UsersRemoteDatasourcesImpl implements UsersRemoteDatasources {
     try {
       DocumentSnapshot snapshot = await users.doc(id).get();
 
-      if (!snapshot.exists) {
-        return throw Exception('User not found');
-      }
+      final UserModel user;
 
-      final user = UserModel.fromJson(
-        snapshot.data() as Map<String, dynamic>,
-      );
+      if (!snapshot.exists) {
+        user = UserModel.isEmpty().copyWith(id: id);
+        await createUser(user);
+      } else {
+        user = UserModel.fromJson(
+          snapshot.data() as Map<String, dynamic>,
+        );
+      }
 
       return user;
     } catch (e) {

@@ -53,6 +53,13 @@ class UsersCubit extends Cubit<UsersState> {
           );
         },
       );
+      if (!isEdit) {
+        repository.updateUser(
+          currentUser!.copyWith(
+            lastLoginAt: DateTime.now(),
+          ),
+        );
+      }
     } catch (e) {
       // rethrow;
     }

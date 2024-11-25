@@ -31,9 +31,13 @@ class LinksDatasourcesImpl implements LinksDatasources {
       // check if link name is not banned
       final List<String> bannedWordsData = await fetchBannedWords();
 
-      if (bannedWordsData.contains(link.title)) {
-        return throw Exception("تم حظر نشر الرابط بسبب مخالفتك لسياسة النشر");
+      List<String> titleWords = link.title.split(' ');
+      for (String word in titleWords) {
+        if (bannedWordsData.contains(word)) {
+          return throw Exception("تم حظر نشر الرابط بسبب مخالفتك لسياسة النشر");
+        }
       }
+      
       if (bannedWordsData.contains(link.url)) {
         return throw Exception("تم حظر نشر الرابط بسبب مخالفتك لسياسة النشر");
       }
@@ -102,6 +106,15 @@ class LinksDatasourcesImpl implements LinksDatasources {
   @override
   Future<String> updateLink(LinkModel link) async {
     try {
+      final List<String> bannedWordsData = await fetchBannedWords();
+
+      List<String> titleWords = link.title.split(' ');
+      for (String word in titleWords) {
+        if (bannedWordsData.contains(word)) {
+          return throw Exception("تم حظر نشر الرابط بسبب مخالفتك لسياسة النشر");
+        }
+      }
+      
       await links.doc(link.id).update(link.toJson());
       return 'Link updated successfully';
     } catch (e) {

@@ -54,7 +54,9 @@ class App extends StatelessWidget {
                 lazy: false,
                 create: (__) => MainCubit(
                   repository: instance<MainRepository>(),
-                )..fetchSlideshowsEvint(),
+                )
+                  ..fetchLocalSlideshowsEvint()
+                  ..fetchRemoteSlideshowsEvint(),
               ),
             ],
             child: MaterialApp(

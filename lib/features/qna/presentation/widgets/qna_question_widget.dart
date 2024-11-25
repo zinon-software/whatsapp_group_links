@@ -33,12 +33,14 @@ class QnaQuestionWidget extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 4),
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
-        onTap: () {
-          Navigator.of(context).pushNamed(
-            AppRoutes.qnaDetailsRoute,
-            arguments: {'question': qnaQuestion},
-          );
-        },
+        onTap: showUser
+            ? () {
+                Navigator.of(context).pushNamed(
+                  AppRoutes.qnaDetailsRoute,
+                  arguments: {'question': qnaQuestion},
+                );
+              }
+            : null,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -77,6 +79,10 @@ class QnaQuestionWidget extends StatelessWidget {
                   ),
                 const SizedBox(width: 8),
                 Chip(
+                  labelPadding: const EdgeInsets.symmetric(
+                    horizontal: 4,
+                    vertical: 0,
+                  ),
                   label: Text(
                     "${qnaQuestion.answersCount} رداً",
                     style: const TextStyle(

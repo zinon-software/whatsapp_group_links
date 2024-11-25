@@ -8,14 +8,31 @@ part 'main_state.dart';
 
 class MainCubit extends Cubit<MainState> {
   final MainRepository repository;
+  List<SlideshowModel> slideshows = [];
+
   MainCubit({required this.repository}) : super(MainInitial());
 
-  void fetchSlideshowsEvint() async {
+  void fetchLocalSlideshowsEvint() {
+    emit(SlideshowsLoadingState());
+
+    (repository.getSlideshows()).fold(
+      (error) => emit(SlideshowsErrorState(error)),
+      (data) {
+        slideshows = data;
+        emit(SlideshowsSuccessState(data));
+      },
+    );
+  }
+
+  void fetchRemoteSlideshowsEvint() async {
     emit(SlideshowsLoadingState());
 
     (await repository.fetchSlideshows()).fold(
       (error) => emit(SlideshowsErrorState(error)),
-      (data) => emit(SlideshowsSuccessState(data)),
+      (data) {
+        slideshows = data;
+        emit(SlideshowsSuccessState(data));
+      },
     );
   }
 
@@ -26,7 +43,7 @@ class MainCubit extends Cubit<MainState> {
       (error) => emit(ManageSlideshowErrorState(error)),
       (data) {
         emit(ManageSlideshowSuccessState(data));
-        fetchSlideshowsEvint();
+        fetchRemoteSlideshowsEvint();
       },
     );
   }
@@ -38,7 +55,7 @@ class MainCubit extends Cubit<MainState> {
       (error) => emit(ManageSlideshowErrorState(error)),
       (data) {
         emit(ManageSlideshowSuccessState(data));
-        fetchSlideshowsEvint();
+        fetchRemoteSlideshowsEvint();
       },
     );
   }

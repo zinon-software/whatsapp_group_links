@@ -41,6 +41,6 @@ String handleException(Object e) {
   if (e is FirebaseException) {
     return handleFirebaseException(e);
   } else {
-    return 'حدث خطأ ما: ${e.toString()}';
+    return 'حدث خطأ ما: ${e.toString().replaceAll('Exception: ', '')}';
   }
 }

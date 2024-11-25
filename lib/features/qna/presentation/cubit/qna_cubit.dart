@@ -31,8 +31,8 @@ class QnaCubit extends Cubit<QnaState> {
     result.fold(
       (error) => emit(ManageQuestionErrorState(error)),
       (success) {
-        fetchQnaQuestionsEvent();
         emit(ManageQuestionSuccessState());
+        fetchQnaQuestionsEvent();
       },
     );
   }
@@ -43,8 +43,8 @@ class QnaCubit extends Cubit<QnaState> {
     result.fold(
       (error) => emit(ManageQuestionErrorState(error)),
       (success) {
-        fetchQnaQuestionsEvent();
         emit(ManageQuestionSuccessState());
+        fetchQnaQuestionsEvent();
       },
     );
   }

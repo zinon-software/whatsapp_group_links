@@ -83,6 +83,11 @@ class _QnaFormScreenState extends State<QnaFormScreen> {
         title: Text(widget.question != null ? 'تعديل السؤال' : 'إضافة سؤال'),
       ),
       body: BlocListener<QnaCubit, QnaState>(
+        bloc: _qnaCubit,
+        listenWhen: (previous, current) =>
+            current is ManageQuestionLoadingState ||
+            current is ManageQuestionSuccessState ||
+            current is ManageQuestionErrorState,
         listener: (context, state) {
           if (state is ManageQuestionLoadingState) {
             AppAlert.loading(context);
@@ -90,6 +95,7 @@ class _QnaFormScreenState extends State<QnaFormScreen> {
           if (state is ManageQuestionSuccessState) {
             AppAlert.showAlert(context, subTitle: "تمت العملية بنجاح").then(
               (value) {
+                // ignore: use_build_context_synchronously
                 Navigator.pop(context);
               },
             );
@@ -144,10 +150,9 @@ class _QnaFormScreenState extends State<QnaFormScreen> {
                     border: OutlineInputBorder(),
                   ),
                   onChanged: (value) {
-                    // setState(() {
                     _categoryController.text = value.toString();
-                    // });
                   },
+                  validator: (value) => value == null ? 'مطلوب' : null,
                 ),
                 SizedBox(height: 10),
                 DropdownButtonFormField(
@@ -165,9 +170,9 @@ class _QnaFormScreenState extends State<QnaFormScreen> {
                       isPublic = value as bool;
                     });
                   },
+                  validator: (value) => value == null ? 'مطلوب' : null,
                 ),
-                SizedBox(height: 10),
-                SizedBox(height: 20),
+                SizedBox(height: 30),
                 CustomButtonWidget(
                   width: double.infinity,
                   onPressed: _submit,
