@@ -68,7 +68,7 @@ class HomeLinksWidget extends StatelessWidget {
         ),
         SizedBox(height: 8),
         StreamBuilder<QuerySnapshot>(
-          stream: query.limit(10).snapshots(),
+          stream: query.limit(5).snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return CustomSkeletonizerWidget(
@@ -121,6 +121,19 @@ class HomeLinksWidget extends StatelessWidget {
                         height: 85,
                       ),
                       if (index == linksData.length - 1)
+                      InkWell(
+                      onTap: () {
+                        adsManager.showRewardedAd();
+                        Navigator.pushNamed(
+                          context,
+                          AppRoutes.linksRoute,
+                          arguments: {
+                            'title': title,
+                            'query': query,
+                          },
+                        );
+                      },  
+                      child: 
                         Container(
                           height: 85,
                           width: 40,
@@ -133,6 +146,7 @@ class HomeLinksWidget extends StatelessWidget {
                             Icons.chevron_right,
                             color: Colors.black,
                           ),
+                        ),
                         ),
                     ],
                   );

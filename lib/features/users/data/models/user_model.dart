@@ -1,5 +1,3 @@
-
-
 class UserModel {
   final String id;
   final String name;
@@ -13,6 +11,7 @@ class UserModel {
   final double coins;
   final String? country;
   final bool isStopAds;
+  final String? fcmToken;
 
   UserModel({
     required this.id,
@@ -27,6 +26,7 @@ class UserModel {
     this.coins = 0,
     this.country,
     this.isStopAds = false,
+    this.fcmToken,
   });
 
   // إنشاء كائن UserModel من مستند Firestore
@@ -48,6 +48,7 @@ class UserModel {
       coins: json['coins'] ?? 0,
       country: json['country'],
       isStopAds: json['is_stop_ads'] ?? false,
+      fcmToken: json['fcm_token'],
     );
 
     return user;
@@ -67,38 +68,39 @@ class UserModel {
       'score': score,
       'coins': coins,
       'country': country,
-      'is_stop_ads': isStopAds
+      'is_stop_ads': isStopAds,
+      'fcm_token': fcmToken
     };
   }
 
-  UserModel copyWith({
-    String? id,
-    String? name,
-    String? email,
-    String? photoUrl,
-    DateTime? createdAt,
-    DateTime? lastLoginAt,
-    String? phoneNumber,
-    PermissionModel? permissions,
-    int? score,
-    double? coins,
-    String? country,
-    bool? isStopAds,
-  }) {
+  UserModel copyWith(
+      {String? id,
+      String? name,
+      String? email,
+      String? photoUrl,
+      DateTime? createdAt,
+      DateTime? lastLoginAt,
+      String? phoneNumber,
+      PermissionModel? permissions,
+      int? score,
+      double? coins,
+      String? country,
+      bool? isStopAds,
+      String? fcmToken}) {
     return UserModel(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      email: email ?? this.email,
-      photoUrl: photoUrl ?? this.photoUrl,
-      createdAt: createdAt ?? this.createdAt,
-      lastLoginAt: lastLoginAt ?? this.lastLoginAt,
-      phoneNumber: phoneNumber ?? this.phoneNumber,
-      permissions: permissions ?? this.permissions,
-      score: score ?? this.score,
-      coins: coins ?? this.coins,
-      country: country ?? this.country,
-      isStopAds: isStopAds ?? this.isStopAds,
-    );
+        id: id ?? this.id,
+        name: name ?? this.name,
+        email: email ?? this.email,
+        photoUrl: photoUrl ?? this.photoUrl,
+        createdAt: createdAt ?? this.createdAt,
+        lastLoginAt: lastLoginAt ?? this.lastLoginAt,
+        phoneNumber: phoneNumber ?? this.phoneNumber,
+        permissions: permissions ?? this.permissions,
+        score: score ?? this.score,
+        coins: coins ?? this.coins,
+        country: country ?? this.country,
+        isStopAds: isStopAds ?? this.isStopAds,
+        fcmToken: fcmToken ?? this.fcmToken);
   }
 
   static UserModel isEmpty() {

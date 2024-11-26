@@ -44,7 +44,6 @@ class QnaDatasourcesImpl implements QnaDatasources {
         }
       }
 
-
       final DocumentReference docRef = questions.doc();
 
       question = question.copyWith(id: docRef.id);
@@ -71,6 +70,13 @@ class QnaDatasourcesImpl implements QnaDatasources {
   Future<String> deleteQuestion(String id) async {
     try {
       await questions.doc(id).delete();
+
+      answers.where('question_id', isEqualTo: id).get().then((snapshot) {
+        for (DocumentSnapshot doc in snapshot.docs) {
+          doc.reference.delete();
+        }
+      });
+      
       return 'Link deleted successfully';
     } catch (e) {
       rethrow;
@@ -125,7 +131,6 @@ class QnaDatasourcesImpl implements QnaDatasources {
           return throw Exception("تم حظر النشر بسبب مخالفتك لسياسة النشر");
         }
       }
-
 
       await questions.doc(question.id).update(question.toJson());
       return 'question updated successfully';

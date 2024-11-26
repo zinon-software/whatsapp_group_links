@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,6 +11,7 @@ import 'package:linkati/features/users/presentation/cubit/users_cubit.dart';
 import '../../../../../core/ads/ads_manager.dart';
 import '../../../../config/app_injector.dart';
 import '../../../../core/api/app_collections.dart';
+import '../../../../core/notification/notification_manager.dart';
 import '../../../links/presentation/widgets/home_links_widget.dart';
 import '../views/fortune_wheel_view.dart';
 import '../widgets/admin_dashboard_button_widget.dart';
@@ -39,6 +41,14 @@ class _HomeScreenState extends State<HomeScreen> {
     appReview();
 
     _usersCubit.fetchMyUserAccount();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      RemoteMessage? initialMessage =
+          await FirebaseMessaging.instance.getInitialMessage();
+      if (initialMessage != null) {
+        NotificationManager.navigatorRoutes(initialMessage.data["route"]);
+      }
+    });
   }
 
   appReview() async {
@@ -91,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         alignment: Alignment.center,
                         child: Text(
-                          "${_usersCubit.currentUser!.score} نقطة 🪙",
+                          "${_usersCubit.currentUser?.score} نقطة 🪙",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -136,6 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     logo: 'assets/svg/rank.svg',
                     title: "المتسابقين",
+                    subtitle: "عرض الترتيب الحالي للمشاركين",
                     icon: Icons.group,
                   ),
                   HomeButtonWidget(
@@ -163,6 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     logo: 'assets/svg/challenges.svg',
                     title: "التحديات",
+                    subtitle: "استعراض أحدث التحديات المتاحة",
                     icon: Icons.lightbulb,
                   ),
                   HomeButtonWidget(
@@ -173,6 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     logo: 'assets/svg/ask.svg',
                     title: "مجتمع تساؤلات",
+                    subtitle: "مشاركة الأسئلة والأجوبة مع المجتمع",
                     icon: Icons.question_answer,
                   ),
                   HomeLinksWidget(

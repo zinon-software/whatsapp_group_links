@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:linkati/core/widgets/custom_skeletonizer_widget.dart';
 
@@ -43,13 +44,18 @@ class _LinksScreenState extends State<LinksScreen> {
       ),
       body: Column(
         children: [
-           _adsManager.getBannerAdWidget(padding: const EdgeInsets.all(8.0)),
-          
+          _adsManager.getBannerAdWidget(padding: const EdgeInsets.all(8.0)),
           Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: widget.query.snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
+            child: FirestoreQueryBuilder<LinkModel>(
+              pageSize: 20,
+              query: widget.query.withConverter<LinkModel>(
+                fromFirestore: (snapshot, _) => LinkModel.fromJson(
+                  snapshot.data() as Map<String, dynamic>,
+                ),
+                toFirestore: (link, _) => link.toJson(),
+              ),
+              builder: (context, snapshot, _) {
+                if (snapshot.isFetching) {
                   return CustomSkeletonizerWidget(
                     enabled: true,
                     child: ListView.builder(
@@ -66,22 +72,27 @@ class _LinksScreenState extends State<LinksScreen> {
                     ),
                   );
                 }
+
                 if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 }
-                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+
+                if (!snapshot.hasData || snapshot.docs.isEmpty) {
                   return const Center(
                     child: Text('No social media links available.'),
                   );
                 }
 
                 return ListView.builder(
-                  itemCount: snapshot.data!.docs.length,
+                  itemCount: snapshot.docs.length,
                   itemBuilder: (context, index) {
-                    var linkData = snapshot.data!.docs[index].data()
-                        as Map<String, dynamic>;
+                    if (snapshot.hasMore && index + 1 == snapshot.docs.length) {
+                      // Tell FirestoreQueryBuilder to try to obtain more items.
+                      // It is safe to call this function from within the build method.
+                      snapshot.fetchMore();
+                    }
 
-                    var link = LinkModel.fromJson(linkData);
+                    final LinkModel link = snapshot.docs[index].data();
 
                     return Column(
                       children: [

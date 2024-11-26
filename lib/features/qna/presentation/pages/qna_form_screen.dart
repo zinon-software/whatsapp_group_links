@@ -173,10 +173,28 @@ class _QnaFormScreenState extends State<QnaFormScreen> {
                   validator: (value) => value == null ? 'مطلوب' : null,
                 ),
                 SizedBox(height: 30),
-                CustomButtonWidget(
-                  width: double.infinity,
-                  onPressed: _submit,
-                  label: 'حفظ',
+                Row(
+                  children: [
+                    Expanded(
+                      child: CustomButtonWidget(
+                        width: double.infinity,
+                        onPressed: _submit,
+                        label: widget.question != null ? 'تعديل' : 'إضافة',
+                      ),
+                    ),
+                    if (widget.question != null) const SizedBox(width: 10),
+                    // delete icon button
+                    if (widget.question != null)
+                      IconButton(
+                        color: Colors.red,
+                        onPressed: () {
+                          _qnaCubit.deleteQuestionEvent(
+                            widget.question!.id,
+                          );
+                        },
+                        icon: const Icon(Icons.delete),
+                      ),
+                  ],
                 ),
               ],
             ),

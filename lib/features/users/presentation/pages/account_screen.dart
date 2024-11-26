@@ -72,25 +72,29 @@ class AccountScreen extends StatelessWidget {
                               ),
                             const SizedBox(height: 10),
                             // User Score
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.star, color: Colors.amber),
-                                const SizedBox(width: 5),
-                                Text(
-                                  usersCubit.currentUser?.score.toString() ??
-                                      '0',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                            Container(
+                              height: 25,
+                              width: 120,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              decoration: BoxDecoration(
+                                color: Colors.amber,
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                "${usersCubit.currentUser?.score} نقطة 🪙",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                              ],
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                             const SizedBox(height: 10),
                             // User Name
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              // mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(Icons.person, color: Colors.grey[700]),
                                 const SizedBox(width: 5),
@@ -107,7 +111,7 @@ class AccountScreen extends StatelessWidget {
                             const SizedBox(height: 5),
                             // User Email
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              // mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(Icons.email, color: Colors.grey[700]),
                                 const SizedBox(width: 5),
@@ -124,7 +128,7 @@ class AccountScreen extends StatelessWidget {
                             const SizedBox(height: 5),
                             // User Phone
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              // mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(Icons.phone, color: Colors.grey[700]),
                                 const SizedBox(width: 5),
@@ -140,13 +144,20 @@ class AccountScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 20),
                             // contry
-                            Text(
-                              usersCubit.currentUser?.country ??
-                                  'الدولة غير متاحة',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey[700],
-                              ),
+                            Row(
+                              children: [
+                                Icon(Icons.location_on,
+                                    color: Colors.grey[700]),
+                                const SizedBox(width: 5),
+                                Text(
+                                  usersCubit.currentUser?.country ??
+                                      'الدولة غير متاحة',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey[700],
+                                  ),
+                                ),
+                              ],
                             )
                           ],
                         ),

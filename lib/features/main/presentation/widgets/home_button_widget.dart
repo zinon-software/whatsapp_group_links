@@ -10,11 +10,13 @@ class HomeButtonWidget extends StatelessWidget {
     required this.logo,
     required this.icon,
     required this.title,
+    required this.subtitle,
   });
   final VoidCallback onTap;
   final String logo;
   final IconData icon;
   final String title;
+  final String subtitle;
 
   @override
   Widget build(BuildContext context) {
@@ -47,19 +49,45 @@ class HomeButtonWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
-            Icon(
-              icon,
-              color: ColorsManager.primaryLight,
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        icon,
+                        color: ColorsManager.primaryLight,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        title,
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge!
+                            .copyWith(color: Colors.black),
+                      ),
+                    ],
+                  ),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(color: Colors.grey),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Container(
+                    height: 2,
+                    width: 100,
+                    margin: const EdgeInsets.symmetric(horizontal: 0),
+                    decoration: BoxDecoration(
+                      color: ColorsManager.primaryLight,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(width: 4),
-            Text(
-              title,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge!
-                  .copyWith(color: Colors.black),
-            ),
-            Spacer(),
             Container(
               height: 70,
               width: 40,

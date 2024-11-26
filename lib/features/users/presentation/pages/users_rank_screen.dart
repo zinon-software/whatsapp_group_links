@@ -56,8 +56,9 @@ class _UsersRankScreenState extends State<UsersRankScreen> {
         builder: (context, state) {
           if (state is FetchUsersLoadingState) {
             return const Center(
-              child:
-                  CircularProgressIndicator(color: ColorsManager.primaryLight,),
+              child: CircularProgressIndicator(
+                color: ColorsManager.primaryLight,
+              ),
             );
           }
 

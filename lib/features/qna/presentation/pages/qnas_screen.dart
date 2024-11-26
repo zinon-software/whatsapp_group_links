@@ -15,7 +15,7 @@ class QnasScreen extends StatelessWidget {
     final QnaCubit qnaCubit = context.read<QnaCubit>();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('تساؤلات'),
+        title: const Text('مجتمع تساؤلات'),
         actions: [
           IconButton(
             onPressed: () {
@@ -60,7 +60,11 @@ class QnasScreen extends StatelessWidget {
         child: const Icon(Icons.add),
         onPressed: () {
           if (FirebaseAuth.instance.currentUser != null) {
-            Navigator.of(context).pushNamed(AppRoutes.qnaFormRoute);
+            Navigator.of(context).pushNamed(AppRoutes.qnaFormRoute).then(
+              (value) {
+                qnaCubit.fetchQnaQuestionsEvent();
+              },
+            );
           } else {
             AppAlert.showAlert(
               context,

@@ -64,7 +64,8 @@ class AdminDashboardButtonWidget extends StatelessWidget {
             },
             logo: 'assets/svg/challenges.svg',
             title: "لوحة التحكم",
-            icon: Icons.shield_outlined,
+            subtitle: "لوحة التحكم",
+            icon: Icons.shield,
           );
         }
         return const SizedBox.shrink();

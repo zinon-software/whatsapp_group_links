@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../../../core/notification/notification_manager.dart';
 import '../models/user_model.dart';
 
 abstract class UsersRemoteDatasources {
@@ -47,7 +48,8 @@ class UsersRemoteDatasourcesImpl implements UsersRemoteDatasources {
   @override
   Future<String> createUser(UserModel request) async {
     try {
-      await users.doc(request.id).set(request.toJson());
+    final token =  await NotificationManager.getNotificationToken();
+      await users.doc(request.id).set(request.copyWith(fcmToken: token).toJson());
       return "تم تحديث حالة التصريح بنجاح";
     } catch (e) {
       rethrow;
@@ -57,7 +59,8 @@ class UsersRemoteDatasourcesImpl implements UsersRemoteDatasources {
   @override
   Future<String> updateUser(UserModel request) async {
     try {
-      await users.doc(request.id).update(request.toJson());
+    final token =  await NotificationManager.getNotificationToken();
+      await users.doc(request.id).update(request.copyWith(fcmToken: token).toJson());
       return "تم تحديث حالة التصريح بنجاح";
     } catch (e) {
       rethrow;

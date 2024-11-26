@@ -53,7 +53,7 @@ class _QnaDetailsScreenState extends State<QnaDetailsScreen> {
       createdAt: DateTime.now(),
     );
 
-    _qnaCubit.createAnswerEvent(newAnswer);
+    _qnaCubit.createAnswerEvent(newAnswer, widget.question.authorId);
     _answerController.clear();
   }
 
@@ -102,8 +102,6 @@ class _QnaDetailsScreenState extends State<QnaDetailsScreen> {
                     );
                   },
                 ).toList();
-
-                answers.sort((a, b) => b.votes.compareTo(a.votes));
 
                 return ListView.builder(
                   itemCount: answers.length,
@@ -171,4 +169,3 @@ class _QnaDetailsScreenState extends State<QnaDetailsScreen> {
     );
   }
 }
-

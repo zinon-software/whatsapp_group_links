@@ -1,14 +1,18 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:linkati/config/app_injector.dart';
+import 'package:linkati/core/notification/send_notification.dart';
+import 'package:linkati/core/storage/storage_repository.dart';
 import 'package:linkati/features/qna/data/models/qna_answer_model.dart';
 import 'package:linkati/features/qna/data/models/qna_question_model.dart';
 import 'package:linkati/features/qna/data/repositories/qna_repositories.dart';
+import 'package:linkati/features/users/data/models/user_model.dart';
 
 part 'qna_state.dart';
 
 class QnaCubit extends Cubit<QnaState> {
   final QnaRepository repository;
-  final List<QnaQuestionModel> qnaQuestions = [];
+  List<QnaQuestionModel> qnaQuestions = [];
 
   QnaCubit({required this.repository}) : super(QnaInitial());
 
@@ -18,8 +22,7 @@ class QnaCubit extends Cubit<QnaState> {
     result.fold(
       (error) => emit(QnaQuestionsErrorState(error)),
       (success) {
-        qnaQuestions.clear();
-        qnaQuestions.addAll(success);
+        qnaQuestions = success;
         emit(QnaQuestionsSuccessState(success));
       },
     );
@@ -49,12 +52,17 @@ class QnaCubit extends Cubit<QnaState> {
     );
   }
 
-  void createAnswerEvent(QnaAnswerModel newAnswer) async {
+  void createAnswerEvent(QnaAnswerModel newAnswer, String questionAuthorId) async {
     emit(ManageAnswerLoadingState());
+    
     final result = await repository.createAnswer(newAnswer);
+    UserModel? poster = instance<StorageRepository>().getData(key: questionAuthorId) as UserModel?;
     result.fold(
       (error) => emit(ManageAnswerErrorState(error)),
       (success) {
+        if(poster?.fcmToken != null) {
+          sendFCMMessage(poster!.fcmToken!, "رد على سؤال", newAnswer.text, {"route": "/"},);
+        }
         emit(ManageAnswerSuccessState());
       },
     );
@@ -66,5 +74,17 @@ class QnaCubit extends Cubit<QnaState> {
 
   void decrementAnswerVotesEvent(String id) async {
     repository.decrementAnswerVotes(id);
+  }
+
+  void deleteQuestionEvent(String id) async {
+    emit(ManageQuestionLoadingState());
+    final result = await repository.deleteQuestion(id);
+    result.fold(
+      (error) => emit(ManageQuestionErrorState(error)),
+      (success) {
+        emit(ManageQuestionSuccessState());
+        fetchQnaQuestionsEvent();
+      },
+    );
   }
 }

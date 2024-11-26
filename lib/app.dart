@@ -38,7 +38,9 @@ class App extends StatelessWidget {
                 create: (__) => UsersCubit(
                   repository: instance<UsersRepository>(),
                   auth: FirebaseAuth.instance,
-                )..fetchMyUserAccount(),
+                )
+                  ..fetchMyUserAccount()
+                  ..fetchUsersEvent(),
               ),
               RepositoryProvider<ChallengesCubit>(
                 create: (__) => ChallengesCubit(
