@@ -26,6 +26,7 @@ class QnaCubit extends Cubit<QnaState> {
       (error) => emit(QnaQuestionsErrorState(error)),
       (success) {
         qnaQuestions = success;
+        qnaQuestions = success;
         emit(QnaQuestionsSuccessState(success));
       },
     );
@@ -57,7 +58,8 @@ class QnaCubit extends Cubit<QnaState> {
 
   void createAnswerEvent(
       QnaAnswerModel newAnswer, String questionAuthorId) async {
-    emit(ManageAnswerLoadingState());
+  
+
 
     final result = await repository.createAnswer(newAnswer);
     UserModel? poster = instance<StorageRepository>()
