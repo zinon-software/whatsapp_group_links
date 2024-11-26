@@ -14,7 +14,7 @@ Future<void> sendFCMMessage({
       'https://fcm.googleapis.com/v1/projects/${AppConfig.instance.fcmSenderId}/messages:send';
 
   final accountCredentials =
-      ServiceAccountCredentials.fromJson(AppConfig.instance.serviceAccountKey);
+      ServiceAccountCredentials.fromJson(AppConfig.instance.serviceAccountData);
   final scopes = ['https://www.googleapis.com/auth/firebase.messaging'];
 
   await clientViaServiceAccount(accountCredentials, scopes).then(
