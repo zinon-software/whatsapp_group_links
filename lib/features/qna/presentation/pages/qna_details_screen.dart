@@ -55,6 +55,7 @@ class _QnaDetailsScreenState extends State<QnaDetailsScreen> {
 
     _qnaCubit.createAnswerEvent(newAnswer, widget.question.authorId);
     _answerController.clear();
+    FocusManager.instance.primaryFocus?.unfocus();
   }
 
   @override

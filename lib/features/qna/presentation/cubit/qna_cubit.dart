@@ -52,16 +52,23 @@ class QnaCubit extends Cubit<QnaState> {
     );
   }
 
-  void createAnswerEvent(QnaAnswerModel newAnswer, String questionAuthorId) async {
+  void createAnswerEvent(
+      QnaAnswerModel newAnswer, String questionAuthorId) async {
     emit(ManageAnswerLoadingState());
-    
+
     final result = await repository.createAnswer(newAnswer);
-    UserModel? poster = instance<StorageRepository>().getData(key: questionAuthorId) as UserModel?;
+    UserModel? poster = instance<StorageRepository>()
+        .getData(key: questionAuthorId) as UserModel?;
     result.fold(
       (error) => emit(ManageAnswerErrorState(error)),
       (success) {
-        if(poster?.fcmToken != null) {
-          sendFCMMessage(poster!.fcmToken!, "رد على سؤال", newAnswer.text, {"route": "/"},);
+        if (poster?.fcmToken != null) {
+          sendFCMMessage(
+            title: "رد على سؤال",
+            body: newAnswer.text,
+            token: poster!.fcmToken!,
+            data: {"route": "/"},
+          );
         }
         emit(ManageAnswerSuccessState());
       },

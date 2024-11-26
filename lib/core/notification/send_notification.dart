@@ -1,14 +1,15 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+
+import 'package:flutter/foundation.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:linkati/config/app_config.dart';
 
-Future<void> sendFCMMessage(
-  String title,
-  String body,
-  String token, // توكن الجهاز المستهدف
-  Map<String, dynamic> data,
-) async {
+Future<void> sendFCMMessage({
+  required String title,
+  required String body,
+  required String token, // توكن الجهاز المستهدف
+  required Map<String, dynamic> data,
+}) async {
   final url =
       'https://fcm.googleapis.com/v1/projects/${AppConfig.instance.fcmSenderId}/messages:send';
 
@@ -26,14 +27,14 @@ Future<void> sendFCMMessage(
             "body": body,
           },
           "data": data, // بيانات مخصصة
-//       "android": {
-//         "notification": {"click_action": "TOP_STORY_ACTIVITY"}
-//       },
-//       "apns": {
-//         "payload": {
-//           "aps": {"category": "NEW_MESSAGE_CATEGORY"}
-//         }
-//       }
+          "android": {
+            "notification": {"click_action": "TOP_STORY_ACTIVITY"}
+          },
+          "apns": {
+            "payload": {
+              "aps": {"category": "NEW_MESSAGE_CATEGORY"}
+            }
+          }
         }
       };
 
@@ -43,9 +44,13 @@ Future<void> sendFCMMessage(
       );
 
       if (response.statusCode == 200) {
-        print('Message sent successfully');
+        if (kDebugMode) {
+          print('Message sent successfully');
+        }
       } else {
-        print('Failed to send message: ${response.body}');
+        if (kDebugMode) {
+          print('Failed to send message: ${response.body}');
+        }
       }
 
       client.close();
