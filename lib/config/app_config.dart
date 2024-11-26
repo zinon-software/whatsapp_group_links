@@ -2,8 +2,14 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AppConfig {
   static AppConfig? _instance;
+
   static AppConfig get instance => _instance ??= AppConfig._init();
+  
   AppConfig._init();
+
+   factory AppConfig() {
+    return instance;
+  }
 
   final Map<String, dynamic> serviceAccountData = {
     "type": "service_account",
@@ -20,7 +26,5 @@ class AppConfig {
   };
   final String fcmSenderId = dotenv.env['FIREBASE_FCM_SENDER_ID']!;
 
-  factory AppConfig() {
-    return instance;
-  }
+ 
 }
