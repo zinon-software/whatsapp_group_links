@@ -173,7 +173,10 @@ class _DailySpinViewState extends State<DailySpinView> {
 
     setState(() {
       canSpin = false;
-      lastSpinTime = DateTime.now();
+
+      if (!isWatchAd) {
+        lastSpinTime = DateTime.now();
+      }
     });
 
     await Future.delayed(Duration(seconds: 5));
