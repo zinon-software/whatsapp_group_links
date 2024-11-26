@@ -30,7 +30,7 @@ Future<void> sendFCMMessage({
           "android": {
             "notification": {
               "icon": "ic_notification", // اسم الأيقونة في drawable
-              "color": "#ff0000",
+              // "color": "#ff0000",
               "sound": "default",
               "click_action": "TOP_STORY_ACTIVITY",
             }
@@ -89,7 +89,7 @@ Future<void> sendFCMMessageToAllUsers({
           "android": {
             "notification": {
               "icon": "ic_notification", // اسم الأيقونة في drawable
-              "color": "#ff0000",
+              // "color": "#ff0000",
               "sound": "default",
               "click_action": "TOP_STORY_ACTIVITY",
             }
