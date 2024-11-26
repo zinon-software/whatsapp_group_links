@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:linkati/config/app_injector.dart';
 import 'package:linkati/core/api/app_collections.dart';
+import 'package:linkati/core/storage/storage_repository.dart';
 import 'package:linkati/core/widgets/custom_button_widget.dart';
 import 'package:linkati/core/widgets/custom_text_field.dart';
 import 'package:linkati/features/qna/presentation/cubit/qna_cubit.dart';
 import 'package:linkati/features/users/presentation/widgets/user_widget.dart';
 
+import '../../../../core/notification/notification_manager.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/widgets/alert_widget.dart';
 import '../../data/models/qna_answer_model.dart';
@@ -66,7 +68,49 @@ class _QnaDetailsScreenState extends State<QnaDetailsScreen> {
           userId: widget.question.authorId,
           query: widget.question.id,
         ),
-        centerTitle: true,
+        centerTitle: false,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add_alert),
+            onPressed: () {
+              // subscribe fcm topic and unsubscribe fcm topic
+              bool subscribeQuestionTopic = instance<StorageRepository>()
+                      .getData(key: widget.question.id) ??
+                  false;
+
+              AppAlert.showAlertWidget(
+                context,
+                child: Column(
+                  children: [
+                    Text(subscribeQuestionTopic
+                        ? 'تفعيل التنبيه'
+                        : 'تعطيل التنبيه'),
+                    const SizedBox(height: 20),
+                    CustomButtonWidget(
+                      label: subscribeQuestionTopic
+                          ? 'تعطيل التنبيه'
+                          : 'تفعيل التنبيه',
+                      icon: subscribeQuestionTopic ? Icons.cancel : Icons.check,
+                      onPressed: () {
+                        subscribeQuestionTopic = !subscribeQuestionTopic;
+                        if (subscribeQuestionTopic) {
+                          NotificationManager.subscribeToTopic(
+                            widget.question.id,
+                          );
+                        } else {
+                          NotificationManager.unSubscribeToTopic(
+                            widget.question.id,
+                          );
+                        }
+                        AppAlert.dismissDialog(context);
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -106,6 +150,7 @@ class _QnaDetailsScreenState extends State<QnaDetailsScreen> {
 
                 return ListView.builder(
                   itemCount: answers.length,
+                  reverse: true,
                   itemBuilder: (context, index) {
                     final answer = answers[index];
                     return QnaAnswerWidget(
@@ -117,9 +162,9 @@ class _QnaDetailsScreenState extends State<QnaDetailsScreen> {
               },
             ),
           ),
-          const Divider(),
           // حقل إدخال لإضافة إجابة جديدة
-          Padding(
+          Container(
+            height: 70,
             padding: const EdgeInsets.fromLTRB(8, 2, 8, 16),
             child: BlocBuilder<QnaCubit, QnaState>(
               bloc: _qnaCubit,
@@ -131,6 +176,7 @@ class _QnaDetailsScreenState extends State<QnaDetailsScreen> {
                         controller: _answerController,
                         hintText: 'أضف إجابتك هنا...',
                         readOnly: state is ManageAnswerLoadingState,
+                        keyboardType: TextInputType.multiline,
                       ),
                     ),
                     const SizedBox(width: 8),

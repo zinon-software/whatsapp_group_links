@@ -2,10 +2,13 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:linkati/core/routes/app_routes.dart';
 import 'package:linkati/features/challenges/data/models/game_model.dart';
 import 'package:linkati/features/challenges/data/models/question_model.dart';
 import 'package:linkati/features/challenges/data/models/topic_model.dart';
 import 'package:linkati/features/challenges/data/repositories/challenges_repositories.dart';
+
+import '../../../../core/notification/send_notification.dart';
 
 part 'challenges_state.dart';
 
@@ -97,6 +100,15 @@ class ChallengesCubit extends Cubit<ChallengesState> {
       },
       (response) {
         emit(ManageGameSuccessState(game: response));
+        sendFCMMessageToAllUsers(
+          topic: "allUsers",
+          title: 'المتسابق ${response.player1.user?.name} يدعوك الان لمنافسته',
+          body: 'تم انشاء لعبة جديدة في قسم ${topics.firstWhere((element) => element.id == game.topic).title}',
+          data: {
+            'gameId': response.id,
+            'route': AppRoutes.homeRoute,
+          },
+        );
       },
     );
   }

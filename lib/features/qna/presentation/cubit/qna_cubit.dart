@@ -8,6 +8,9 @@ import 'package:linkati/features/qna/data/models/qna_question_model.dart';
 import 'package:linkati/features/qna/data/repositories/qna_repositories.dart';
 import 'package:linkati/features/users/data/models/user_model.dart';
 
+import '../../../../core/notification/notification_manager.dart';
+import '../../../../core/routes/app_routes.dart';
+
 part 'qna_state.dart';
 
 class QnaCubit extends Cubit<QnaState> {
@@ -62,14 +65,16 @@ class QnaCubit extends Cubit<QnaState> {
     result.fold(
       (error) => emit(ManageAnswerErrorState(error)),
       (success) {
-        if (poster?.fcmToken != null) {
-          sendFCMMessage(
-            title: "رد على سؤال",
-            body: newAnswer.text,
-            token: poster!.fcmToken!,
-            data: {"route": "/"},
-          );
-        }
+        NotificationManager.subscribeToTopic(newAnswer.questionId);
+        sendFCMMessageToAllUsers(
+          topic: newAnswer.questionId,
+          title: 'رد جديد من ${poster?.name ?? ""}',
+          body: newAnswer.text,
+          data: {
+            'question_id': newAnswer.questionId,
+            'route': AppRoutes.homeRoute,
+          },
+        );
         emit(ManageAnswerSuccessState());
       },
     );
@@ -93,5 +98,9 @@ class QnaCubit extends Cubit<QnaState> {
         fetchQnaQuestionsEvent();
       },
     );
+  }
+
+  void deleteAnswerEvent(String id) {
+    repository.deleteAnswer(id);
   }
 }

@@ -4,7 +4,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import '../../config/app_injector.dart';
 import '../routes/app_routes.dart';
+import '../storage/storage_repository.dart';
 
 class NotificationManager {
   static final FlutterLocalNotificationsPlugin
@@ -13,7 +15,7 @@ class NotificationManager {
   static late AndroidNotificationChannel _channel;
 
   static const AndroidInitializationSettings _initializationSettingsAndroid =
-      AndroidInitializationSettings('launch_background');
+      AndroidInitializationSettings('ic_notification');
 
   static const DarwinInitializationSettings _initializationSettingsDarwin =
       DarwinInitializationSettings(
@@ -58,8 +60,21 @@ class NotificationManager {
     // استقبال الرسائل من خدمة FCM في حالة عمل التطبيق في الواجهة الأمامية
     FirebaseMessaging.onMessage.listen(_firebaseMessagingForegroundHandler);
     // استقبال الرسائل عند فتح التطبيق من إشعار
-    FirebaseMessaging.onMessageOpenedApp
-        .listen(_firebaseMessagingOpenedAppHandler);
+    FirebaseMessaging.onMessageOpenedApp.listen(
+      _firebaseMessagingOpenedAppHandler,
+    );
+
+    await subscribeToTopic("allUsers");
+  }
+
+  static Future<void> subscribeToTopic(String topic) async {
+    instance<StorageRepository>().setData(key: topic, value: true);
+    await FirebaseMessaging.instance.subscribeToTopic(topic);
+  }
+
+  static Future<void> unSubscribeToTopic(String topic) async {
+    instance<StorageRepository>().setData(key: topic, value: false);
+    await FirebaseMessaging.instance.unsubscribeFromTopic(topic);
   }
 
   static Future<String> getNotificationToken() async {
@@ -73,7 +88,7 @@ class NotificationManager {
       _channel.id,
       _channel.name,
       channelDescription: _channel.description,
-      icon: 'launch_background',
+      icon: 'ic_notification',
       importance: Importance.max,
       priority: Priority.high,
       groupKey: 'notification_group',

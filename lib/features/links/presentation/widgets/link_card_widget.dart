@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:linkati/core/extensions/date_format_extension.dart';
 import 'package:linkati/core/utils/color_manager.dart';
 
@@ -34,8 +35,8 @@ class LinkCardWidget extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.fromLTRB(4, 0, 16.0, 0),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        width: width,
-        height: height,
+        width: width.w,
+        height: height?.h,
         decoration: BoxDecoration(
           color: ColorsManager.card,
           borderRadius: BorderRadius.circular(10),

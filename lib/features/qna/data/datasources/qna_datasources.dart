@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:linkati/config/app_injector.dart';
 import 'package:linkati/features/links/data/datasources/links_datasources.dart';
 
+import '../../../../core/notification/notification_manager.dart';
 import '../models/qna_answer_model.dart';
 import '../models/qna_question_model.dart';
 
@@ -50,6 +51,8 @@ class QnaDatasourcesImpl implements QnaDatasources {
 
       await docRef.set(question.toJson());
 
+      NotificationManager.subscribeToTopic(question.id);
+
       return 'Link added successfully';
     } catch (e) {
       rethrow;
@@ -76,7 +79,9 @@ class QnaDatasourcesImpl implements QnaDatasources {
           doc.reference.delete();
         }
       });
-      
+
+      NotificationManager.unSubscribeToTopic(id);
+
       return 'Link deleted successfully';
     } catch (e) {
       rethrow;

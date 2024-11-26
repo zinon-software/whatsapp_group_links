@@ -75,7 +75,9 @@ class ChallengesDatasourcesImpl implements ChallengesDatasources {
 
       // إذا كانت هناك لعبة مفتوحة، رفض إنشاء لعبة جديدة
       if (existingGameQuery.docs.isNotEmpty) {
-        return throw Exception('You already have an open game.');
+        return GameModel.fromJson(
+          existingGameQuery.docs.first.data() as Map<String, dynamic>,
+        );
       }
 
       // إنشاء اللعبة الجديدة

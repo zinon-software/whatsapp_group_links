@@ -37,18 +37,10 @@ class _LoadUserWidgetState extends State<LoadUserWidget> {
     return BlocBuilder<UsersCubit, UsersState>(
       bloc: _usersCubit,
       buildWhen: (previous, current) {
-        if (_user != null) return false;
+        // التأكد من أنه يتم تحديث البيانات فقط عند الحاجة
         if (current is FetchUserSuccessState) {
-          return current.query == widget.query &&
-              current.user.id == widget.userId;
-        }
-        if (current is FetchUserErrorState) {
-          return current.query == widget.query &&
-              current.userId == widget.userId;
-        }
-        if (current is FetchUserLoadingState) {
-          return current.query == widget.query &&
-              current.userId == widget.userId;
+          return current.user.id == widget.userId &&
+              current.query == widget.query;
         }
         return false;
       },

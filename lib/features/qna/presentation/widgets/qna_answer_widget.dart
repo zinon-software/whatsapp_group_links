@@ -27,8 +27,6 @@ class QnaAnswerWidget extends StatefulWidget {
 }
 
 class _QnaAnswerWidgetState extends State<QnaAnswerWidget> {
-  late final bool isCurrentUser =
-      widget.answer.authorId == FirebaseAuth.instance.currentUser?.uid;
   bool isLiked = false;
   bool isAnimating = false; // للتحكم في حالة التفاعل
   final StorageRepository storageRepository = instance<StorageRepository>();
@@ -79,17 +77,22 @@ class _QnaAnswerWidgetState extends State<QnaAnswerWidget> {
 
   @override
   Widget build(BuildContext context) {
+    late final bool isCurrentUser =
+        widget.answer.authorId == FirebaseAuth.instance.currentUser?.uid;
+
     return Card(
       margin: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 8,
+        horizontal: 8,
+        vertical: 4,
       ),
       color: isCurrentUser ? null : Colors.blue.shade50,
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
               children: [
                 Expanded(
                   child: LoadUserWidget(
@@ -114,15 +117,21 @@ class _QnaAnswerWidgetState extends State<QnaAnswerWidget> {
                     ),
                   ),
                 ),
+                if (isCurrentUser)
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    color: Colors.red,
+                    onPressed: () {
+                      widget.qnaCubit.deleteAnswerEvent(widget.answer.id);
+                    },
+                  ),
                 SizedBox(width: 8),
               ],
             ),
-          ),
-          ListTile(
-            title: Text(widget.answer.text),
-            subtitle: Text(widget.answer.createdAt.formatTimeAgoString()),
-          ),
-        ],
+            Text(widget.answer.text),
+            Text(widget.answer.createdAt.formatTimeAgoString()),
+          ],
+        ),
       ),
     );
   }
