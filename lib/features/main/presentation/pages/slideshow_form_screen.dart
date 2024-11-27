@@ -22,6 +22,7 @@ class _SlideshowFormScreenState extends State<SlideshowFormScreen> {
   late final TextEditingController _descriptionController;
   late final TextEditingController _imageUrlController;
   late final TextEditingController _routeController;
+  late final TextEditingController _urlController;
 
   @override
   void initState() {
@@ -33,12 +34,14 @@ class _SlideshowFormScreenState extends State<SlideshowFormScreen> {
     _descriptionController = TextEditingController();
     _imageUrlController = TextEditingController();
     _routeController = TextEditingController(text: "");
+    _urlController = TextEditingController(text: '');
 
     if (widget.slideshow != null) {
       _titleController.text = widget.slideshow!.title;
       _descriptionController.text = widget.slideshow!.description;
       _imageUrlController.text = widget.slideshow!.imageUrl;
       _routeController.text = widget.slideshow!.route;
+      _urlController.text = widget.slideshow!.url;
     }
   }
 
@@ -48,6 +51,7 @@ class _SlideshowFormScreenState extends State<SlideshowFormScreen> {
     _descriptionController.dispose();
     _imageUrlController.dispose();
     _routeController.dispose();
+    _urlController.dispose();
     super.dispose();
   }
 
@@ -61,6 +65,7 @@ class _SlideshowFormScreenState extends State<SlideshowFormScreen> {
           description: _descriptionController.text,
           imageUrl: _imageUrlController.text,
           route: _routeController.text,
+          url: _urlController.text,
         );
         _mainCubit.updateSlideshowEvint(slideshow);
       } else {
@@ -70,6 +75,7 @@ class _SlideshowFormScreenState extends State<SlideshowFormScreen> {
           description: _descriptionController.text,
           imageUrl: _imageUrlController.text,
           route: _routeController.text,
+          url: _urlController.text,
         );
         _mainCubit.createSlideshowEvint(slideshow);
       }
@@ -120,7 +126,12 @@ class _SlideshowFormScreenState extends State<SlideshowFormScreen> {
                 CustomTextField(
                   controller: _routeController,
                   labelText: 'المسار',
-                  // validator: (value) => value!.isEmpty ? 'مطلوب' : null,
+                  isNotValidator: true,
+                ),
+                SizedBox(height: 10),
+                CustomTextField(
+                  controller: _urlController,
+                  labelText: 'الرابط',
                   isNotValidator: true,
                 ),
                 SizedBox(height: 30),

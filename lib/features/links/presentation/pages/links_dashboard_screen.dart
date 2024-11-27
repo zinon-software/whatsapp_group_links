@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,7 +21,7 @@ class LinksDashboardScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("لوحة التحكم"),
+        title: const Text("قائمة المجموعات"),
       ),
       body: BlocListener<LinksCubit, LinksState>(
         bloc: linksCubit,
@@ -41,214 +41,169 @@ class LinksDashboardScreen extends StatelessWidget {
             );
           }
         },
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(height: 10),
-              Title(
-                color: Colors.black,
-                child: const Text("قائمة الكلمات المحظورة"),
+        child: FirestoreQueryBuilder<LinkModel>(
+          pageSize: 20,
+          query: instance<AppCollections>()
+              .links
+              .orderBy('create_dt', descending: true)
+              .withConverter<LinkModel>(
+                fromFirestore: (snapshot, _) => LinkModel.fromJson(
+                  snapshot.data() as Map<String, dynamic>,
+                ),
+                toFirestore: (link, _) => link.toJson(),
               ),
-              StreamBuilder(
-                stream: instance<AppCollections>().bannedWords.snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
+          builder: (context, snapshot, _) {
+            if (snapshot.isFetching) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            }
+
+            if (!snapshot.hasData || snapshot.docs.isEmpty) {
+              return const Center(
+                child: Text('No social media links available.'),
+              );
+            }
+
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView.builder(
+                itemCount: snapshot.docs.length,
+                itemBuilder: (context, index) {
+                  if (snapshot.hasMore && index + 1 == snapshot.docs.length) {
+                    // Tell FirestoreQueryBuilder to try to obtain more items.
+                    // It is safe to call this function from within the build method.
+                    snapshot.fetchMore();
                   }
-                  if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  }
-                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                    return const Center(
-                      child: Text('No banned words available.'),
-                    );
-                  }
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Wrap(
-                      children: snapshot.data!.docs
-                          .map(
-                            (doc) => InkWell(
-                              onTap: () {
-                                linksCubit.deleteBannedWordEvent(doc['word']);
-                              },
-                              child: Card(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Text(
-                                    doc['word'],
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
+
+                  var link = snapshot.docs[index].data();
+
+                  return InkWell(
+                    onTap: () {
+                      Navigator.of(context).pushNamed(
+                        AppRoutes.linkDetailsRoute,
+                        arguments: {'link': link},
+                      );
+                    },
+                    child: Card(
+                      child: ListTile(
+                        contentPadding: EdgeInsets.all(8),
+                        leading: Text("${index + 1}"),
+                        title: Text(
+                          link.title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        subtitle: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            if (link.isActive == true)
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  borderRadius: BorderRadius.circular(18),
+                                ),
+                                padding: const EdgeInsets.all(5),
+                                child: const Icon(
+                                  CupertinoIcons.checkmark_seal_fill,
+                                  color: Colors.green,
                                 ),
                               ),
-                            ),
-                          )
-                          .toList(),
-                    ),
-                  );
-                },
-              ),
-              SizedBox(height: 10),
-              Title(color: Colors.black, child: const Text("قائمة المجموعات")),
-              StreamBuilder<QuerySnapshot>(
-                stream: instance<AppCollections>()
-                    .links
-                    .orderBy('create_dt', descending: true)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  }
-                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                    return const Center(
-                      child: Text('No social media links available.'),
-                    );
-                  }
-
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (context, index) {
-                        var linkData = snapshot.data!.docs[index].data()
-                            as Map<String, dynamic>;
-
-                        var link = LinkModel.fromJson(linkData);
-
-                        return InkWell(
-                          onTap: () {
-                            Navigator.of(context).pushNamed(
-                              AppRoutes.linkDetailsRoute,
-                              arguments: {'link': link},
-                            );
-                          },
-                          child: Card(
-                            child: ListTile(
-                              contentPadding: EdgeInsets.all(8),
-                              leading: Text("${index + 1}"),
-                              title: Text(
-                                link.title,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
+                            Expanded(
+                              child: Text(
+                                link.createDt.formatTimeAgoString(),
                               ),
-                              subtitle: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(18),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 5,
+                              ),
+                              child: Text(
+                                link.type,
+                                style: const TextStyle(fontSize: 10),
+                              ),
+                            ),
+                          ],
+                        ),
+                        trailing: IconButton(
+                          onPressed: () {
+                            AppAlert.showAlertWidget(
+                              context,
+                              child: Column(
                                 children: [
-                                  if (link.isActive == true)
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey[300],
-                                        borderRadius: BorderRadius.circular(18),
-                                      ),
-                                      padding: const EdgeInsets.all(5),
-                                      child: const Icon(
-                                        CupertinoIcons.checkmark_seal_fill,
-                                        color: Colors.green,
-                                      ),
-                                    ),
-                                  Expanded(
-                                    child: Text(
-                                      link.createDt.formatTimeAgoString(),
-                                    ),
+                                  CustomButtonWidget(
+                                    width: double.infinity,
+                                    height: 50,
+                                    onPressed: () {
+                                      linksCubit.changeLinkActiveEvent(
+                                        link.id,
+                                        !link.isActive,
+                                      );
+                                    },
+                                    label: link.isActive
+                                        ? 'Deactivate Link'
+                                        : 'Activate Link',
                                   ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                      borderRadius: BorderRadius.circular(18),
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                      vertical: 5,
-                                    ),
-                                    child: Text(
-                                      link.type,
-                                      style: const TextStyle(fontSize: 10),
-                                    ),
+                                  SizedBox(height: 10),
+                                  // edit
+                                  CustomButtonWidget(
+                                    width: double.infinity,
+                                    height: 50,
+                                    backgroundColor: Colors.green,
+                                    onPressed: () {
+                                      AppAlert.dismissDialog(context);
+                                      Navigator.of(context).pushNamed(
+                                        AppRoutes.linkFormRoute,
+                                        arguments: {'link': link},
+                                      );
+                                    },
+                                    label: 'Edit Link',
+                                  ),
+                                  SizedBox(height: 10),
+                                  // Verified
+                                  CustomButtonWidget(
+                                    width: double.infinity,
+                                    height: 50,
+                                    backgroundColor: Colors.green,
+                                    onPressed: () {
+                                      AppAlert.dismissDialog(context);
+                                      linksCubit.updateLinkEvent(
+                                        link.copyWith(isVerified: true),
+                                      );
+                                    },
+                                    label: 'Verified Link',
+                                  ),
+                                  SizedBox(height: 10),
+                                  // delete
+                                  CustomButtonWidget(
+                                    width: double.infinity,
+                                    height: 50,
+                                    backgroundColor: Colors.red,
+                                    onPressed: () {
+                                      linksCubit.deleteLinkEvent(link.id);
+                                    },
+                                    label: 'Delete Link',
                                   ),
                                 ],
                               ),
-                              trailing: IconButton(
-                                onPressed: () {
-                                  AppAlert.showAlertWidget(
-                                    context,
-                                    child: Column(
-                                      children: [
-                                        CustomButtonWidget(
-                                          width: double.infinity,
-                                          height: 50,
-                                          onPressed: () {
-                                            linksCubit.changeLinkActiveEvent(
-                                              link.id,
-                                              !link.isActive,
-                                            );
-                                          },
-                                          label: link.isActive
-                                              ? 'Deactivate Link'
-                                              : 'Activate Link',
-                                        ),
-                                        SizedBox(height: 10),
-                                        // edit
-                                        CustomButtonWidget(
-                                          width: double.infinity,
-                                          height: 50,
-                                          backgroundColor: Colors.green,
-                                          onPressed: () {
-                                            AppAlert.dismissDialog(context);
-                                            Navigator.of(context).pushNamed(
-                                              AppRoutes.linkFormRoute,
-                                              arguments: {'link': link},
-                                            );
-                                          },
-                                          label: 'Edit Link',
-                                        ),
-                                        SizedBox(height: 10),
-                                        // Verified
-                                        CustomButtonWidget(
-                                          width: double.infinity,
-                                          height: 50,
-                                          backgroundColor: Colors.green,
-                                          onPressed: () {
-                                            AppAlert.dismissDialog(context);
-                                            linksCubit.updateLinkEvent(
-                                              link.copyWith(isVerified: true),
-                                            );
-                                          },
-                                          label: 'Verified Link',
-                                        ),
-                                        SizedBox(height: 10),
-                                        // delete
-                                        CustomButtonWidget(
-                                          width: double.infinity,
-                                          height: 50,
-                                          backgroundColor: Colors.red,
-                                          onPressed: () {
-                                            linksCubit.deleteLinkEvent(link.id);
-                                          },
-                                          label: 'Delete Link',
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                                icon: const Icon(Icons.more_vert),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
+                            );
+                          },
+                          icon: const Icon(Icons.more_vert),
+                        ),
+                      ),
                     ),
                   );
                 },
               ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

@@ -16,6 +16,7 @@ import '../../features/challenges/presentation/pages/topic_form_screen.dart';
 import '../../features/challenges/presentation/pages/topics_screen.dart';
 import '../../features/challenges/presentation/pages/waiting_for_player_screen.dart';
 import '../../features/links/data/models/link_model.dart';
+import '../../features/links/presentation/pages/add_banned_words_screen.dart';
 import '../../features/links/presentation/pages/banned_words_screen.dart';
 import '../../features/links/presentation/pages/link_form_screen.dart';
 import '../../features/links/presentation/pages/links_dashboard_screen.dart';
@@ -55,6 +56,7 @@ class AppRoutes {
   static const String linkDetailsRoute = '/link_details_route';
   static const String linkFormRoute = '/link_form_route';
   static const String bannedWordsRoute = '/banned_words_route';
+  static const String addBannedWordsRoute = '/add_banned_words_route';
   static const String linksDashboardRoute = '/links_dashboard_route';
   static const String linksRoute = '/links_route';
 
@@ -71,5 +73,4 @@ class AppRoutes {
   static const String qnasRoute = '/qnas_route';
   static const String qnaFormRoute = '/qna_form_route';
   static const String qnaDetailsRoute = '/qna_details_route';
-
 }

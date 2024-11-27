@@ -5,6 +5,7 @@ import 'package:linkati/core/widgets/alert_widget.dart';
 import 'package:linkati/core/widgets/custom_cached_network_image_widget.dart';
 import 'package:linkati/features/main/presentation/cubit/main_cubit.dart';
 import 'package:linkati/features/users/presentation/cubit/users_cubit.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/routes/app_routes.dart';
 import '../../data/models/slideshow_model.dart';
@@ -25,17 +26,39 @@ class SlideshowsWidget extends StatelessWidget {
               false) {
             AppAlert.showAlertWidget(
               context,
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
               child: Column(
                 children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: CustomCachedNetworkImage(
+                      state.slideshow.imageUrl,
+                      width: MediaQuery.of(context).size.width - 16,
+                      height: 150,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                  SizedBox(height: 8),
                   Text(
                     state.slideshow.title,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
+                  Text(state.slideshow.description),
+                  if (state.slideshow.url.isNotEmpty) const Divider(),
+                  if (state.slideshow.url.isNotEmpty)
+                    ListTile(
+                      title: const Text("عرض الرابط"),
+                      leading: const Icon(Icons.link),
+                      onTap: () {
+                        AppAlert.dismissDialog(context);
+                        launchUrl(Uri.parse(state.slideshow.url));
+                      },
+                    ),
                   if (state.slideshow.route.isNotEmpty) const Divider(),
                   if (state.slideshow.route.isNotEmpty)
                     ListTile(
                       title: const Text("عرض"),
-                      leading: const Icon(Icons.add),
+                      leading: const Icon(Icons.show_chart),
                       onTap: () {
                         AppAlert.dismissDialog(context);
                         Navigator.pushNamed(context, state.slideshow.route);
@@ -59,6 +82,8 @@ class SlideshowsWidget extends StatelessWidget {
                 ],
               ),
             );
+          } else if (state.slideshow.url.isNotEmpty) {
+            launchUrl(Uri.parse(state.slideshow.url));
           } else if (state.slideshow.route.isNotEmpty) {
             Navigator.pushNamed(context, state.slideshow.route);
           }
@@ -66,7 +91,8 @@ class SlideshowsWidget extends StatelessWidget {
       },
       buildWhen: (previous, current) => current is SlideshowsSuccessState,
       builder: (context, state) {
-        if (state is SlideshowsSuccessState && mainCubit.slideshows.isNotEmpty) {
+        if (state is SlideshowsSuccessState &&
+            mainCubit.slideshows.isNotEmpty) {
           return SizedBox(
             height: 150,
             width: double.infinity,

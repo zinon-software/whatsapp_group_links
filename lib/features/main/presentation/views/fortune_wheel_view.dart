@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:linkati/config/app_hive_config.dart';
@@ -10,102 +9,10 @@ import 'package:linkati/config/app_injector.dart';
 import 'package:linkati/core/storage/storage_repository.dart';
 
 import '../../../../core/ads/ads_manager.dart';
-import '../../../../core/routes/app_routes.dart';
 import '../../../../core/utils/color_manager.dart';
 import '../../../../core/widgets/alert_widget.dart';
 import '../../../../core/widgets/custom_button_widget.dart';
 import '../../../users/presentation/cubit/users_cubit.dart';
-
-class FortuneWheelButton extends StatefulWidget {
-  const FortuneWheelButton({
-    super.key,
-    required this.adsManager,
-    required this.usersCubit,
-  });
-
-  final AdsManager adsManager;
-  final UsersCubit usersCubit;
-
-  @override
-  State<FortuneWheelButton> createState() => _FortuneWheelButtonState();
-}
-
-class _FortuneWheelButtonState extends State<FortuneWheelButton>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _animation;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 1),
-    )..repeat(reverse: true); // الحركة تتكرر للأمام والخلف
-
-    _animation = Tween<double>(begin: 0, end: 10).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeInOut,
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _animation,
-      builder: (context, child) {
-        return Positioned(
-          top: 200 + _animation.value,
-          right: 10,
-          child: IconButton(
-            onPressed: () {
-              if (widget.usersCubit.auth.currentUser == null) {
-                AppAlert.showAlert(
-                  context,
-                  subTitle: "يرجى تسجيل الدخول",
-                  confirmText: "تسجيل الدخول",
-                  onConfirm: () {
-                    AppAlert.dismissDialog(context);
-                    Navigator.of(context).pushNamed(
-                      AppRoutes.loginRoute,
-                    );
-                  },
-                );
-              } else {
-                AppAlert.showAlertWidget(
-                  context,
-                  child: DailySpinView(
-                    adsManager: widget.adsManager,
-                    usersCubit: widget.usersCubit,
-                  ),
-                );
-              }
-            },
-            icon: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.blue[50],
-              ),
-              child: const Icon(
-                CupertinoIcons.game_controller_solid,
-                color: ColorsManager.primaryLight,
-                size: 45,
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
 
 class DailySpinView extends StatefulWidget {
   const DailySpinView({

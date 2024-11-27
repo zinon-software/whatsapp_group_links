@@ -46,4 +46,12 @@ class ColorsManager {
   static const Color aed5e5 = Color(0xFFaed5e5);
   // 255176
   static const Color f255176 = Color(0xFF255176);
+
+  // VIP Colors
+  static const Color vipCard = Color(0xFFFFF8E1); // خلفية خفيفة باللون الذهبي
+  static const Color vipBorder = Color(0xFFFFD700); // لون الإطار الذهبي
+
+  // Ad Colors
+  static const Color adCard = Color(0xFFFFEBEE); // خلفية خفيفة باللون الأحمر
+  static const Color adBorder = Color(0xFFD32F2F); // لون الإطار الأحمر الغامق
 }

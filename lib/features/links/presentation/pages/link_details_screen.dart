@@ -1,4 +1,3 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -8,8 +7,11 @@ import 'package:linkati/features/links/data/models/link_model.dart';
 import 'package:linkati/features/links/presentation/cubit/links_cubit.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../config/app_injector.dart';
 import '../../../../core/ads/ads_manager.dart';
 import '../../../../core/widgets/alert_widget.dart';
+import '../../../users/presentation/cubit/users_cubit.dart';
+import '../../../users/presentation/widgets/user_widget.dart';
 
 class LinkDetailsScreen extends StatefulWidget {
   const LinkDetailsScreen({super.key, required this.link});
@@ -43,7 +45,12 @@ class _LinkDetailsScreenState extends State<LinkDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.link.title),
+        title: (widget.link.user != null)
+            ? LoadUserWidget(
+                userId: widget.link.user ?? '',
+                query: widget.link.id,
+              )
+            : Text(widget.link.title),
         actions: [
           if (!widget.link.isVerified)
             Padding(
@@ -59,7 +66,7 @@ class _LinkDetailsScreenState extends State<LinkDetailsScreen> {
                     onConfirm: () {
                       AppAlert.dismissDialog(context);
                       Navigator.of(context).pushNamed(
-                        AppRoutes.bannedWordsRoute,
+                        AppRoutes.addBannedWordsRoute,
                         arguments: {
                           'words': widget.link.title.split(' ').toList() +
                               [widget.link.url],
@@ -106,12 +113,18 @@ class _LinkDetailsScreenState extends State<LinkDetailsScreen> {
             ),
             Text('${widget.link.views} مشاهدة'),
             Spacer(),
+            if (instance<UsersCubit>().currentUser?.permissions.isAdmin ??
+                false)
+              Text(widget.link.url),
             BlocListener<LinksCubit, LinksState>(
               bloc: _linksCubit,
               listenWhen: (previous, current) =>
                   current is CheckBannedWordLoadingState ||
                   current is CheckBannedWordSuccessState ||
-                  current is CheckBannedWordErrorState,
+                  current is CheckBannedWordErrorState ||
+                  current is ManageLinkLoadingState ||
+                  current is ManageLinkSuccessState ||
+                  current is ManageLinkErrorState,
               listener: (context, state) {
                 if (state is CheckBannedWordErrorState) {
                   AppAlert.showAlert(context, subTitle: state.message);
@@ -123,27 +136,74 @@ class _LinkDetailsScreenState extends State<LinkDetailsScreen> {
                   AppAlert.dismissDialog(context);
                   launchUrl(Uri.parse(widget.link.url));
                 }
+                if (state is ManageLinkErrorState) {
+                  AppAlert.showAlert(context, subTitle: state.message);
+                }
+                if (state is ManageLinkLoadingState) {
+                  AppAlert.loading(context);
+                }
+                if (state is ManageLinkSuccessState) {
+                  AppAlert.showAlert(
+                    context,
+                    subTitle: state.message,
+                    icon: Icons.check,
+                    iconColor: Colors.green,
+                  ).then(
+                    // ignore: use_build_context_synchronously
+                    (value) => Navigator.pop(context),
+                  );
+                }
               },
-              child: CustomButtonWidget(
-                onPressed: () async {
-                  if (widget.link.isActive) {
-                    _linksCubit.checkBannedWordEvent(
-                      widget.link.url.trim().replaceAll('/', ''),
-                    );
-                  } else {
-                    AwesomeDialog(
-                      context: context,
-                      dialogType: DialogType.warning,
-                      animType: AnimType.bottomSlide,
-                      title: 'الرابط قيد المعالجة',
-                      desc:
-                          'يجري التاكد من صحة الرابط من قبل الادارة والموافقة علية.',
-                      btnCancelOnPress: () {},
-                      btnCancelText: "إغلاق",
-                    ).show();
-                  }
-                },
-                label: 'الانتقال الى ${widget.link.type}',
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: CustomButtonWidget(
+                        onPressed: () async {
+                          if (instance<UsersCubit>()
+                                  .currentUser
+                                  ?.permissions
+                                  .isAdmin ??
+                              false) {
+                            launchUrl(Uri.parse(widget.link.url));
+                          } else if (widget.link.isActive) {
+                            _linksCubit.checkBannedWordEvent(
+                              widget.link.url.trim().replaceAll('/', ''),
+                            );
+                          } else {
+                            AppAlert.showAlert(
+                              context,
+                              title: 'الرابط قيد المعالجة',
+                              subTitle:
+                                  'يجري التاكد من صحة الرابط من قبل الادارة والموافقة علية.',
+                            );
+                          }
+                        },
+                        label: 'الانتقال الى ${widget.link.type}',
+                      ),
+                    ),
+                    if (instance<UsersCubit>()
+                            .currentUser
+                            ?.permissions
+                            .isAdmin ??
+                        false)
+                      IconButton(
+                        onPressed: () {
+                          AppAlert.showAlert(
+                            context,
+                            title: 'حذف رابط',
+                            subTitle: 'هل ترغب في حذف هذا الرابط؟',
+                            cancelText: 'الغاء',
+                            onConfirm: () {
+                              _linksCubit.deleteLinkEvent(widget.link.id);
+                            },
+                          );
+                        },
+                        icon: const Icon(Icons.delete, color: Colors.red),
+                      )
+                  ],
+                ),
               ),
             ),
             Spacer(),

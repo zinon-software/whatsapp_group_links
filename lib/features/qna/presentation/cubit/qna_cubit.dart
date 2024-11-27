@@ -56,14 +56,10 @@ class QnaCubit extends Cubit<QnaState> {
     );
   }
 
-  void createAnswerEvent(
-      QnaAnswerModel newAnswer, String questionAuthorId) async {
-  
-
-
+  void createAnswerEvent(QnaAnswerModel newAnswer) async {
     final result = await repository.createAnswer(newAnswer);
     UserModel? poster = instance<StorageRepository>()
-        .getData(key: questionAuthorId) as UserModel?;
+        .getData(key: newAnswer.authorId) as UserModel?;
     result.fold(
       (error) => emit(ManageAnswerErrorState(error)),
       (success) {
@@ -82,8 +78,20 @@ class QnaCubit extends Cubit<QnaState> {
     );
   }
 
-  void incrementAnswerVotesEvent(String id) async {
-    repository.incrementAnswerVotes(id);
+  void incrementAnswerVotesEvent(QnaAnswerModel newAnswer) async {
+    repository.incrementAnswerVotes(newAnswer.id);
+
+    UserModel? poster = instance<StorageRepository>()
+        .getData(key: newAnswer.authorId) as UserModel?;
+    sendFCMMessage(
+      token: poster?.fcmToken ?? "",
+      title: 'اعجب ${poster?.name ?? ""} بردك',
+      body: newAnswer.text,
+      data: {
+        'question_id': newAnswer.questionId,
+        'route': AppRoutes.homeRoute,
+      },
+    );
   }
 
   void decrementAnswerVotesEvent(String id) async {

@@ -4,6 +4,7 @@ class SlideshowModel {
   final String title;
   final String description;
   final String route;
+  final String url;
 
   SlideshowModel({
     required this.id,
@@ -11,6 +12,7 @@ class SlideshowModel {
     required this.title,
     required this.description,
     required this.route,
+    required this.url,
   });
 
   factory SlideshowModel.fromJson(Map<String, dynamic> json) => SlideshowModel(
@@ -19,6 +21,7 @@ class SlideshowModel {
         title: json['title'],
         description: json['description'],
         route: json['route'],
+        url: json['url'] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
@@ -27,6 +30,7 @@ class SlideshowModel {
         'title': title,
         'description': description,
         'route': route,
+        'url': url,
       };
 
   SlideshowModel copyWith({
@@ -35,6 +39,7 @@ class SlideshowModel {
     String? title,
     String? description,
     String? route,
+    String? url,
   }) {
     return SlideshowModel(
       id: id ?? this.id,
@@ -42,6 +47,7 @@ class SlideshowModel {
       title: title ?? this.title,
       description: description ?? this.description,
       route: route ?? this.route,
+      url: url ?? this.url,
     );
   }
 
@@ -52,6 +58,7 @@ class SlideshowModel {
       title: '',
       description: '',
       route: '',
+      url: '',
     );
   }
 }

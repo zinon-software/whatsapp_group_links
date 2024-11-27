@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../../../core/notification/send_notification.dart';
 import '../../data/models/link_model.dart';
 import '../../data/repositories/links_repositories.dart';
 
@@ -19,6 +20,11 @@ class LinksCubit extends Cubit<LinksState> {
     (await repository.createLink(newLink)).fold((failure) {
       emit(CreateLinkErrorState(failure));
     }, (response) {
+      sendFCMMessageToAllUsers(
+        title: 'تم انشاء رابط جديد',
+        body: newLink.title,
+        data: {},
+      );
       emit(CreateLinkSuccessState(response));
     });
   }

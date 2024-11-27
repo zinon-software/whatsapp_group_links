@@ -182,7 +182,7 @@ class _LinkFormScreenState extends State<LinkFormScreen> {
                                 url: _urlController.text.trim(),
                                 views: widget.link?.views ?? 0,
                                 type: type,
-                                isActive: widget.link?.isActive ?? true,
+                                isActive: widget.link?.isActive ?? false,
                               );
 
                               if (widget.link != null) {

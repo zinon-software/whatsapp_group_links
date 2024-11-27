@@ -1,9 +1,8 @@
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:linkati/config/app_injector.dart';
 import 'package:linkati/features/challenges/data/repositories/challenges_repositories.dart';
 import 'package:linkati/features/challenges/presentation/cubit/challenges_cubit.dart';
@@ -15,7 +14,6 @@ import 'core/themes/app_themes.dart';
 import 'features/links/data/repositories/links_repositories.dart';
 import 'features/links/presentation/cubit/links_cubit.dart';
 import 'features/main/data/repositories/main_repositories.dart';
-import 'features/users/data/repositories/users_repositories.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -35,10 +33,7 @@ class App extends StatelessWidget {
             providers: [
               RepositoryProvider<UsersCubit>(
                 lazy: false,
-                create: (__) => UsersCubit(
-                  repository: instance<UsersRepository>(),
-                  auth: FirebaseAuth.instance,
-                )
+                create: (__) => instance<UsersCubit>()
                   ..fetchMyUserAccount()
                   ..fetchUsersEvent(),
               ),

@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:linkati/config/app_config.dart';
 
+import '../routes/app_routes.dart';
+
 Future<void> sendFCMMessage({
   required String title,
   required String body,
@@ -67,8 +69,13 @@ Future<void> sendFCMMessageToAllUsers({
   required String title,
   required String body,
   required Map<String, dynamic> data,
-  required String topic,
+  String topic = "allUsers",
 }) async {
+
+  if(!data.containsKey('route')) {
+    data['route'] = AppRoutes.homeRoute;
+  }
+  
   final url =
       'https://fcm.googleapis.com/v1/projects/${AppConfig.instance.fcmSenderId}/messages:send';
 

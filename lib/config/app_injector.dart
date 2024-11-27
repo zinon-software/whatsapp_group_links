@@ -1,4 +1,5 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -20,6 +21,7 @@ import '../features/users/data/datasources/users_local_datasources.dart';
 import '../features/users/data/datasources/users_remote_datasources.dart';
 import '../features/users/data/models/user_model_adapter.dart';
 import '../features/users/data/repositories/users_repositories.dart';
+import '../features/users/presentation/cubit/users_cubit.dart';
 import 'app_hive_config.dart';
 
 final instance = GetIt.instance;
@@ -82,6 +84,16 @@ void stupUsers() {
         remoteDatasources: instance<UsersRemoteDatasources>(),
         localDatasources: instance<UsersLocalDatasources>(),
         connectionStatus: instance<ConnectionStatus>(),
+      ),
+    );
+  }
+
+  // users cubit
+  if (!GetIt.I.isRegistered<UsersCubit>()) {
+    instance.registerLazySingleton<UsersCubit>(
+      () => UsersCubit(
+        repository: instance<UsersRepository>(),
+        auth: FirebaseAuth.instance,
       ),
     );
   }

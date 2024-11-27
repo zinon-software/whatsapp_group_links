@@ -60,7 +60,7 @@ class _QnaAnswerWidgetState extends State<QnaAnswerWidget> {
       // التحكم في الحفظ والإزالة
       if (isLiked) {
         storageRepository.setData(key: widget.answer.id, value: true);
-        widget.qnaCubit.incrementAnswerVotesEvent(widget.answer.id);
+        widget.qnaCubit.incrementAnswerVotesEvent(widget.answer);
       } else {
         storageRepository.deleteData(key: widget.answer.id);
         widget.qnaCubit.decrementAnswerVotesEvent(widget.answer.id);

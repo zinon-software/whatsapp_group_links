@@ -39,6 +39,17 @@ class AdminDashboardButtonWidget extends StatelessWidget {
                       },
                     ),
                     const Divider(),
+                    // banned words
+                    ListTile(
+                      leading: const Icon(Icons.block),
+                      title: const Text("الكلمات المحظورة"),
+                      onTap: () {
+                        Navigator.of(context).pushNamed(
+                          AppRoutes.bannedWordsRoute,
+                        );
+                      },
+                    ),
+                    const Divider(),
                     ListTile(
                       leading: const Icon(Icons.link),
                       title: const Text("الروابط"),

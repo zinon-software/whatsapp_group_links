@@ -86,7 +86,13 @@ class AppNavigation {
       case AppRoutes.bannedWordsRoute:
         return _moveRoute(
           settings: settings,
-          view: BannedWordsScreen(words: query['words'] as List<String>),
+          view: const BannedWordsScreen(),
+        );
+
+      case AppRoutes.addBannedWordsRoute:
+        return _moveRoute(
+          settings: settings,
+          view: AddBannedWordsScreen(words: query['words'] as List<String>),
         );
 
       case AppRoutes.linksDashboardRoute:

@@ -143,6 +143,7 @@ class AppAlert {
   static Future<void> showAlertWidget(
     BuildContext context, {
     required Widget child,
+    Widget? customHeader,
     DialogType dialogType = DialogType.noHeader,
     bool dismissOn = true,
     EdgeInsetsGeometry? padding,
@@ -155,6 +156,8 @@ class AppAlert {
       dialogType: dialogType,
       headerAnimationLoop: false,
       dialogBackgroundColor: dialogBackgroundColor,
+      customHeader: customHeader,
+      
       body: Column(
         children: [
           child,

@@ -119,7 +119,7 @@ class LinksRepositoryImpl implements LinksRepository {
     }
 
     try {
-      final response = await datasources.addBannedWord(word);
+      final response = await datasources.createBannedWord(word);
       return Right(response);
     } catch (e) {
       return Left(handleException(e));
@@ -153,7 +153,7 @@ class LinksRepositoryImpl implements LinksRepository {
       return Left(handleException(e));
     }
   }
-  
+
   @override
   Future<Either<String, bool>> checkBannedWord(String word) async {
     if (await connectionStatus.isNotConnected) {
