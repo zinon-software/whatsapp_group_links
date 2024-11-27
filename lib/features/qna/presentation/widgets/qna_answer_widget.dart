@@ -3,12 +3,14 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:linkati/core/extensions/date_format_extension.dart';
+import 'package:linkati/core/utils/color_manager.dart';
+import 'package:linkati/core/widgets/custom_cached_network_image_widget.dart';
 
 import '../../../../config/app_injector.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/storage/storage_repository.dart';
 import '../../../../core/widgets/alert_widget.dart';
-import '../../../users/presentation/widgets/user_widget.dart';
+import '../../../users/data/models/user_model.dart';
 import '../../data/models/qna_answer_model.dart';
 import '../cubit/qna_cubit.dart'; // لاستخدام Timer
 
@@ -17,10 +19,12 @@ class QnaAnswerWidget extends StatefulWidget {
     super.key,
     required this.answer,
     required this.qnaCubit,
+    required this.user,
   });
 
   final QnaAnswerModel answer;
   final QnaCubit qnaCubit;
+  final UserModel user;
 
   @override
   State<QnaAnswerWidget> createState() => _QnaAnswerWidgetState();
@@ -80,59 +84,92 @@ class _QnaAnswerWidgetState extends State<QnaAnswerWidget> {
     late final bool isCurrentUser =
         widget.answer.authorId == FirebaseAuth.instance.currentUser?.uid;
 
-    return Card(
-      margin: const EdgeInsets.symmetric(
-        horizontal: 8,
-        vertical: 4,
-      ),
-      color: isCurrentUser ? null : Colors.blue.shade50,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: LoadUserWidget(
-                    userId: widget.answer.authorId,
-                    query: widget.answer.id,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        CircleAvatar(
+          radius: 20,
+          backgroundImage: CustomCachedNetworkImage(
+            widget.user.photoUrl,
+          ).imageProvider,
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Card(
+                margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                elevation: 2,
+                color: ColorsManager.fillColor,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.user.name,
+                        style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                      ),
+                      const SizedBox(height: 10),
+                      // نص الإجابة
+                      Text(
+                        widget.answer.text,
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      Text(widget.answer.text),
+                      const SizedBox(height: 10),
+                    ],
                   ),
                 ),
-                Text("${widget.answer.votes}"),
-                SizedBox(width: 8),
-                GestureDetector(
-                  onTap: toggleLike,
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 300),
-                    transitionBuilder: (child, animation) {
-                      return ScaleTransition(scale: animation, child: child);
-                    },
-                    child: Icon(
-                      isLiked ? Icons.thumb_up : Icons.thumb_up_alt_outlined,
-                      key: ValueKey(isLiked),
-                      color: isLiked ? Colors.green : Colors.grey,
-                      size: isAnimating ? 36 : 24, // تأثير الحجم
+              ),
+              Row(
+                children: [
+                  Text(
+                    widget.answer.createdAt.formatTimeAgoString(),
+                    style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                  ),
+                  const SizedBox(width: 16),
+                  GestureDetector(
+                    onTap: toggleLike,
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      transitionBuilder: (child, animation) {
+                        return ScaleTransition(scale: animation, child: child);
+                      },
+                      child: Row(
+                        children: [
+                          Icon(
+                            isLiked
+                                ? Icons.thumb_up
+                                : Icons.thumb_up_alt_outlined,
+                            key: ValueKey(isLiked),
+                            color: isLiked ? Colors.green : Colors.grey,
+                            size: isAnimating ? 26 : 24, // تأثير الحجم
+                          ),
+                          SizedBox(width: 4),
+                          Text("${widget.answer.votes}"),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                if (isCurrentUser)
-                  IconButton(
-                    icon: const Icon(Icons.delete),
-                    color: Colors.red,
-                    onPressed: () {
-                      widget.qnaCubit.deleteAnswerEvent(widget.answer.id);
-                    },
-                  ),
-                SizedBox(width: 8),
-              ],
-            ),
-            Text(widget.answer.text),
-            Text(widget.answer.createdAt.formatTimeAgoString()),
-          ],
+                  const SizedBox(width: 16),
+                  if (isCurrentUser)
+                    IconButton(
+                      icon: const Icon(Icons.delete),
+                      color: Colors.red,
+                      onPressed: () {
+                        widget.qnaCubit.deleteAnswerEvent(widget.answer.id);
+                      },
+                    ),
+                ],
+              ),
+            ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }

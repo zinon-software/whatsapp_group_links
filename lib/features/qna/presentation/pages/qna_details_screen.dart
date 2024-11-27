@@ -5,12 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:linkati/config/app_injector.dart';
 import 'package:linkati/core/api/app_collections.dart';
 import 'package:linkati/core/storage/storage_repository.dart';
-import 'package:linkati/core/widgets/custom_button_widget.dart';
 import 'package:linkati/core/widgets/custom_text_field.dart';
 import 'package:linkati/features/qna/presentation/cubit/qna_cubit.dart';
-import 'package:linkati/features/users/presentation/widgets/user_widget.dart';
 
-import '../../../../core/notification/notification_manager.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/widgets/alert_widget.dart';
 import '../../data/models/qna_answer_model.dart';
@@ -64,151 +61,101 @@ class _QnaDetailsScreenState extends State<QnaDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: LoadUserWidget(
-          userId: widget.question.authorId,
-          query: widget.question.id,
-        ),
-        centerTitle: false,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add_alert),
-            onPressed: () {
-              // subscribe fcm topic and unsubscribe fcm topic
-              bool subscribeQuestionTopic = instance<StorageRepository>()
-                      .getData(key: widget.question.id) ??
-                  false;
-
-              AppAlert.showAlertWidget(
-                context,
-                child: Column(
-                  children: [
-                    Text(subscribeQuestionTopic
-                        ? 'تفعيل التنبيه'
-                        : 'تعطيل التنبيه'),
-                    const SizedBox(height: 20),
-                    CustomButtonWidget(
-                      label: subscribeQuestionTopic
-                          ? 'تعطيل التنبيه'
-                          : 'تفعيل التنبيه',
-                      icon: subscribeQuestionTopic ? Icons.cancel : Icons.check,
-                      onPressed: () {
-                        subscribeQuestionTopic = !subscribeQuestionTopic;
-                        if (subscribeQuestionTopic) {
-                          NotificationManager.subscribeToTopic(
-                            widget.question.id,
-                          );
-                        } else {
-                          NotificationManager.unSubscribeToTopic(
-                            widget.question.id,
-                          );
-                        }
-                        AppAlert.dismissDialog(context);
-                      },
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ],
+        title: Text(widget.question.text, style: const TextStyle(fontSize: 18)),
       ),
       body: Column(
         children: [
-          QnaQuestionWidget(
-            qnaQuestion: widget.question,
-            showUser: false,
-          ),
-          // قائمة الإجابات
           Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: instance<AppCollections>()
-                  .qnaAnswers
-                  .where('question_id', isEqualTo: widget.question.id)
-                  .orderBy('created_at', descending: true)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                if (snapshot.hasError) {
-                  return const Center(
-                      child: Text('حدث خطأ أثناء تحميل الإجابات'));
-                }
-
-                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return const Center(child: Text('لا توجد إجابات بعد'));
-                }
-
-                final answers = snapshot.data!.docs.map(
-                  (doc) {
-                    return QnaAnswerModel.fromJson(
-                      doc.data() as Map<String, dynamic>,
-                    );
-                  },
-                ).toList();
-
-                return ListView.builder(
-                  itemCount: answers.length,
-                  reverse: true,
-                  itemBuilder: (context, index) {
-                    final answer = answers[index];
-                    return QnaAnswerWidget(
-                      answer: answer,
-                      qnaCubit: _qnaCubit,
-                    );
-                  },
-                );
-              },
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  // قسم السؤال
+                  QnaQuestionWidget(
+                    qnaQuestion: widget.question,
+                    showUser: true,
+                  ),
+                  // قائمة الإجابات
+                  StreamBuilder<QuerySnapshot>(
+                    stream: instance<AppCollections>()
+                        .qnaAnswers
+                        .where('question_id', isEqualTo: widget.question.id)
+                        .orderBy('created_at', descending: true)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return const Center(
+                            child: CircularProgressIndicator());
+                      }
+                      if (snapshot.hasError) {
+                        return const Center(
+                            child: Text('حدث خطأ أثناء تحميل الإجابات'));
+                      }
+                      if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                        return const Center(
+                            child: Text('لا توجد إجابات بعد'));
+                      }
+      
+                      final answers = snapshot.data!.docs.map((doc) {
+                        return QnaAnswerModel.fromJson(
+                          doc.data() as Map<String, dynamic>,
+                        );
+                      }).toList();
+      
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: answers.length,
+                        padding: const EdgeInsets.all(8),
+                        itemBuilder: (context, index) {
+                          final answer = answers[index];
+                          return QnaAnswerWidget(
+                            answer: answer,
+                            qnaCubit: _qnaCubit,
+                            user: instance<StorageRepository>().getData(
+                              key: answer.authorId,
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
-          // حقل إدخال لإضافة إجابة جديدة
+          // حقل إدخال
           Container(
-            height: 70,
-            padding: const EdgeInsets.fromLTRB(8, 2, 8, 16),
-            child: BlocBuilder<QnaCubit, QnaState>(
-              bloc: _qnaCubit,
-              builder: (context, state) {
-                return Row(
-                  children: [
-                    Expanded(
-                      child: CustomTextField(
-                        controller: _answerController,
-                        hintText: 'أضف إجابتك هنا...',
-                        readOnly: state is ManageAnswerLoadingState,
-                        keyboardType: TextInputType.multiline,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    CustomButtonWidget(
-                      width: 50,
-                      height: 60,
-                      onPressed: () {
-                        if (FirebaseAuth.instance.currentUser == null) {
-                          AppAlert.showAlert(
-                            context,
-                            subTitle: "يرجى تسجيل الدخول",
-                            confirmText: "تسجيل الدخول",
-                            onConfirm: () {
-                              AppAlert.dismissDialog(context);
-                              Navigator.of(context).pushNamed(
-                                AppRoutes.loginRoute,
-                                arguments: {
-                                  "return_route": true,
-                                },
-                              );
-                            },
-                          );
-                        } else {
-                          _submitAnswer();
-                        }
-                      },
-                      icon: Icons.send,
-                      isLoading: state is ManageAnswerLoadingState,
-                    ),
-                  ],
-                );
-              },
+            color: Colors.white,
+            padding: const EdgeInsets.all(8),
+            child: Row(
+              children: [
+                Expanded(
+                  child: CustomTextField(
+                    controller: _answerController,
+                    hintText: 'اكتب إجابتك...',
+                  ),
+                ),
+                const SizedBox(width: 8),
+                IconButton(
+                  icon: const Icon(Icons.send, color: Colors.blue),
+                  onPressed: () {
+                    if (FirebaseAuth.instance.currentUser == null) {
+                      AppAlert.showAlert(
+                        context,
+                        subTitle: "يرجى تسجيل الدخول",
+                        confirmText: "تسجيل الدخول",
+                        onConfirm: () {
+                          Navigator.of(context)
+                              .pushNamed(AppRoutes.loginRoute);
+                        },
+                      );
+                    } else {
+                      _submitAnswer();
+                    }
+                  },
+                ),
+              ],
             ),
           ),
         ],
