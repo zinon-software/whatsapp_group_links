@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BlockAdsView extends StatelessWidget {
   const BlockAdsView({super.key});
@@ -49,14 +50,18 @@ class BlockAdsView extends StatelessWidget {
             children: [
               // Button to block ads temporarily
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  launchUrl(Uri.parse('https://wa.me/967772404196'));
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 10,
+                  ),
                 ),
                 child: const Text(
                   "حظر مؤقت",
@@ -66,7 +71,9 @@ class BlockAdsView extends StatelessWidget {
 
               // Button to subscribe for ad-free experience
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  launchUrl(Uri.parse('https://wa.me/967772404196'));
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
                   shape: RoundedRectangleBorder(
