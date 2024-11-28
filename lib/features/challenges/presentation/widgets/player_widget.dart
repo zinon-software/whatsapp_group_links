@@ -37,7 +37,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     super.initState();
 
     if (widget.isAi) {
-      _user = UserModel.isEmpty().copyWith(
+      _user = UserModel.empity().copyWith(
         id: widget.player.userId,
         name: 'AI',
         phoneNumber: '1234567890',
@@ -125,7 +125,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
           return CustomSkeletonizerWidget(
             enabled: true,
             child: PlayerDataWidget(
-              user: UserModel.isEmpty(),
+              user: UserModel.empity(),
               isHost: false,
               isMe: false,
               score: 0,
@@ -135,7 +135,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
 
         // إذا لم يتم تلبية أي من الحالات أعلاه، يعرض عنصر فارغ افتراضي
         return PlayerDataWidget(
-          user: _user ?? UserModel.isEmpty(),
+          user: _user ?? UserModel.empity(),
           isHost: widget.isHost,
           isMe: widget.isMe,
           score: widget.player.score,

@@ -64,13 +64,16 @@ class App extends StatelessWidget {
               title: "Linkati",
               theme: AppThemes.light(),
               navigatorObservers: <NavigatorObserver>[observer],
+              locale: Locale('ar', 'AE'), // تعيين اللغة إلى العربية
+              supportedLocales: const [
+                Locale('ar', 'AE'), // اللغة العربية
+                Locale('en', 'US'), // اللغة الإنجليزية
+              ],
               localizationsDelegates: const [
                 GlobalCupertinoLocalizations.delegate,
                 GlobalMaterialLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate,
               ],
-              supportedLocales: const [Locale("ar", "AE")],
-              locale: const Locale("ar", "AE"),
             ),
           );
         });

@@ -31,7 +31,7 @@ class UsersRemoteDatasourcesImpl implements UsersRemoteDatasources {
       final UserModel user;
 
       if (!snapshot.exists) {
-        user = UserModel.isEmpty().copyWith(id: id);
+        user = UserModel.empity().copyWith(id: id);
         await createUser(user);
       } else {
         user = UserModel.fromJson(

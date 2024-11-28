@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:linkati/config/app_injector.dart';
@@ -10,6 +11,8 @@ import 'package:linkati/features/qna/presentation/cubit/qna_cubit.dart';
 
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/widgets/alert_widget.dart';
+import '../../../../core/widgets/notification_bell_widget.dart';
+import '../../../users/data/models/user_model.dart';
 import '../../data/models/qna_answer_model.dart';
 import '../../data/models/qna_question_model.dart';
 import '../widgets/qna_answer_widget.dart';
@@ -62,83 +65,100 @@ class _QnaDetailsScreenState extends State<QnaDetailsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.question.text, style: const TextStyle(fontSize: 18)),
+        actions: [
+          NotificationBellWidget(topic: widget.question.id),
+        ],
       ),
       body: Column(
         children: [
           Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  // قسم السؤال
-                  QnaQuestionWidget(
+            child: CustomScrollView(
+              slivers: [
+                // قسم السؤال
+                SliverToBoxAdapter(
+                  child: QnaQuestionWidget(
                     qnaQuestion: widget.question,
-                    showUser: true,
+                    canTap: false,
+                    hasShadow: false,
                   ),
-                  // قائمة الإجابات
-                  StreamBuilder<QuerySnapshot>(
-                    stream: instance<AppCollections>()
-                        .qnaAnswers
-                        .where('question_id', isEqualTo: widget.question.id)
-                        .orderBy('created_at', descending: true)
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        return const Center(
-                            child: CircularProgressIndicator());
-                      }
-                      if (snapshot.hasError) {
-                        return const Center(
-                            child: Text('حدث خطأ أثناء تحميل الإجابات'));
-                      }
-                      if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                        return const Center(
-                            child: Text('لا توجد إجابات بعد'));
-                      }
-      
-                      final answers = snapshot.data!.docs.map((doc) {
-                        return QnaAnswerModel.fromJson(
-                          doc.data() as Map<String, dynamic>,
-                        );
-                      }).toList();
-      
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: answers.length,
-                        padding: const EdgeInsets.all(8),
-                        itemBuilder: (context, index) {
+                ),
+                SliverToBoxAdapter(
+                  child: SizedBox(height: 16),
+                ),
+                // قائمة الإجابات
+                StreamBuilder<QuerySnapshot>(
+                  stream: instance<AppCollections>()
+                      .qnaAnswers
+                      .where('question_id', isEqualTo: widget.question.id)
+                      .orderBy('created_at', descending: true)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const SliverToBoxAdapter(
+                          child: Center(child: CircularProgressIndicator()));
+                    }
+                    if (snapshot.hasError) {
+                      return const SliverToBoxAdapter(
+                          child: Center(
+                              child: Text('حدث خطأ أثناء تحميل الإجابات')));
+                    }
+                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                      return const SliverToBoxAdapter(
+                          child: Center(child: Text('لا توجد إجابات بعد')));
+                    }
+
+                    final answers = snapshot.data!.docs.map((doc) {
+                      return QnaAnswerModel.fromJson(
+                        doc.data() as Map<String, dynamic>,
+                      );
+                    }).toList();
+
+                    return SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
                           final answer = answers[index];
                           return QnaAnswerWidget(
                             answer: answer,
                             qnaCubit: _qnaCubit,
                             user: instance<StorageRepository>().getData(
-                              key: answer.authorId,
-                            ),
+                                  key: answer.authorId,
+                                ) as UserModel? ??
+                                UserModel.empity(),
                           );
                         },
-                      );
-                    },
-                  ),
-                ],
-              ),
+                        childCount: answers.length,
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
           ),
           // حقل إدخال
           Container(
             color: Colors.white,
             padding: const EdgeInsets.all(8),
+            height: null,
             child: Row(
               children: [
                 Expanded(
                   child: CustomTextField(
                     controller: _answerController,
                     hintText: 'اكتب إجابتك...',
+                    maxLines: null,
+                    keyboardType: TextInputType.multiline,
                   ),
                 ),
                 const SizedBox(width: 8),
                 IconButton(
-                  icon: const Icon(Icons.send, color: Colors.blue),
+                  icon: Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.rotationY(3.14),
+                    child: const Icon(
+                      CupertinoIcons.paperplane,
+                      color: Colors.blue,
+                    ),
+                  ),
                   onPressed: () {
                     if (FirebaseAuth.instance.currentUser == null) {
                       AppAlert.showAlert(
@@ -146,8 +166,7 @@ class _QnaDetailsScreenState extends State<QnaDetailsScreen> {
                         subTitle: "يرجى تسجيل الدخول",
                         confirmText: "تسجيل الدخول",
                         onConfirm: () {
-                          Navigator.of(context)
-                              .pushNamed(AppRoutes.loginRoute);
+                          Navigator.of(context).pushNamed(AppRoutes.loginRoute);
                         },
                       );
                     } else {

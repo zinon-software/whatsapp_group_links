@@ -31,7 +31,7 @@ class UsersCubit extends Cubit<UsersState> {
 
       currentUser = repository.getUser(uid);
 
-      currentUser ??= UserModel.isEmpty().copyWith(
+      currentUser ??= UserModel.empity().copyWith(
         id: auth.currentUser!.uid,
         email: auth.currentUser!.email,
         name: auth.currentUser!.displayName,

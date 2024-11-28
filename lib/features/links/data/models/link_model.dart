@@ -31,7 +31,9 @@ class LinkModel {
       id: json["id"],
       user: json["user"],
       title: json["title"],
-      createDt: (json['create_dt'] as Timestamp).toDate(),
+      createDt: json["create_dt"] is String
+          ? DateTime.parse(json["create_dt"])
+          : (json["create_dt"] as Timestamp).toDate(),
       url: json["url"],
       views: json["views"],
       type: json["type"],
@@ -53,7 +55,7 @@ class LinkModel {
       'id': id ?? this.id,
       'user': user,
       'title': title,
-      'create_dt': createDt,
+      'create_dt': createDt.toIso8601String(),
       'url': url,
       'views': views,
       'type': type,

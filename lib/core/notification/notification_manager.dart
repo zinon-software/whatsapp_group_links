@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:linkati/features/links/data/models/link_model.dart';
 
 import '../../config/app_injector.dart';
 import '../routes/app_routes.dart';
@@ -111,15 +113,19 @@ class NotificationManager {
       notification?.title,
       notification?.body,
       platformChannelSpecifics,
-      payload: message.data['route'],
+      payload: jsonEncode(message.data),
     );
   }
 
   @pragma('vm:entry-point')
   static Future<void> _firebaseMessagingBackgroundHandler(
       RemoteMessage message) async {
-    await Firebase.initializeApp();
-    await showNotification(message);
+    try {
+      await Firebase.initializeApp();
+      await showNotification(message);
+    } catch (e) {
+      //
+    }
   }
 
   static Future<void> _firebaseMessagingForegroundHandler(
@@ -129,8 +135,7 @@ class NotificationManager {
 
   static Future<void> _firebaseMessagingOpenedAppHandler(
       RemoteMessage message) async {
-    // await showNotification(message);
-    navigatorRoutes(message.data['route']);
+    navigatorRoutes(jsonEncode(message.data));
   }
 
   static void _onDidReceiveNotificationResponse(
@@ -179,8 +184,23 @@ class NotificationManager {
   }
 
   static void navigatorRoutes(String? payload) {
-    AppNavigation.navigatorKey.currentState?.pushNamed(
-      AppRoutes.homeRoute,
-    );
+    if (payload != null) {
+      final data = jsonDecode(payload);
+      final String route = data['route'] as String;
+      if (route == AppRoutes.linkDetailsRoute) {
+        AppNavigation.navigatorKey.currentState?.pushNamed(
+          AppRoutes.linkDetailsRoute,
+          arguments: LinkModel.fromJson(data['link'] as Map<String, dynamic>),
+        );
+      } else {
+        AppNavigation.navigatorKey.currentState?.pushNamed(
+          AppRoutes.homeRoute,
+        );
+      }
+    } else {
+      AppNavigation.navigatorKey.currentState?.pushNamed(
+        AppRoutes.homeRoute,
+      );
+    }
   }
 }

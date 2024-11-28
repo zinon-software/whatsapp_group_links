@@ -1,15 +1,16 @@
-import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:linkati/core/extensions/date_format_extension.dart';
 import 'package:linkati/core/utils/color_manager.dart';
 import 'package:linkati/core/widgets/custom_cached_network_image_widget.dart';
+import 'package:linkati/features/users/presentation/cubit/users_cubit.dart';
 
 import '../../../../config/app_injector.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/storage/storage_repository.dart';
 import '../../../../core/widgets/alert_widget.dart';
+import '../../../../core/widgets/custom_text_field.dart';
 import '../../../users/data/models/user_model.dart';
 import '../../data/models/qna_answer_model.dart';
 import '../cubit/qna_cubit.dart'; // لاستخدام Timer
@@ -32,7 +33,6 @@ class QnaAnswerWidget extends StatefulWidget {
 
 class _QnaAnswerWidgetState extends State<QnaAnswerWidget> {
   bool isLiked = false;
-  bool isAnimating = false; // للتحكم في حالة التفاعل
   final StorageRepository storageRepository = instance<StorageRepository>();
 
   @override
@@ -58,7 +58,6 @@ class _QnaAnswerWidgetState extends State<QnaAnswerWidget> {
     } else {
       setState(() {
         isLiked = !isLiked;
-        isAnimating = true; // تفعيل الرسوم المتحركة
       });
 
       // التحكم في الحفظ والإزالة
@@ -69,107 +68,290 @@ class _QnaAnswerWidgetState extends State<QnaAnswerWidget> {
         storageRepository.deleteData(key: widget.answer.id);
         widget.qnaCubit.decrementAnswerVotesEvent(widget.answer.id);
       }
-
-      // إعادة تعيين حالة الرسوم المتحركة بعد انتهاء الرسوم
-      Timer(const Duration(milliseconds: 500), () {
-        setState(() {
-          isAnimating = false;
-        });
-      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     late final bool isCurrentUser =
-        widget.answer.authorId == FirebaseAuth.instance.currentUser?.uid;
+        widget.answer.authorId == instance<UsersCubit>().currentUser?.id ||
+            instance<UsersCubit>().currentUser?.permissions.isAdmin == true;
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        CircleAvatar(
-          radius: 20,
-          backgroundImage: CustomCachedNetworkImage(
-            widget.user.photoUrl,
-          ).imageProvider,
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Column(
             children: [
-              Card(
-                margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-                elevation: 2,
-                color: ColorsManager.fillColor,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.user.name,
-                        style: TextStyle(color: Colors.grey[600], fontSize: 12),
-                      ),
-                      const SizedBox(height: 10),
-                      // نص الإجابة
-                      Text(
-                        widget.answer.text,
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      Text(widget.answer.text),
-                      const SizedBox(height: 10),
-                    ],
+              CircleAvatar(
+                radius: 18,
+                backgroundImage: CustomCachedNetworkImage(
+                  widget.user.photoUrl,
+                ).imageProvider,
+              ),
+              const SizedBox(height: 5),
+              if (isCurrentUser)
+                IconButton(
+                  icon: const Icon(Icons.delete),
+                  color: Colors.red,
+                  onPressed: () {
+                    AppAlert.showAlert(
+                      context,
+                      subTitle: "هل تريد حذف الرد؟",
+                      confirmText: "حذف",
+                      onConfirm: () {
+                        widget.qnaCubit.deleteAnswerEvent(widget.answer.id);
+                      },
+                    );
+                  },
+                  iconSize: 20,
+                ),
+            ],
+          ),
+          const SizedBox(width: 5),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Card(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 4,
+                    vertical: 2,
+                  ),
+                  elevation: 0,
+                  color: ColorsManager.fillColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.user.name,
+                          style:
+                              TextStyle(color: Colors.grey[600], fontSize: 12),
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          widget.answer.text,
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Row(
-                children: [
-                  Text(
-                    widget.answer.createdAt.formatTimeAgoString(),
-                    style: TextStyle(color: Colors.grey[600], fontSize: 12),
-                  ),
-                  const SizedBox(width: 16),
-                  GestureDetector(
-                    onTap: toggleLike,
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 300),
-                      transitionBuilder: (child, animation) {
-                        return ScaleTransition(scale: animation, child: child);
-                      },
+                Row(
+                  children: [
+                    Text(
+                      widget.answer.createdAt.timeAgo(),
+                      style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                    ),
+                    const SizedBox(width: 16),
+                    GestureDetector(
+                      onTap: toggleLike,
                       child: Row(
                         children: [
-                          Icon(
-                            isLiked
-                                ? Icons.thumb_up
-                                : Icons.thumb_up_alt_outlined,
-                            key: ValueKey(isLiked),
-                            color: isLiked ? Colors.green : Colors.grey,
-                            size: isAnimating ? 26 : 24, // تأثير الحجم
+                          Text(
+                            "أعجبني",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: isLiked ? Colors.green : Colors.grey[600],
+                            ),
                           ),
                           SizedBox(width: 4),
-                          Text("${widget.answer.votes}"),
+                          Text(
+                            "${widget.answer.votes}",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: isLiked ? Colors.green : Colors.grey[600],
+                            ),
+                          ),
                         ],
                       ),
                     ),
+                    GestureDetector(
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (context) {
+                            return ReplyBottomSheetWidget(
+                              answer: widget.answer,
+                              qnaCubit: widget.qnaCubit,
+                              username: widget.user.name,
+                            );
+                          },
+                        );
+                      },
+                      child: Row(
+                        children: [
+                          const SizedBox(width: 8),
+                          Icon(Icons.reply, size: 16, color: Colors.blue),
+                          const SizedBox(width: 4),
+                          const Text(
+                            "رد",
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 8),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ReplyBottomSheetWidget extends StatefulWidget {
+  const ReplyBottomSheetWidget({
+    super.key,
+    required this.answer,
+    required this.qnaCubit,
+    required this.username,
+  });
+  final QnaAnswerModel answer;
+  final QnaCubit qnaCubit;
+
+  final String username;
+
+  @override
+  State<ReplyBottomSheetWidget> createState() => _ReplyBottomSheetWidgetState();
+}
+
+class _ReplyBottomSheetWidgetState extends State<ReplyBottomSheetWidget> {
+  late final TextEditingController _replyController;
+
+  @override
+  void initState() {
+    super.initState();
+    _replyController = TextEditingController();
+    // open keyboard
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusScope.of(context).requestFocus(FocusNode());
+    });
+  }
+
+  @override
+  void dispose() {
+    _replyController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submitReply() async {
+    if (_replyController.text.trim().isEmpty) return;
+
+    // إنشاء الرد على التعليق
+    final newReply = QnaAnswerModel(
+      id: '',
+      questionId: widget.answer.questionId,
+      authorId: FirebaseAuth.instance.currentUser!.uid,
+      text: _replyController.text.trim(),
+      votes: 0,
+      createdAt: DateTime.now(),
+    );
+
+    // إرسال الرد باستخدام الـCubit
+    widget.qnaCubit.createAnswerEvent(newReply);
+
+    _replyController.clear();
+    Navigator.pop(context); // إغلاق الـ BottomSheet بعد إرسال الرد
+    FocusManager.instance.primaryFocus?.unfocus();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom, //
+      ),
+      child: SingleChildScrollView(
+        child: Container(
+          color: Colors.white,
+          padding: const EdgeInsets.all(8),
+          height: 100,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "جاري الرد على ${widget.username}",
                   ),
-                  const SizedBox(width: 16),
-                  if (isCurrentUser)
+                  SizedBox(width: 16),
+                  InkWell(
+                    onTap: () {
+                      Navigator.pop(context); // إغلاق الـ BottomSheet
+                    },
+                    child: const Text(
+                      "إلغاء",
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 50,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: CustomTextField(
+                        controller: _replyController,
+                        hintText: 'اكتب إجابتك...',
+                      ),
+                    ),
+                    const SizedBox(width: 8),
                     IconButton(
-                      icon: const Icon(Icons.delete),
-                      color: Colors.red,
+                      icon: Transform(
+                        alignment: Alignment.center,
+                        transform: Matrix4.rotationY(3.14),
+                        child: const Icon(
+                          CupertinoIcons.paperplane,
+                          color: Colors.blue,
+                        ),
+                      ),
                       onPressed: () {
-                        widget.qnaCubit.deleteAnswerEvent(widget.answer.id);
+                        if (FirebaseAuth.instance.currentUser == null) {
+                          AppAlert.showAlert(
+                            context,
+                            subTitle: "يرجى تسجيل الدخول",
+                            confirmText: "تسجيل الدخول",
+                            onConfirm: () {
+                              Navigator.of(context)
+                                  .pushNamed(AppRoutes.loginRoute);
+                            },
+                          );
+                        } else {
+                          _submitReply();
+                        }
                       },
                     ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),
         ),
-      ],
+      ),
     );
   }
 }

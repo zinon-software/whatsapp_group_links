@@ -10,103 +10,111 @@ class QnaQuestionWidget extends StatelessWidget {
   const QnaQuestionWidget({
     super.key,
     required this.qnaQuestion,
-    required this.showUser,
+    required this.canTap,
+    this.hasShadow = true,
   });
 
   final QnaQuestionModel qnaQuestion;
-  final bool showUser;
+  final bool canTap;
+  final bool hasShadow;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: showUser ? BorderRadius.circular(10) : null,
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.grey,
-            blurRadius: 2,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      margin: const EdgeInsets.symmetric(vertical: 4),
-      padding: const EdgeInsets.all(8.0),
-      child: InkWell(
-        onTap: showUser
-            ? () {
-                Navigator.of(context).pushNamed(
-                  AppRoutes.qnaDetailsRoute,
-                  arguments: {'question': qnaQuestion},
-                );
-              }
-            : null,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (showUser)
-              Row(
-                children: [
-                  Expanded(
-                    child: LoadUserWidget(
-                      userId: qnaQuestion.authorId,
-                      query: qnaQuestion.id,
+    return Hero(
+      tag: 'qnaQuestionCard-${qnaQuestion.id}', // مفتاح Hero فريد لكل بطاقة
+      child: Material(
+        type: MaterialType.transparency,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: hasShadow
+                ? const [
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 2,
+                      offset: Offset(0, 2),
                     ),
-                  ),
-
-                  // date
-                  Text(qnaQuestion.createdAt.formatTimeAgoString()),
-                ],
-              ),
-            if (showUser) Divider(),
-            Text(
-              qnaQuestion.text,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            const SizedBox(height: 12),
-            Row(
+                  ]
+                : [],
+          ),
+          margin: const EdgeInsets.symmetric(vertical: 4),
+          padding: const EdgeInsets.all(8.0),
+          child: InkWell(
+            onTap: canTap
+                ? () {
+                    Navigator.of(context).pushNamed(
+                      AppRoutes.qnaDetailsRoute,
+                      arguments: {'question': qnaQuestion},
+                    );
+                  }
+                : null,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (qnaQuestion.category != null)
-                  Chip(
-                    label: Text(
-                      qnaQuestion.category!,
-                      style: const TextStyle(
-                        fontSize: 12,
+                Row(
+                  children: [
+                    Expanded(
+                      child: LoadUserWidget(
+                        userId: qnaQuestion.authorId,
+                        query: qnaQuestion.id,
                       ),
                     ),
-                  ),
-                const SizedBox(width: 8),
-                Chip(
-                  labelPadding: const EdgeInsets.symmetric(
-                    horizontal: 4,
-                    vertical: 0,
-                  ),
-                  label: Text(
-                    "${qnaQuestion.answersCount} رداً",
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Colors.black,
-                    ),
-                  ),
+
+                    // date
+                    Text(qnaQuestion.createdAt.formatTimeAgoString()),
+                  ],
                 ),
-                const SizedBox(width: 8),
-                Spacer(),
-                if (FirebaseAuth.instance.currentUser?.uid ==
-                    qnaQuestion.authorId)
-                  IconButton(
-                    icon: const Icon(Icons.edit, color: Colors.blue),
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(
-                        AppRoutes.qnaFormRoute,
-                        arguments: {'question': qnaQuestion},
-                      );
-                    },
-                  ),
+                Divider(),
+                Text(
+                  qnaQuestion.text,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    if (qnaQuestion.category != null)
+                      Chip(
+                        label: Text(
+                          qnaQuestion.category!,
+                          style: const TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    const SizedBox(width: 8),
+                    Chip(
+                      labelPadding: const EdgeInsets.symmetric(
+                        horizontal: 4,
+                        vertical: 0,
+                      ),
+                      label: Text(
+                        "${qnaQuestion.answersCount} رداً",
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Spacer(),
+                    if (FirebaseAuth.instance.currentUser?.uid ==
+                        qnaQuestion.authorId)
+                      IconButton(
+                        icon: const Icon(Icons.edit, color: Colors.blue),
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(
+                            AppRoutes.qnaFormRoute,
+                            arguments: {'question': qnaQuestion},
+                          );
+                        },
+                      ),
+                  ],
+                ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );

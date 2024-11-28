@@ -7,7 +7,7 @@ import '../models/link_model.dart';
 
 abstract class LinksRepository {
   // links
-  Future<Either<String, String>> createLink(LinkModel link);
+  Future<Either<String, LinkModel>> createLink(LinkModel link);
   Future<Either<String, String>> incrementViews(String id);
   Future<Either<String, List<LinkModel>>> fetchLinks();
   Future<Either<String, String>> deleteLink(String id);
@@ -43,7 +43,7 @@ class LinksRepositoryImpl implements LinksRepository {
   }
 
   @override
-  Future<Either<String, String>> createLink(LinkModel link) async {
+  Future<Either<String, LinkModel>> createLink(LinkModel link) async {
     if (await connectionStatus.isNotConnected) {
       return const Left("تحقق من جودة اتصالك بالانترنت");
     }

@@ -5,7 +5,7 @@ import '../models/link_model.dart';
 
 abstract class LinksDatasources {
   // links
-  Future<String> createLink(LinkModel link);
+  Future<LinkModel> createLink(LinkModel link);
   Future<String> incrementViews(String id);
   Future<List<LinkModel>> fetchLinks();
   Future<String> deleteLink(String id);
@@ -26,7 +26,7 @@ class LinksDatasourcesImpl implements LinksDatasources {
   LinksDatasourcesImpl({required this.links, required this.bannedWords});
 
   @override
-  Future<String> createLink(LinkModel link) async {
+  Future<LinkModel> createLink(LinkModel link) async {
     try {
       // check if link name is not banned
       final List<String> bannedWordsData = await fetchBannedWords();
@@ -44,8 +44,10 @@ class LinksDatasourcesImpl implements LinksDatasources {
 
       final DocumentReference linkDocRef = links.doc();
 
-      await links.doc(linkDocRef.id).set(link.toJson(id: linkDocRef.id));
-      return 'تم إضافة الرابط بنجاح';
+      link = link.copyWith(id: linkDocRef.id);
+
+      await links.doc(linkDocRef.id).set(link.toJson());
+      return link;
     } catch (e) {
       rethrow;
     }

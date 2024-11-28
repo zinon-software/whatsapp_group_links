@@ -322,6 +322,7 @@ class _HomeScreenState extends State<HomeScreen> {
               } else {
                 AppAlert.showAlertWidget(
                   context,
+                  dismissOn: false,
                   child: DailySpinView(
                     adsManager: _adsManager,
                     usersCubit: _usersCubit,
@@ -342,6 +343,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               AppAlert.showAlertWidget(
                 context,
+                dismissOn: false,
                 child: const BlockAdsView(),
                 customHeader: Container(
                   decoration: BoxDecoration(

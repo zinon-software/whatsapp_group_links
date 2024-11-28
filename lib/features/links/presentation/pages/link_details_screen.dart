@@ -43,6 +43,8 @@ class _LinkDetailsScreenState extends State<LinkDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isAdmin =
+        instance<UsersCubit>().currentUser?.permissions.isAdmin ?? false;
     return Scaffold(
       appBar: AppBar(
         title: (widget.link.user != null)
@@ -113,9 +115,7 @@ class _LinkDetailsScreenState extends State<LinkDetailsScreen> {
             ),
             Text('${widget.link.views} مشاهدة'),
             Spacer(),
-            if (instance<UsersCubit>().currentUser?.permissions.isAdmin ??
-                false)
-              Text(widget.link.url),
+            if (isAdmin) Text(widget.link.url),
             BlocListener<LinksCubit, LinksState>(
               bloc: _linksCubit,
               listenWhen: (previous, current) =>
@@ -161,11 +161,7 @@ class _LinkDetailsScreenState extends State<LinkDetailsScreen> {
                     Expanded(
                       child: CustomButtonWidget(
                         onPressed: () async {
-                          if (instance<UsersCubit>()
-                                  .currentUser
-                                  ?.permissions
-                                  .isAdmin ??
-                              false) {
+                          if (isAdmin) {
                             launchUrl(Uri.parse(widget.link.url));
                           } else if (widget.link.isActive) {
                             _linksCubit.checkBannedWordEvent(
@@ -183,11 +179,7 @@ class _LinkDetailsScreenState extends State<LinkDetailsScreen> {
                         label: 'الانتقال الى ${widget.link.type}',
                       ),
                     ),
-                    if (instance<UsersCubit>()
-                            .currentUser
-                            ?.permissions
-                            .isAdmin ??
-                        false)
+                    if (isAdmin)
                       IconButton(
                         onPressed: () {
                           AppAlert.showAlert(
@@ -201,7 +193,76 @@ class _LinkDetailsScreenState extends State<LinkDetailsScreen> {
                           );
                         },
                         icon: const Icon(Icons.delete, color: Colors.red),
-                      )
+                      ),
+                    if (isAdmin)
+                      IconButton(
+                        onPressed: () {
+                          AppAlert.showAlertWidget(
+                            context,
+                            child: Column(
+                              children: [
+                                CustomButtonWidget(
+                                  width: double.infinity,
+                                  height: 50,
+                                  onPressed: () {
+                                    _linksCubit.changeLinkActiveEvent(
+                                      widget.link.id,
+                                      !widget.link.isActive,
+                                    );
+                                  },
+                                  label: widget.link.isActive
+                                      ? 'الغاء تفعيل الرابط'
+                                      : 'تفعيل الرابط',
+                                ),
+                                SizedBox(height: 10),
+                                // edit
+                                CustomButtonWidget(
+                                  width: double.infinity,
+                                  height: 50,
+                                  backgroundColor: Colors.green,
+                                  onPressed: () {
+                                    AppAlert.dismissDialog(context);
+                                    Navigator.of(context).pushNamed(
+                                      AppRoutes.linkFormRoute,
+                                      arguments: {'link': widget.link},
+                                    );
+                                  },
+                                  label: 'تعديل الرابط',
+                                ),
+                                SizedBox(height: 10),
+                                // Verified
+                                CustomButtonWidget(
+                                  width: double.infinity,
+                                  height: 50,
+                                  backgroundColor: Colors.green,
+                                  onPressed: () {
+                                    AppAlert.dismissDialog(context);
+                                    _linksCubit.updateLinkEvent(
+                                      widget.link.copyWith(isVerified: true),
+                                    );
+                                  },
+                                  label: 'تأكيد الرابط',
+                                ),
+                                SizedBox(height: 10),
+                                // delete
+                                CustomButtonWidget(
+                                  width: double.infinity,
+                                  height: 50,
+                                  backgroundColor: Colors.red,
+                                  onPressed: () {
+                                    _linksCubit.deleteLinkEvent(widget.link.id);
+                                  },
+                                  label: 'حذف الرابط',
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        icon: const Icon(
+                          Icons.more_vert_rounded,
+                          color: Colors.green,
+                        ),
+                      ),
                   ],
                 ),
               ),

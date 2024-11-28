@@ -148,8 +148,8 @@ class LinksDashboardScreen extends StatelessWidget {
                                       );
                                     },
                                     label: link.isActive
-                                        ? 'Deactivate Link'
-                                        : 'Activate Link',
+                                        ? 'الغاء تفعيل الرابط'
+                                        : 'تفعيل الرابط',
                                   ),
                                   SizedBox(height: 10),
                                   // edit
@@ -164,7 +164,7 @@ class LinksDashboardScreen extends StatelessWidget {
                                         arguments: {'link': link},
                                       );
                                     },
-                                    label: 'Edit Link',
+                                    label: 'تعديل الرابط',
                                   ),
                                   SizedBox(height: 10),
                                   // Verified
@@ -178,7 +178,7 @@ class LinksDashboardScreen extends StatelessWidget {
                                         link.copyWith(isVerified: true),
                                       );
                                     },
-                                    label: 'Verified Link',
+                                    label: 'تأكيد الرابط',
                                   ),
                                   SizedBox(height: 10),
                                   // delete
@@ -189,7 +189,7 @@ class LinksDashboardScreen extends StatelessWidget {
                                     onPressed: () {
                                       linksCubit.deleteLinkEvent(link.id);
                                     },
-                                    label: 'Delete Link',
+                                    label: 'حذف الرابط',
                                   ),
                                 ],
                               ),

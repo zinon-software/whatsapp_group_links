@@ -51,7 +51,7 @@ class _LoadUserWidgetState extends State<LoadUserWidget> {
         if (state is FetchUserLoadingState && _user == null) {
           return CustomSkeletonizerWidget(
             enabled: true,
-            child: UserWidget(user: UserModel.isEmpty()),
+            child: UserWidget(user: UserModel.empity()),
           );
         }
         if (state is FetchUserSuccessState &&

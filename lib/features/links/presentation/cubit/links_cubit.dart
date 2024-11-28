@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../../core/notification/send_notification.dart';
+import '../../../../core/routes/app_routes.dart';
 import '../../data/models/link_model.dart';
 import '../../data/repositories/links_repositories.dart';
 
@@ -20,12 +21,16 @@ class LinksCubit extends Cubit<LinksState> {
     (await repository.createLink(newLink)).fold((failure) {
       emit(CreateLinkErrorState(failure));
     }, (response) {
+      Map<String, dynamic> data = {"link": response.toJson()};
+      data["platform"] = determinePlatform(response.url);
+      data["route"] = AppRoutes.linkDetailsRoute;
+
       sendFCMMessageToAllUsers(
-        title: 'تم انشاء رابط جديد',
+        title: 'تم انشاء رابط ${determinePlatform(response.url)} جديد',
         body: newLink.title,
-        data: {},
+        data: newLink.toJson(),
       );
-      emit(CreateLinkSuccessState(response));
+      emit(CreateLinkSuccessState("تم انشاء رابط جديد"));
     });
   }
 

@@ -16,7 +16,7 @@ class CustomTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final String? initialValue;
   final Function(String?)? onSaved;
-  final int maxLines;
+  final int? maxLines;
   final int? maxLength;
   final TextInputAction? textInputAction;
 
@@ -36,7 +36,7 @@ class CustomTextField extends StatelessWidget {
     this.widget,
     this.initialValue,
     this.onSaved,
-    this.maxLines = 1,
+    this.maxLines,
     this.maxLength,
     this.textInputAction,
   });
@@ -53,6 +53,7 @@ class CustomTextField extends StatelessWidget {
       onSaved: onSaved,
       onFieldSubmitted: onFieldSubmitted,
       textAlign: TextAlign.right,
+      minLines: maxLines != null ? null : 1,
       maxLines: maxLines,
       maxLength: maxLength,
       textInputAction: textInputAction,
@@ -64,7 +65,7 @@ class CustomTextField extends StatelessWidget {
         labelText: labelText,
         filled: true, // جعل الحقل مملوء بلون
         fillColor: Colors.grey[200], // لون الخلفية
-
+        contentPadding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
         border: OutlineInputBorder(
           // شكل الحاشية
           borderRadius: BorderRadius.circular(10.0), // تقريب الحواف
