@@ -68,7 +68,9 @@ class AppAlert {
     Color? dialogBackgroundColor,
   }) async {
     dismissDialog(context);
-    return await AwesomeDialog(
+
+    // ضمان إرجاع قيمة `bool`
+    final result = await AwesomeDialog(
       context: context,
       dialogBackgroundColor: dialogBackgroundColor,
       animType: AnimType.scale,
@@ -138,7 +140,11 @@ class AppAlert {
       dismissOnTouchOutside: dismissOn,
       dismissOnBackKeyPress: dismissOn,
     ).show();
+
+    // ضمان إرجاع `false` في حالة عدم وجود نتيجة
+    return result ?? false;
   }
+
 
   static Future<void> showAlertWidget(
     BuildContext context, {
@@ -157,7 +163,6 @@ class AppAlert {
       headerAnimationLoop: false,
       dialogBackgroundColor: dialogBackgroundColor,
       customHeader: customHeader,
-      
       body: Column(
         children: [
           child,
