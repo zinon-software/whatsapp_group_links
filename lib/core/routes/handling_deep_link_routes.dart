@@ -1,12 +1,15 @@
 import 'dart:developer';
 import 'package:app_links/app_links.dart';
+import 'package:flutter/foundation.dart';
 
 import 'app_routes.dart';
 
 class HandlingDeepLinkRoutes {
   static DeepLinkRoute handleDeepLink(String deepLink) {
     Uri uri = Uri.parse(deepLink);
-    print('CURRENT URI HAMADA $uri');
+    if (kDebugMode) {
+      print('CURRENT URI HAMADA $uri');
+    }
     switch (uri.path) {
      
       case "/bills/bills/":

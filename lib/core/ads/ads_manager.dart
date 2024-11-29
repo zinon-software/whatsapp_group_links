@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:linkati/config/app_injector.dart';
@@ -438,17 +439,29 @@ class _NativeAdWidgetState extends State<NativeAdWidget> {
           ),
       listener: NativeAdListener(
         onAdLoaded: (Ad ad) {
-          print('_NativeAdWidget $NativeAd loaded.');
+          if (kDebugMode) {
+            print('_NativeAdWidget $NativeAd loaded.');
+          }
           setState(() {
             _nativeAdIsLoaded = true;
           });
         },
         onAdFailedToLoad: (Ad ad, LoadAdError error) {
-          print('$NativeAd _NativeAdWidget failedToLoad: $error');
+          if (kDebugMode) {
+            print('$NativeAd _NativeAdWidget failedToLoad: $error');
+          }
           ad.dispose();
         },
-        onAdOpened: (Ad ad) => print('_NativeAdWidget $NativeAd onAdOpened.'),
-        onAdClosed: (Ad ad) => print('_NativeAdWidget $NativeAd onAdClosed.'),
+        onAdOpened: (Ad ad) {
+          if (kDebugMode) {
+            print('_NativeAdWidget $NativeAd onAdOpened.');
+          }
+        },
+        onAdClosed: (Ad ad) {
+          if (kDebugMode) {
+            print('_NativeAdWidget $NativeAd onAdClosed.');
+          }
+        },
       ),
       // nativeTemplateStyle: NativeTemplateStyle(
       //   // Required: Choose a template.

@@ -38,7 +38,7 @@ class SlideshowsWidget extends StatelessWidget {
                       fit: BoxFit.fill,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
                     state.slideshow.title,
                     style: TextStyle(fontWeight: FontWeight.bold),
