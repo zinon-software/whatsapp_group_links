@@ -11,6 +11,7 @@ abstract class QnaDatasources {
   Future<String> createQuestion(QnaQuestionModel link);
   Future<String> incrementAnswersCount(String id);
   Future<List<QnaQuestionModel>> fetchQnaQuestions();
+  Future<QnaQuestionModel> fetchQnaQuestion(String questionId);
   Future<String> deleteQuestion(String id);
   Future<String> updateQuestion(QnaQuestionModel question);
   Future<String> changeQuestionActive(String id, bool isActive);
@@ -247,6 +248,23 @@ class QnaDatasourcesImpl implements QnaDatasources {
 
       await answers.doc(answer.id).update(answer.toJson());
       return 'answer updated successfully';
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<QnaQuestionModel> fetchQnaQuestion(String questionId) async {
+    try {
+      final DocumentSnapshot questionSnapshot =
+          await questions.doc(questionId).get();
+      if (!questionSnapshot.exists) {
+        throw Exception('Question not found');
+      }
+      final QnaQuestionModel qnaData = QnaQuestionModel.fromJson(
+        questionSnapshot.data() as Map<String, dynamic>,
+      );
+      return qnaData;
     } catch (e) {
       rethrow;
     }

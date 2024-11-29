@@ -195,12 +195,15 @@ class AppNavigation {
         );
 
       case AppRoutes.qnaDetailsRoute:
+      QnaQuestionModel? question = query['question'] as QnaQuestionModel?;
         return _moveRoute(
           settings: settings,
           view: BlocProvider.value(
             value: QnaCubit(repository: instance<QnaRepository>()),
             child: QnaDetailsScreen(
-              question: query['question'] as QnaQuestionModel,
+              question: question,
+              questionId: question?.id ?? query['question_id'] as String,
+
             ),
           ),
         );

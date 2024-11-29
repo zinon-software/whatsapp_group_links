@@ -190,7 +190,18 @@ class NotificationManager {
       if (route == AppRoutes.linkDetailsRoute) {
         AppNavigation.navigatorKey.currentState?.pushNamed(
           AppRoutes.linkDetailsRoute,
-          arguments: LinkModel.fromJson(data['link'] as Map<String, dynamic>),
+          arguments: {
+            "link": LinkModel.fromStringData(
+              jsonDecode(data['link']) as Map<String, dynamic>,
+            ),
+          },
+        );
+      } else if (route == AppRoutes.qnaDetailsRoute) {
+        AppNavigation.navigatorKey.currentState?.pushNamed(
+          AppRoutes.qnaDetailsRoute,
+          arguments: {
+            'question_id': data['question_id'],
+          },
         );
       } else {
         AppNavigation.navigatorKey.currentState?.pushNamed(

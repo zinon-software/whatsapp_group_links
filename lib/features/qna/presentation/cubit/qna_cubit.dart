@@ -70,7 +70,7 @@ class QnaCubit extends Cubit<QnaState> {
           body: newAnswer.text,
           data: {
             'question_id': newAnswer.questionId,
-            'route': AppRoutes.homeRoute,
+            'route': AppRoutes.qnaDetailsRoute,
           },
         );
         emit(ManageAnswerSuccessState());
@@ -89,7 +89,7 @@ class QnaCubit extends Cubit<QnaState> {
       body: newAnswer.text,
       data: {
         'question_id': newAnswer.questionId,
-        'route': AppRoutes.homeRoute,
+        'route': AppRoutes.qnaDetailsRoute,
       },
     );
   }
@@ -112,5 +112,16 @@ class QnaCubit extends Cubit<QnaState> {
 
   void deleteAnswerEvent(String id) {
     repository.deleteAnswer(id);
+  }
+
+  void fetchQnaQuestionEvent(String questionId) async {
+    emit(QnaQuestionLoadingState());
+    final result = await repository.fetchQnaQuestion(questionId);
+    result.fold(
+      (error) => emit(QnaQuestionErrorState(error)),
+      (success) {
+        emit(QnaQuestionSuccessState(success));
+      },
+    );
   }
 }

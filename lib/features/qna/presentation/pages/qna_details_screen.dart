@@ -19,8 +19,9 @@ import '../widgets/qna_answer_widget.dart';
 import '../widgets/qna_question_widget.dart';
 
 class QnaDetailsScreen extends StatefulWidget {
-  const QnaDetailsScreen({super.key, required this.question});
-  final QnaQuestionModel question;
+  const QnaDetailsScreen({super.key, this.question, required this.questionId});
+  final QnaQuestionModel? question;
+  final String questionId;
 
   @override
   State<QnaDetailsScreen> createState() => _QnaDetailsScreenState();
@@ -29,12 +30,29 @@ class QnaDetailsScreen extends StatefulWidget {
 class _QnaDetailsScreenState extends State<QnaDetailsScreen> {
   late final TextEditingController _answerController;
   late final QnaCubit _qnaCubit;
+  late QnaQuestionModel question;
 
   @override
   void initState() {
     super.initState();
     _answerController = TextEditingController();
     _qnaCubit = context.read<QnaCubit>();
+    _initQuestion();
+  }
+
+  void _initQuestion() {
+    if (widget.question != null) {
+      question = widget.question!;
+    } else {
+      try {
+        question = _qnaCubit.qnaQuestions.firstWhere(
+          (element) => element.id == widget.questionId,
+        );
+      } catch (e) {
+        question = QnaQuestionModel.empty().copyWith(id: widget.questionId);
+        _qnaCubit.fetchQnaQuestionEvent(widget.questionId);
+      }
+    }
   }
 
   @override
@@ -48,7 +66,7 @@ class _QnaDetailsScreenState extends State<QnaDetailsScreen> {
 
     final newAnswer = QnaAnswerModel(
       id: '',
-      questionId: widget.question.id,
+      questionId: question.id,
       authorId: FirebaseAuth.instance.currentUser!.uid,
       text: _answerController.text.trim(),
       votes: 0,
@@ -64,9 +82,9 @@ class _QnaDetailsScreenState extends State<QnaDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.question.text, style: const TextStyle(fontSize: 18)),
+        title: Text(question.text, style: const TextStyle(fontSize: 18)),
         actions: [
-          NotificationBellWidget(topic: widget.question.id),
+          NotificationBellWidget(topic: question.id),
         ],
       ),
       body: Column(
@@ -76,10 +94,20 @@ class _QnaDetailsScreenState extends State<QnaDetailsScreen> {
               slivers: [
                 // قسم السؤال
                 SliverToBoxAdapter(
-                  child: QnaQuestionWidget(
-                    qnaQuestion: widget.question,
-                    canTap: false,
-                    hasShadow: false,
+                  child: BlocBuilder<QnaCubit, QnaState>(
+                    bloc: _qnaCubit,
+                    buildWhen: (previous, current) =>
+                        current is QnaQuestionSuccessState,
+                    builder: (context, state) {
+                      question = state is QnaQuestionSuccessState
+                          ? state.question
+                          : question;
+                      return QnaQuestionWidget(
+                        qnaQuestion: question,
+                        canTap: false,
+                        hasShadow: false,
+                      );
+                    },
                   ),
                 ),
                 SliverToBoxAdapter(
@@ -89,7 +117,7 @@ class _QnaDetailsScreenState extends State<QnaDetailsScreen> {
                 StreamBuilder<QuerySnapshot>(
                   stream: instance<AppCollections>()
                       .qnaAnswers
-                      .where('question_id', isEqualTo: widget.question.id)
+                      .where('question_id', isEqualTo: question.id)
                       .orderBy('created_at', descending: true)
                       .snapshots(),
                   builder: (context, snapshot) {
@@ -166,7 +194,10 @@ class _QnaDetailsScreenState extends State<QnaDetailsScreen> {
                         subTitle: "يرجى تسجيل الدخول",
                         confirmText: "تسجيل الدخول",
                         onConfirm: () {
-                          Navigator.of(context).pushNamed(AppRoutes.loginRoute);
+                          AppAlert.dismissDialog(context);
+                          Navigator.of(context).pushNamed(
+                            AppRoutes.loginRoute,
+                          );
                         },
                       );
                     } else {

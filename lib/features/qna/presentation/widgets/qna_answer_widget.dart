@@ -102,6 +102,7 @@ class _QnaAnswerWidgetState extends State<QnaAnswerWidget> {
                       subTitle: "هل تريد حذف الرد؟",
                       confirmText: "حذف",
                       onConfirm: () {
+                        AppAlert.dismissDialog(context);
                         widget.qnaCubit.deleteAnswerEvent(widget.answer.id);
                       },
                     );
@@ -336,6 +337,7 @@ class _ReplyBottomSheetWidgetState extends State<ReplyBottomSheetWidget> {
                             subTitle: "يرجى تسجيل الدخول",
                             confirmText: "تسجيل الدخول",
                             onConfirm: () {
+                              AppAlert.dismissDialog(context);
                               Navigator.of(context)
                                   .pushNamed(AppRoutes.loginRoute);
                             },

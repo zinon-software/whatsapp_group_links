@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -21,15 +22,17 @@ class LinksCubit extends Cubit<LinksState> {
     (await repository.createLink(newLink)).fold((failure) {
       emit(CreateLinkErrorState(failure));
     }, (response) {
-      Map<String, dynamic> data = {"link": response.toJson()};
-      data["platform"] = determinePlatform(response.url);
-      data["route"] = AppRoutes.linkDetailsRoute;
+      Map<String, dynamic> data = {
+        "link": jsonEncode(response.toStringData()), // تحويل الكائن إلى نص JSON
+        "route": AppRoutes.linkDetailsRoute,
+      };
 
       sendFCMMessageToAllUsers(
         title: 'تم انشاء رابط ${determinePlatform(response.url)} جديد',
         body: newLink.title,
-        data: newLink.toJson(),
+        data: data,
       );
+
       emit(CreateLinkSuccessState("تم انشاء رابط جديد"));
     });
   }

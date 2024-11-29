@@ -1,7 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:linkati/core/extensions/date_format_extension.dart';
+import 'package:linkati/features/users/presentation/cubit/users_cubit.dart';
 
+import '../../../../config/app_injector.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../../users/presentation/widgets/user_widget.dart';
 import '../../data/models/qna_question_model.dart';
@@ -44,7 +45,10 @@ class QnaQuestionWidget extends StatelessWidget {
                 ? () {
                     Navigator.of(context).pushNamed(
                       AppRoutes.qnaDetailsRoute,
-                      arguments: {'question': qnaQuestion},
+                      arguments: {
+                        'question': qnaQuestion,
+                        'question_id': qnaQuestion.id,
+                      },
                     );
                   }
                 : null,
@@ -99,8 +103,9 @@ class QnaQuestionWidget extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Spacer(),
-                    if (FirebaseAuth.instance.currentUser?.uid ==
-                        qnaQuestion.authorId)
+                    if (instance<UsersCubit>().currentUser?.id ==
+                            qnaQuestion.authorId ||
+                        (instance<UsersCubit>().currentUser?.isAdmin ?? false))
                       IconButton(
                         icon: const Icon(Icons.edit, color: Colors.blue),
                         onPressed: () {

@@ -42,6 +42,13 @@ class LinksDatasourcesImpl implements LinksDatasources {
         return throw Exception("تم حظر نشر الرابط بسبب مخالفتك لسياسة النشر");
       }
 
+      // check if link url is not registered in linkes
+      final QuerySnapshot querySnapshot =
+          await links.where('url', isEqualTo: link.url).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        return throw Exception("هذا الرابط مسجل بالفعل");
+      }
+
       final DocumentReference linkDocRef = links.doc();
 
       link = link.copyWith(id: linkDocRef.id);

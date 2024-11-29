@@ -65,7 +65,7 @@ class CustomTextField extends StatelessWidget {
         labelText: labelText,
         filled: true, // جعل الحقل مملوء بلون
         fillColor: Colors.grey[200], // لون الخلفية
-        contentPadding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+        contentPadding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
         border: OutlineInputBorder(
           // شكل الحاشية
           borderRadius: BorderRadius.circular(10.0), // تقريب الحواف

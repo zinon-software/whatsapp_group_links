@@ -33,8 +33,6 @@ class QnaQuestionsErrorState extends QnaState {
   const QnaQuestionsErrorState(this.message);
 }
 
-
-
 class ManageAnswerLoadingState extends QnaState {}
 
 class ManageAnswerErrorState extends QnaState {
@@ -45,3 +43,16 @@ class ManageAnswerErrorState extends QnaState {
 
 class ManageAnswerSuccessState extends QnaState {}
 
+class QnaQuestionSuccessState extends QnaState {
+  final QnaQuestionModel question;
+
+  const QnaQuestionSuccessState(this.question);
+}
+
+class QnaQuestionErrorState extends QnaState {
+  final String message;
+
+  const QnaQuestionErrorState(this.message);
+}
+
+class QnaQuestionLoadingState extends QnaState {}

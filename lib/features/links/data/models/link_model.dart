@@ -50,12 +50,12 @@ class LinkModel {
     return linkModel;
   }
 
-  Map<String, dynamic> toJson({String? id}) {
+  Map<String, dynamic> toJson() {
     return {
-      'id': id ?? this.id,
+      'id': id,
       'user': user,
       'title': title,
-      'create_dt': createDt.toIso8601String(),
+      'create_dt': createDt,
       'url': url,
       'views': views,
       'type': type,
@@ -106,4 +106,43 @@ class LinkModel {
       isVerified: true,
     );
   }
+
+  // fromStringData
+  factory LinkModel.fromStringData(Map<String, dynamic> data) {
+    try {
+      return LinkModel(
+        id: data['id'],
+        user: data['user'],
+        title: data['title'],
+        createDt: DateTime.parse(data['create_dt']),
+        url: data['url'],
+        views: int.parse(data['views']),
+        type: data['type'],
+        isActive: bool.parse(data['is_active']),
+        isVerified: bool.parse(data['is_verified']),
+        isAd: bool.parse(data['is_ad']),
+        isVIP: bool.parse(data['is_vip']),
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+  
+
+  Map<String, dynamic> toStringData() {
+    return {
+      'id': id.toString(),
+      'user': user.toString(),
+      'title': title.toString(),
+      'create_dt': createDt.toIso8601String(),
+      'url': url.toString(),
+      'views': views.toString(),
+      'type': type.toString(),
+      'is_active': isActive.toString(),
+      'is_verified': isVerified.toString(),
+      'is_ad': isAd.toString(),
+      'is_vip': isVIP.toString(),
+    };
+  }
+
 }

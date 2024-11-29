@@ -54,6 +54,8 @@ class UserModel {
     return user;
   }
 
+  bool get isAdmin => permissions.isAdmin;
+
   // تحويل الكائن إلى Map لتخزينه في Firestore
   Map<String, dynamic> toJson() {
     return {

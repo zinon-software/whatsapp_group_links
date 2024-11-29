@@ -77,4 +77,18 @@ class QnaQuestionModel {
       answersCount: answersCount ?? this.answersCount,
     );
   }
+
+  static QnaQuestionModel empty() {
+    return QnaQuestionModel(
+      id: '',
+      authorId: '',
+      text: '',
+      category: null,
+      isPublic: true,
+      isAnswered: false,
+      isActive: true,
+      createdAt: DateTime.now(),
+      answersCount: 0,
+    );
+  }
 }

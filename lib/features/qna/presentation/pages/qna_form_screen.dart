@@ -115,7 +115,6 @@ class _QnaFormScreenState extends State<QnaFormScreen> {
                   controller: _textController,
                   labelText: 'السؤال',
                   validator: (value) => value!.isEmpty ? 'مطلوب' : null,
-                  maxLines: 3,
                   keyboardType: TextInputType.multiline,
                 ),
                 SizedBox(height: 10),
