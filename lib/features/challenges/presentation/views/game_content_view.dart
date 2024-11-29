@@ -71,7 +71,7 @@ class GameContentView extends StatelessWidget {
                 ),
                 PlayerWidget(
                   isMe: !isMePlayer1,
-                  isHost: game.currentTurnPlayerId == game.player2!.userId,
+                  isHost: game.currentTurnPlayerId == game.player2?.userId,
                   isAi: game.isWithAi,
                   player: game.player2!,
                   usersCubit: usersCubit,

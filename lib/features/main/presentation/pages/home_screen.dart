@@ -87,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
             BlocBuilder<UsersCubit, UsersState>(
               bloc: _usersCubit,
               builder: (context, state) {
-                if (_usersCubit.auth.currentUser == null) {
+                if (_usersCubit.currentUser == null) {
                   return IconButton(
                     icon: const Icon(Icons.login),
                     onPressed: () {

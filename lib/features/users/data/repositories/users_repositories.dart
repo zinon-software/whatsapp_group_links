@@ -10,6 +10,7 @@ abstract class UsersRepository {
   Future<Either<String, List<UserModel>>> fetchUsers();
   Future<Either<String, UserModel>> fetchUser(String id);
   UserModel? getUser(String id);
+  UserModel? getMyUser();
 
   Future<Either<String, String>> createUser(UserModel request);
   Future<Either<String, String>> updateUser(UserModel request);
@@ -61,7 +62,7 @@ class UsersRepositoryImpl implements UsersRepository {
 
     try {
       final response = await remoteDatasources.createUser(request);
-      localDatasources.saveUser(request);
+      localDatasources.saveMyUser(request);
       return Right(response);
     } catch (e) {
       return Left(handleException(e));
@@ -76,7 +77,7 @@ class UsersRepositoryImpl implements UsersRepository {
 
     try {
       final response = await remoteDatasources.updateUser(request);
-      localDatasources.saveUser(request);
+      localDatasources.saveMyUser(request);
       return Right(response);
     } catch (e) {
       return Left(handleException(e));
@@ -91,8 +92,12 @@ class UsersRepositoryImpl implements UsersRepository {
     }
 
     try {
-      final response =
-          await remoteDatasources.updatePermission(userId, feild, newStatus);
+      final response = await remoteDatasources.updatePermission(
+        userId,
+        feild,
+        newStatus,
+      );
+      
       return Right(response);
     } catch (e) {
       return Left(handleException(e));
@@ -135,5 +140,10 @@ class UsersRepositoryImpl implements UsersRepository {
   @override
   UserModel? getUser(String id) {
     return localDatasources.getUser(id);
+  }
+
+  @override
+  UserModel? getMyUser() {
+    return localDatasources.getMyUser();
   }
 }

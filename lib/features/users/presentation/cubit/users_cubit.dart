@@ -23,13 +23,12 @@ class UsersCubit extends Cubit<UsersState> {
       : super(UsersInitialState());
 
   FutureOr<void> fetchMyUserAccount({bool isEdit = false}) async {
+    currentUser = repository.getMyUser();
     try {
       if (auth.currentUser == null) {
         return;
       }
       final uid = auth.currentUser!.uid;
-
-      currentUser = repository.getUser(uid);
 
       currentUser ??= UserModel.empty().copyWith(
         id: auth.currentUser!.uid,
