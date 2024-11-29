@@ -105,7 +105,7 @@ class UserModel {
         fcmToken: fcmToken ?? this.fcmToken);
   }
 
-  static UserModel empity() {
+  static UserModel empty() {
     return UserModel(
       id: '',
       name: '====== ===',

@@ -37,7 +37,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     super.initState();
 
     if (widget.isAi) {
-      _user = UserModel.empity().copyWith(
+      _user = UserModel.empty().copyWith(
         id: widget.player.userId,
         name: 'AI',
         phoneNumber: '1234567890',
@@ -48,11 +48,11 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     } else if (_user == null) {
       _user = widget.usersCubit.repository.getUser(widget.player.userId);
 
-      if(_user == null) {
+      if (_user == null) {
         widget.usersCubit.fetchUserEvent(
-        userId: widget.player.userId,
-        query: widget.gameId,
-      );
+          userId: widget.player.userId,
+          query: widget.gameId,
+        );
       }
     }
   }
@@ -125,7 +125,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
           return CustomSkeletonizerWidget(
             enabled: true,
             child: PlayerDataWidget(
-              user: UserModel.empity(),
+              user: UserModel.empty(),
               isHost: false,
               isMe: false,
               score: 0,
@@ -135,7 +135,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
 
         // إذا لم يتم تلبية أي من الحالات أعلاه، يعرض عنصر فارغ افتراضي
         return PlayerDataWidget(
-          user: _user ?? UserModel.empity(),
+          user: _user ?? UserModel.empty(),
           isHost: widget.isHost,
           isMe: widget.isMe,
           score: widget.player.score,

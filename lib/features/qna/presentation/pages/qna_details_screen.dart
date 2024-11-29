@@ -151,7 +151,7 @@ class _QnaDetailsScreenState extends State<QnaDetailsScreen> {
                             user: instance<StorageRepository>().getData(
                                   key: answer.authorId,
                                 ) as UserModel? ??
-                                UserModel.empity(),
+                                UserModel.empty(),
                           );
                         },
                         childCount: answers.length,

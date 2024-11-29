@@ -31,7 +31,7 @@ class UsersRemoteDatasourcesImpl implements UsersRemoteDatasources {
       final UserModel user;
 
       if (!snapshot.exists) {
-        user = UserModel.empity().copyWith(id: id);
+        user = UserModel.empty().copyWith(id: id);
         await createUser(user);
       } else {
         user = UserModel.fromJson(
@@ -48,8 +48,10 @@ class UsersRemoteDatasourcesImpl implements UsersRemoteDatasources {
   @override
   Future<String> createUser(UserModel request) async {
     try {
-    final token =  await NotificationManager.getNotificationToken();
-      await users.doc(request.id).set(request.copyWith(fcmToken: token).toJson());
+      final token = await NotificationManager.getNotificationToken();
+      await users
+          .doc(request.id)
+          .set(request.copyWith(fcmToken: token).toJson());
       return "تم تحديث حالة التصريح بنجاح";
     } catch (e) {
       rethrow;
@@ -59,8 +61,10 @@ class UsersRemoteDatasourcesImpl implements UsersRemoteDatasources {
   @override
   Future<String> updateUser(UserModel request) async {
     try {
-    final token =  await NotificationManager.getNotificationToken();
-      await users.doc(request.id).update(request.copyWith(fcmToken: token).toJson());
+      final token = await NotificationManager.getNotificationToken();
+      await users
+          .doc(request.id)
+          .update(request.copyWith(fcmToken: token).toJson());
       return "تم تحديث حالة التصريح بنجاح";
     } catch (e) {
       rethrow;

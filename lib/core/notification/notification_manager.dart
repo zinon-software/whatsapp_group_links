@@ -7,6 +7,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:linkati/features/links/data/models/link_model.dart';
 
 import '../../config/app_injector.dart';
+import '../../features/challenges/data/models/topic_model.dart';
 import '../routes/app_routes.dart';
 import '../storage/storage_repository.dart';
 
@@ -184,31 +185,44 @@ class NotificationManager {
   }
 
   static void navigatorRoutes(String? payload) {
-    if (payload != null) {
-      final data = jsonDecode(payload);
-      final String route = data['route'] as String;
-      if (route == AppRoutes.linkDetailsRoute) {
-        AppNavigation.navigatorKey.currentState?.pushNamed(
-          AppRoutes.linkDetailsRoute,
-          arguments: {
-            "link": LinkModel.fromStringData(
-              jsonDecode(data['link']) as Map<String, dynamic>,
-            ),
-          },
-        );
-      } else if (route == AppRoutes.qnaDetailsRoute) {
-        AppNavigation.navigatorKey.currentState?.pushNamed(
-          AppRoutes.qnaDetailsRoute,
-          arguments: {
-            'question_id': data['question_id'],
-          },
-        );
+    try {
+      if (payload != null) {
+        final data = jsonDecode(payload);
+        final String route = data['route'] as String;
+        if (route == AppRoutes.linkDetailsRoute) {
+          AppNavigation.navigatorKey.currentState?.pushNamed(
+            AppRoutes.linkDetailsRoute,
+            arguments: {
+              "link": LinkModel.fromStringData(
+                jsonDecode(data['link']) as Map<String, dynamic>,
+              ),
+            },
+          );
+        } else if (route == AppRoutes.qnaDetailsRoute) {
+          AppNavigation.navigatorKey.currentState?.pushNamed(
+            AppRoutes.qnaDetailsRoute,
+            arguments: {
+              'question_id': data['question_id'],
+            },
+          );
+        } else if (route == AppRoutes.gamesRoute) {
+          AppNavigation.navigatorKey.currentState?.pushNamed(
+            AppRoutes.gamesRoute,
+            arguments: {
+              'topic': TopicModel.fromJson(jsonDecode(data['topic'])),
+            },
+          );
+        } else {
+          AppNavigation.navigatorKey.currentState?.pushNamed(
+            AppRoutes.homeRoute,
+          );
+        }
       } else {
         AppNavigation.navigatorKey.currentState?.pushNamed(
           AppRoutes.homeRoute,
         );
       }
-    } else {
+    } catch (e) {
       AppNavigation.navigatorKey.currentState?.pushNamed(
         AppRoutes.homeRoute,
       );

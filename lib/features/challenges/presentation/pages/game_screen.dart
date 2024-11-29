@@ -41,8 +41,8 @@ class _GameScreenState extends State<GameScreen> {
   late ChallengesCubit _challengesCubit;
   late UsersCubit _usersCubit;
 
-  UserModel player1 = UserModel.empity();
-  UserModel player2 = UserModel.empity();
+  UserModel player1 = UserModel.empty();
+  UserModel player2 = UserModel.empty();
 
   @override
   void initState() {

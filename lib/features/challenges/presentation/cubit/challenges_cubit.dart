@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -91,7 +92,9 @@ class ChallengesCubit extends Cubit<ChallengesState> {
     );
   }
 
-  Future<void> createGameEvent(GameModel game) async {
+  Future<void> createGameEvent(
+      {required GameModel game}) async {
+
     emit(ManageGameLoadingState());
 
     (await repository.createGame(game)).fold(
@@ -103,10 +106,11 @@ class ChallengesCubit extends Cubit<ChallengesState> {
         sendFCMMessageToAllUsers(
           topic: "allUsers",
           title: 'المتسابق ${response.player1.user?.name} يدعوك الان لمنافسته',
-          body: 'تم انشاء لعبة جديدة في قسم ${topics.firstWhere((element) => element.id == game.topic).title}',
+          body:
+              'تم انشاء لعبة جديدة في قسم ${topics.firstWhere((element) => element.id == game.topic).title}',
           data: {
-            'gameId': response.id,
-            'route': AppRoutes.homeRoute,
+            'topic': jsonEncode(topics.firstWhere((element) => element.id == game.topic).toJson()),
+            'route': AppRoutes.gamesRoute,
           },
         );
       },

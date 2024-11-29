@@ -196,7 +196,7 @@ class _GamesScreenState extends State<GamesScreen> {
 
       // إذا تم اختيار عدد من الأسئلة بشكل صحيح
       _challengesCubit.createGameEvent(
-        GameModel(
+       game: GameModel(
           id: '',
           player1: PlayerModel(
             userId: _usersCubit.currentUser!.id,

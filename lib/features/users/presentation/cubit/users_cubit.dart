@@ -31,14 +31,14 @@ class UsersCubit extends Cubit<UsersState> {
 
       currentUser = repository.getUser(uid);
 
-      currentUser ??= UserModel.empity().copyWith(
+      currentUser ??= UserModel.empty().copyWith(
         id: auth.currentUser!.uid,
         email: auth.currentUser!.email,
         name: auth.currentUser!.displayName,
         photoUrl: auth.currentUser!.photoURL,
         phoneNumber: auth.currentUser!.phoneNumber,
       );
-      
+
       emit(UserSuccessState());
 
       (await repository.fetchUser(uid)).fold(
@@ -49,6 +49,16 @@ class UsersCubit extends Cubit<UsersState> {
           emit(UserSuccessState());
           if (isEdit) {
             repository.updateUser(response);
+          } else if (response.name == UserModel.empty().name) {
+            repository.updateUser(
+              UserModel.empty().copyWith(
+                id: auth.currentUser!.uid,
+                email: auth.currentUser!.email,
+                name: auth.currentUser!.displayName,
+                photoUrl: auth.currentUser!.photoURL,
+                phoneNumber: auth.currentUser!.phoneNumber,
+              ),
+            );
           }
 
           // save isStopAds local storage
