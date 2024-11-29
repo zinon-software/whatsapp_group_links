@@ -2,6 +2,8 @@
 
 import 'dart:io';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 class AdHelper {
   final bool _testMode = ! const bool.fromEnvironment('dart.vm.product');
 
@@ -9,7 +11,7 @@ class AdHelper {
     if (_testMode) {
       return "ca-app-pub-3940256099942544/6300978111";
     } else if (Platform.isAndroid) {
-      return "ca-app-pub-9553130506719526/7133339279";
+      return dotenv.env['BANNER_AD_UNIT_ID_ANDROID']!;
     } else if (Platform.isIOS) {
       return "";
     } else {
@@ -21,7 +23,7 @@ class AdHelper {
     if (_testMode) {
       return "ca-app-pub-3940256099942544/1033173712";
     } else if (Platform.isAndroid) {
-      return "ca-app-pub-9553130506719526/2286199091";
+      return dotenv.env['INTERSTITIAL_AD_UNIT_ID_ANDROID']!;
     } else if (Platform.isIOS) {
       return "";
     } else {
@@ -33,7 +35,7 @@ class AdHelper {
     if (_testMode) {
       return "ca-app-pub-3940256099942544/5224354917";
     } else if (Platform.isAndroid) {
-      return "ca-app-pub-9553130506719526/2587589604";
+      return dotenv.env['REWARDED_AD_UNIT_ID_ANDROID']!;
     } else if (Platform.isIOS) {
       return "";
     } else {
@@ -46,7 +48,7 @@ class AdHelper {
     if (_testMode) {
       return "ca-app-pub-3940256099942544/5224354917";
     } else if (Platform.isAndroid) {
-      return "ca-app-pub-9553130506719526/6351248791";
+      return dotenv.env['REWARDED_INTERSTITIAL_AD_UNIT_ID_ANDROID']!;
     } else if (Platform.isIOS) {
       return "";
     } else {
@@ -61,7 +63,7 @@ class AdHelper {
     }
     else {
       if (Platform.isAndroid) {
-        return "ca-app-pub-9553130506719526/9222057394";
+        return dotenv.env['NATIVE_AD_UNIT_ID_ANDROID']!;
       } else if (Platform.isIOS) {
         return "ca-app-pub-2434981739474696/4764156723";
       } else {
