@@ -70,58 +70,74 @@ class _UsersRankScreenState extends State<UsersRankScreen> {
 
           if (state is FetchUsersSuccessState) {
             List<UserModel> users = [];
-
             users.addAll(state.users);
-            users.sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
+            // ترتيب المستخدمين حسب تاريخ الإنشاء ثم النقاط
+            users.sort((a, b) => b.createdAt.compareTo(a.createdAt));
             users.sort((a, b) => b.score.compareTo(a.score));
 
-            UserModel topOneUser = users[0];
+            // التحقق من وجود عناصر كافية 
+            UserModel? topOneUser;
+            UserModel? topTwoUser;
+            UserModel? topThreeUser;
 
-            users.remove(topOneUser);
-            UserModel topTwoUser = users[0];
-
-            users.remove(topTwoUser);
-            UserModel topThreeUser = users[0];
-
-            users.remove(topThreeUser);
+            if (users.isNotEmpty) {
+              topOneUser = users[0];
+              users.remove(topOneUser);
+            }
+            if (users.isNotEmpty) {
+              topTwoUser = users[0];
+              users.remove(topTwoUser);
+            }
+            if (users.isNotEmpty) {
+              topThreeUser = users[0];
+              users.remove(topThreeUser);
+            }
 
             return Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: SizedBox(
-                    height: 260,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Expanded(
-                          child: UserRankCardWidget(
-                            isMe: topTwoUser.id == _usersCubit.currentUser?.id,
-                            user: topTwoUser,
-                            rank: 2,
-                          ),
-                        ), // المرتبة الثانية
-                        Expanded(
-                          child: UserRankCardWidget(
-                            isMe: topOneUser.id == _usersCubit.currentUser?.id,
-                            user: topOneUser,
-                            rank: 1,
-                          ),
-                        ), // المرتبة الأولى
-                        Expanded(
-                          child: UserRankCardWidget(
-                            isMe:
-                                topThreeUser.id == _usersCubit.currentUser?.id,
-                            user: topThreeUser,
-                            rank: 3,
-                          ),
-                        ), // المرتبة الثالثة
-                      ],
+                if (topOneUser != null ||
+                    topTwoUser != null ||
+                    topThreeUser != null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: SizedBox(
+                      height: 260,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          if (topTwoUser != null)
+                            Expanded(
+                              child: TopUserRankCardWidget(
+                                isMe: topTwoUser.id ==
+                                    _usersCubit.currentUser?.id,
+                                user: topTwoUser,
+                                rank: 2,
+                              ),
+                            ),
+                          if (topOneUser != null)
+                            Expanded(
+                              child: TopUserRankCardWidget(
+                                isMe: topOneUser.id ==
+                                    _usersCubit.currentUser?.id,
+                                user: topOneUser,
+                                rank: 1,
+                              ),
+                            ),
+                          if (topThreeUser != null)
+                            Expanded(
+                              child: TopUserRankCardWidget(
+                                isMe: topThreeUser.id ==
+                                    _usersCubit.currentUser?.id,
+                                user: topThreeUser,
+                                rank: 3,
+                              ),
+                            ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
                 Expanded(
                   child: ListView.builder(
                     itemCount: users.length,
@@ -134,61 +150,10 @@ class _UsersRankScreenState extends State<UsersRankScreen> {
                             Center(
                               child: _adsManager.getNativeAdWidget(),
                             ),
-                          Container(
-                            margin: const EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(
-                                color: isMe ? Colors.amber : Colors.transparent,
-                                width: 2,
-                              ),
-                              borderRadius: BorderRadius.circular(12),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.grey,
-                                  blurRadius: 5,
-                                  offset: Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                            child: ListTile(
-                              tileColor:
-                                  isMe ? ColorsManager.primaryLight : null,
-                              leading: CircleAvatar(
-                                backgroundColor: ColorsManager.primaryLight,
-                                child: CustomCachedNetworkImage(
-                                  user.photoUrl,
-                                  width: 50,
-                                  height: 50,
-                                  borderRadius: 25,
-                                ),
-                              ),
-                              title: Text(user.name),
-                              subtitle: Row(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 2,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: ColorsManager.primaryLight,
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Text(
-                                      "المرتبة: ${index + 4}",
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(width: 8),
-                                  Text(user.country ?? ''),
-                                ],
-                              ),
-                              trailing: Text("+${user.score}"),
-                            ),
+                          UserRankCardWidget(
+                            isMe: isMe,
+                            user: user,
+                            rank: index + 4,
                           ),
                           if (index == users.length - 1)
                             const SizedBox(height: 100),
@@ -227,11 +192,83 @@ class _UsersRankScreenState extends State<UsersRankScreen> {
 }
 
 class UserRankCardWidget extends StatelessWidget {
+  const UserRankCardWidget({
+    super.key,
+    required this.isMe,
+    required this.user,
+    required this.rank,
+  });
+
+  final bool isMe;
+  final UserModel user;
+  final int rank;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(
+          color: isMe ? Colors.amber : Colors.transparent,
+          width: 2,
+        ),
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.grey,
+            blurRadius: 5,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: ListTile(
+        tileColor: isMe ? ColorsManager.primaryLight : null,
+        leading: CircleAvatar(
+          backgroundColor: ColorsManager.primaryLight,
+          child: CustomCachedNetworkImage(
+            user.photoUrl,
+            width: 50,
+            height: 50,
+            borderRadius: 25,
+          ),
+        ),
+        title: Text(user.name),
+        subtitle: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8,
+                vertical: 2,
+              ),
+              decoration: BoxDecoration(
+                color: ColorsManager.primaryLight,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                "المرتبة: $rank",
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            SizedBox(width: 8),
+            Text(user.country ?? ''),
+          ],
+        ),
+        trailing: Text("+${user.score}"),
+      ),
+    );
+  }
+}
+
+class TopUserRankCardWidget extends StatelessWidget {
   final UserModel user;
   final int rank;
   final bool isMe;
 
-  const UserRankCardWidget({
+  const TopUserRankCardWidget({
     super.key,
     required this.user,
     required this.rank,

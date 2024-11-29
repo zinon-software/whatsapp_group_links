@@ -7,6 +7,7 @@ import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:linkati/config/app_hive_config.dart';
 import 'package:linkati/config/app_injector.dart';
 import 'package:linkati/core/storage/storage_repository.dart';
+import 'package:linkati/core/widgets/toast_widget.dart';
 
 import '../../../../core/ads/ads_manager.dart';
 import '../../../../core/utils/color_manager.dart';
@@ -69,9 +70,8 @@ class _DailySpinViewState extends State<DailySpinView> {
 
   void _spinWheel({bool isWatchAd = false}) async {
     if (!canSpin) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('يمكنك اللعب مرة أخرى بعد 24 ساعة.')),
-      );
+      showToast('يمكنك اللعب مرة أخرى بعد 24 ساعة.');
+
       return;
     }
 
@@ -134,22 +134,10 @@ class _DailySpinViewState extends State<DailySpinView> {
         _spinWheel(isWatchAd: true);
       },
       onAdFailedToLoad: () {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'يرجى المحاولة في وقت لاحق.',
-            ),
-          ),
-        );
+        showToast('يرجى المحاولة في وقت لاحق.');
       },
       onAdFailedToShow: () {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'يرجى المحاولة في وقت لاحق.',
-            ),
-          ),
-        );
+        showToast('يرجى المحاولة في وقت لاحق.');
       },
     );
   }
