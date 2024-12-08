@@ -8,7 +8,7 @@ import '../models/qna_answer_model.dart';
 
 abstract class QnaRepository {
   // qnaQuestions
-  Future<Either<String, String>> createQuestion(QnaQuestionModel question);
+  Future<Either<String, QnaQuestionModel>> createQuestion(QnaQuestionModel question);
   Future<Either<String, String>> incrementAnswersCount(String id);
   Future<Either<String, List<QnaQuestionModel>>> fetchQnaQuestions();
   Future<Either<String, QnaQuestionModel>> fetchQnaQuestion(String questionId);
@@ -48,7 +48,7 @@ class QnaRepositoryImpl implements QnaRepository {
   }
 
   @override
-  Future<Either<String, String>> createQuestion(
+  Future<Either<String, QnaQuestionModel>> createQuestion(
       QnaQuestionModel question) async {
     if (await connectionStatus.isNotConnected) {
       return const Left("تحقق من جودة اتصالك بالانترنت");

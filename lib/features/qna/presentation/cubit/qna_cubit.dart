@@ -26,8 +26,8 @@ class QnaCubit extends Cubit<QnaState> {
       (error) => emit(QnaQuestionsErrorState(error)),
       (success) {
         qnaQuestions = success;
-        qnaQuestions = success;
-        emit(QnaQuestionsSuccessState(success));
+        qnaQuestions.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+        emit(QnaQuestionsSuccessState(qnaQuestions));
       },
     );
   }
@@ -44,14 +44,22 @@ class QnaCubit extends Cubit<QnaState> {
     );
   }
 
-  void createQuestionEvent(QnaQuestionModel qnaQuestionModel) async {
+  void createQuestionEvent(QnaQuestionModel question) async {
     emit(ManageQuestionLoadingState());
-    final result = await repository.createQuestion(qnaQuestionModel);
+    final result = await repository.createQuestion(question);
     result.fold(
       (error) => emit(ManageQuestionErrorState(error)),
       (success) {
         emit(ManageQuestionSuccessState());
         fetchQnaQuestionsEvent();
+        sendFCMMessageToAllUsers(
+          title: "موظوع جديد",
+          body: question.text,
+          data: {
+            'question_id': success.id,
+            'route': AppRoutes.qnaDetailsRoute,
+          },
+        );
       },
     );
   }

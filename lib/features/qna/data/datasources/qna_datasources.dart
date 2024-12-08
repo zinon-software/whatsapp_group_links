@@ -8,8 +8,9 @@ import '../models/qna_question_model.dart';
 
 abstract class QnaDatasources {
   // qnaQuestions
-  Future<String> createQuestion(QnaQuestionModel link);
+  Future<QnaQuestionModel> createQuestion(QnaQuestionModel link);
   Future<String> incrementAnswersCount(String id);
+  Future<String> decrementAnswersCount(String id);
   Future<List<QnaQuestionModel>> fetchQnaQuestions();
   Future<QnaQuestionModel> fetchQnaQuestion(String questionId);
   Future<String> deleteQuestion(String id);
@@ -32,7 +33,7 @@ class QnaDatasourcesImpl implements QnaDatasources {
   QnaDatasourcesImpl({required this.questions, required this.answers});
 
   @override
-  Future<String> createQuestion(QnaQuestionModel question) async {
+  Future<QnaQuestionModel> createQuestion(QnaQuestionModel question) async {
     try {
       final LinksDatasources linksDatasources = instance<LinksDatasources>();
 
@@ -54,7 +55,7 @@ class QnaDatasourcesImpl implements QnaDatasources {
 
       NotificationManager.subscribeToTopic(question.id);
 
-      return 'Link added successfully';
+      return question;
     } catch (e) {
       rethrow;
     }
@@ -124,6 +125,26 @@ class QnaDatasourcesImpl implements QnaDatasources {
   }
 
   @override
+  Future<String> decrementAnswersCount(String id) async {
+    try {
+      final DocumentReference docRef = questions.doc(id);
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        final DocumentSnapshot answersCountSnapshot =
+            await transaction.get(docRef);
+
+        if (answersCountSnapshot.exists) {
+          final int currentCount = answersCountSnapshot['answers_count'];
+          transaction.update(docRef, {'answers_count': currentCount - 1});
+        }
+      });
+
+      return 'Answers count decremented successfully';
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
   Future<String> updateQuestion(QnaQuestionModel question) async {
     try {
       final LinksDatasources linksDatasources = instance<LinksDatasources>();
@@ -173,15 +194,14 @@ class QnaDatasourcesImpl implements QnaDatasources {
   @override
   Future<String> decrementAnswerVotes(String id) async {
     try {
-      await FirebaseFirestore.instance.runTransaction((transaction) async {
-        final DocumentSnapshot answerSnapshot =
-            await transaction.get(answers.doc(id));
+      final DocumentReference reference = answers.doc(id);
+      final DocumentSnapshot answerSnapshot = await reference.get();
 
-        if (answerSnapshot.exists) {
-          final int currentVotes = answerSnapshot['votes'];
-          transaction.update(answers.doc(id), {'votes': currentVotes - 1});
-        }
-      });
+      if (answerSnapshot.exists) {
+        final int currentVotes = answerSnapshot['votes'];
+        reference.update({'votes': currentVotes - 1});
+      }
+
       return 'answer votes decremented successfully';
     } catch (e) {
       rethrow;
@@ -192,6 +212,7 @@ class QnaDatasourcesImpl implements QnaDatasources {
   Future<String> deleteAnswer(String id) async {
     try {
       await answers.doc(id).delete();
+      decrementAnswersCount(id);
       return 'answer deleted successfully';
     } catch (e) {
       rethrow;
@@ -216,15 +237,14 @@ class QnaDatasourcesImpl implements QnaDatasources {
   @override
   Future<String> incrementAnswerVotes(String id) async {
     try {
-      await FirebaseFirestore.instance.runTransaction((transaction) async {
-        final DocumentSnapshot answerSnapshot =
-            await transaction.get(answers.doc(id));
+      final DocumentReference reference = answers.doc(id);
+      final DocumentSnapshot answerSnapshot = await reference.get();
 
-        if (answerSnapshot.exists) {
-          final int currentVotes = answerSnapshot['votes'];
-          transaction.update(answers.doc(id), {'votes': currentVotes + 1});
-        }
-      });
+      if (answerSnapshot.exists) {
+        final int currentVotes = answerSnapshot['votes'];
+        reference.update({'votes': currentVotes + 1});
+      }
+
       return 'answer votes incremented successfully';
     } catch (e) {
       rethrow;

@@ -97,14 +97,12 @@ class LinksDatasourcesImpl implements LinksDatasources {
   Future<String> incrementViews(String id) async {
     try {
       final DocumentReference linkDocRef = links.doc(id);
-      await FirebaseFirestore.instance.runTransaction((transaction) async {
-        final DocumentSnapshot linkSnapshot = await transaction.get(linkDocRef);
+      final DocumentSnapshot linkSnapshot = await linkDocRef.get();
 
-        if (linkSnapshot.exists) {
-          final int currentViews = linkSnapshot['views'];
-          transaction.update(linkDocRef, {'views': currentViews + 1});
-        }
-      });
+      if (linkSnapshot.exists) {
+        final int currentViews = linkSnapshot['views'];
+        linkDocRef.update({'views': currentViews + 1});
+      }
 
       return 'تم تحديث الرابط بنجاح';
     } catch (e) {

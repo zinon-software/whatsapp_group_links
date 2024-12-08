@@ -66,45 +66,76 @@ class BannedWordsScreen extends StatelessWidget {
                 );
               }
 
-              return ListView.builder(
-                itemCount: snapshot.docs.length,
-                itemBuilder: (context, index) {
-                  if (snapshot.hasMore && index + 1 == snapshot.docs.length) {
-                    // Tell FirestoreQueryBuilder to try to obtain more items.
-                    // It is safe to call this function from within the build method.
-                    snapshot.fetchMore();
-                  }
-                  final doc = snapshot.docs[index];
-                  return InkWell(
-                    onTap: () {
-                      AppAlert.showAlert(
-                        context,
-                        subTitle: "حذف ${doc.data()}",
-                        onConfirm: () {
-                          linksCubit.deleteBannedWordEvent(doc.data());
+              return SingleChildScrollView(
+                child: Wrap(
+                  spacing: 8.0, // المسافة الأفقية بين العناصر
+                  runSpacing: 8.0, // المسافة العمودية بين الأسطر
+                  children: List.generate(
+                    snapshot.docs.length,
+                    (index) {
+                      if (snapshot.hasMore &&
+                          index + 1 == snapshot.docs.length) {
+                        // استدعاء fetchMore عند الوصول إلى آخر عنصر
+                        snapshot.fetchMore();
+                      }
+                      final doc = snapshot.docs[index];
+                      return GestureDetector(
+                        onTap: () {
+                          AppAlert.showAlert(
+                            context,
+                            subTitle: "حذف ${doc.data()}",
+                            onConfirm: () {
+                              linksCubit.deleteBannedWordEvent(doc.data());
+                            },
+                          );
                         },
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              doc.data(),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
                       );
                     },
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          doc.data(),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
-                  );
-                },
+                  ),
+                ),
               );
 
-              // return Wrap(
-              //   children: snapshot.docs
-              //       .map(
-              //         (doc) => ,
-              //       )
-              //       .toList(),
+              // return ListView.builder(
+              //   itemCount: snapshot.docs.length,
+              //   itemBuilder: (context, index) {
+              //     if (snapshot.hasMore && index + 1 == snapshot.docs.length) {
+              //       // Tell FirestoreQueryBuilder to try to obtain more items.
+              //       // It is safe to call this function from within the build method.
+              //       snapshot.fetchMore();
+              //     }
+              //     final doc = snapshot.docs[index];
+              //     return InkWell(
+              //       onTap: () {
+              //         AppAlert.showAlert(
+              //           context,
+              //           subTitle: "حذف ${doc.data()}",
+              //           onConfirm: () {
+              //             linksCubit.deleteBannedWordEvent(doc.data());
+              //           },
+              //         );
+              //       },
+              //       child: Card(
+              //         child: Padding(
+              //           padding: const EdgeInsets.all(16.0),
+              //           child: Text(
+              //             doc.data(),
+              //             maxLines: 2,
+              //             overflow: TextOverflow.ellipsis,
+              //           ),
+              //         ),
+              //       ),
+              //     );
+              //   },
               // );
             },
           ),

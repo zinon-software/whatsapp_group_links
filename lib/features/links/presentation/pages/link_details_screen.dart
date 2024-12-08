@@ -54,7 +54,8 @@ class _LinkDetailsScreenState extends State<LinkDetailsScreen> {
               )
             : Text(widget.link.title),
         actions: [
-          if (!widget.link.isVerified)
+          // if (!widget.link.isVerified)
+          if (isAdmin)
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: IconButton(
